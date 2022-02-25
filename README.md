@@ -36,7 +36,10 @@ In order to use the PassioSDK your app needs to meet the following minimal requi
 * The SDK will only run on iOS 13 or newer. The XCFramework is compiled for min iOS version 12.0.
 * Passio SDK can only be used on a device and will not run on a simulator
 * The SDK requires access to iPhone's camera
-* Weight/Volume estimation will run only on iPhone with Dual Wide Camera (not on DualCamera). During the Beta period Weight estimation is not available on iPhone 13 Pro and iPhone 13 Pro Max. These limitations are likely to change in the upcoming releases. 
+* Weight/Volume estimation will run only on iPhones with Dual Wide Camera (not on DualCamera). 
+    * iPhone 11 Pro & Pro Max
+    * iPhone 12 mini, Pro & pro Max
+    * iPhone 13 Pro & Pro Max are not enabled for weight estimation during the Beta period.
 
 ## Try first to run the Quick Start Demo
 

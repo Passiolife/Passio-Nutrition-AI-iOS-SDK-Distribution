@@ -1,6 +1,6 @@
 # Passio PassioNutritionAISDK 
 
-## Version  2.1.1
+## Version  2.1.2
 ```Swift
 import ARKit
 import AVFoundation
@@ -20,6 +20,17 @@ import VideoToolbox
 import Vision
 import _Concurrency
 import simd
+
+public protocol AmountEstimate {
+
+    var volumeEstimate: Double? { get }
+
+    /// Scanned Amount in grams
+    var weightEstimate: Double? { get }
+
+    /// The quality of the estimate (eventually for feedback to the user or SDK-based app developer)
+    var estimationQuality: PassioNutritionAISDK.EstimationQuality? { get }
+}
 
 /// Barcode (typealias String) is the string representation of the barcode id
 public typealias Barcode = String
@@ -67,11 +78,8 @@ public protocol DetectedCandidate {
     /// The image that the detection was preformed upon
     var croppedImage: UIImage? { get }
 
-    /// Scanned Volume in milliliters
-    var scannedVolume: Double? { get }
-
-    /// Scanned Weight in grams
-    var scannedWeight: Double? { get }
+    /// Scanned AmountEstimate
+    var amountEstimate: PassioNutritionAISDK.AmountEstimate? { get }
 }
 
 public struct DetectedCandidateImp : PassioNutritionAISDK.DetectedCandidate {
@@ -88,11 +96,57 @@ public struct DetectedCandidateImp : PassioNutritionAISDK.DetectedCandidate {
     /// The image that the detection was preformed upon
     public var croppedImage: UIImage?
 
-    /// Scanned Volume in milliliters
-    public var scannedVolume: Double?
+    /// Scanned AmountEstimate
+    public var amountEstimate: PassioNutritionAISDK.AmountEstimate?
+}
 
-    /// Scanned Weight in grams
-    public var scannedWeight: Double?
+public enum EstimationQuality {
+
+    case good
+
+    case fair
+
+    case poor
+
+    /// Returns a Boolean value indicating whether two values are equal.
+    ///
+    /// Equality is the inverse of inequality. For any values `a` and `b`,
+    /// `a == b` implies that `a != b` is `false`.
+    ///
+    /// - Parameters:
+    ///   - lhs: A value to compare.
+    ///   - rhs: Another value to compare.
+    public static func == (a: PassioNutritionAISDK.EstimationQuality, b: PassioNutritionAISDK.EstimationQuality) -> Bool
+
+    /// Hashes the essential components of this value by feeding them into the
+    /// given hasher.
+    ///
+    /// Implement this method to conform to the `Hashable` protocol. The
+    /// components used for hashing must be the same as the components compared
+    /// in your type's `==` operator implementation. Call `hasher.combine(_:)`
+    /// with each of these components.
+    ///
+    /// - Important: Never call `finalize()` on `hasher`. Doing so may become a
+    ///   compile-time error in the future.
+    ///
+    /// - Parameter hasher: The hasher to use when combining the components
+    ///   of this instance.
+    public func hash(into hasher: inout Hasher)
+
+    /// The hash value.
+    ///
+    /// Hash values are not guaranteed to be equal across different executions of
+    /// your program. Do not save hash values to use during a future execution.
+    ///
+    /// - Important: `hashValue` is deprecated as a `Hashable` requirement. To
+    ///   conform to `Hashable`, implement the `hash(into:)` requirement instead.
+    public var hashValue: Int { get }
+}
+
+extension EstimationQuality : Equatable {
+}
+
+extension EstimationQuality : Hashable {
 }
 
 public typealias FileLocalURL = URL
@@ -105,8 +159,10 @@ public protocol FoodCandidates {
     /// The visual candidates returned from the recognition
     var detectedCandidates: [PassioNutritionAISDK.DetectedCandidate] { get }
 
+    /// The Barcode candidates if available
     var barcodeCandidates: [PassioNutritionAISDK.BarcodeCandidate]? { get }
 
+    /// The packaged food candidates if available
     var packagedFoodCandidates: [PassioNutritionAISDK.PackagedFoodCandidate]? { get }
 }
 
@@ -359,16 +415,6 @@ public struct PassioConfiguration : Equatable {
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
     public static func == (a: PassioNutritionAISDK.PassioConfiguration, b: PassioNutritionAISDK.PassioConfiguration) -> Bool
-}
-
-/// Implement the protocol if you are setting autoUpdate = true PassioConfiguration
-public protocol PassioDownloadDelegate : AnyObject {
-
-    func completedDownloadingAllFiles(filesLocalURLs: [PassioNutritionAISDK.FileLocalURL])
-
-    func completedDownloadingFile(fileLocalURL: PassioNutritionAISDK.FileLocalURL, filesLeft: Int)
-
-    func downloadingError(message: String)
 }
 
 /// PassioFoodItemData contains all the information for a Food Item Data.
@@ -804,9 +850,6 @@ public class PassioNutritionAI {
     /// Shared Instance
     public class var shared: PassioNutritionAISDK.PassioNutritionAI { get }
 
-    /// Defaulted to true. If set to false to the SDK will request none-compressed files.
-    public var requestCompressedFiles: Bool
-
     /// Get the PassioStatus directly or implement the PassioStatusDelegate for updates.
     public var status: PassioNutritionAISDK.PassioStatus { get }
 
@@ -868,9 +911,6 @@ public class PassioNutritionAI {
         public var rawValue: Int32 { get }
     }
 
-    /// Delegate to track the internal downloading service. If the PassioConfiguration flag sdkDownloadsModels is set to true.
-    weak public var downloadDelegate: PassioNutritionAISDK.PassioDownloadDelegate?
-
     /// Call this API to configure the SDK
     /// - Parameters:
     ///   - PassioConfiguration: Your desired configuration, must include your developer key
@@ -911,7 +951,7 @@ public class PassioNutritionAI {
 
     /// List all food enabled for weight estimations
     /// - Returns: List of PassioIDs
-    public func listFoodEnabledForWeightEstimation() -> [PassioNutritionAISDK.PassioID]
+    public func listFoodEnabledForAmountEstimation() -> [PassioNutritionAISDK.PassioID]
 
     /// use getPreviewLayer if you don't plan to rotate the PreviewLayer.
     /// - Returns: AVCaptureVideoPreviewLayer
@@ -927,7 +967,7 @@ public class PassioNutritionAI {
     /// Use this function to get the bounding box relative to the previewLayerBonds
     /// - Parameter boundingBox: The bounding box from the delegate
     /// - Parameter preview: The preview layer bounding box
-    public func transformCGRectForm(boundingBox: CGRect, toPreviewLayerRect preview: CGRect) -> CGRect
+    public func transformCGRectForm(boundingBox: CGRect, toRect: CGRect) -> CGRect
 
     /// Use this call to add personalizedAlternative to a Passio ID
     /// - Parameter personalizedAlternative:
@@ -988,18 +1028,17 @@ public class PassioNutritionAI {
     public var bestVolumeDetectionMode: PassioNutritionAISDK.VolumeDetectionMode { get }
 }
 
-extension PassioNutritionAI : PassioNutritionAISDK.PassioDownloadDelegate {
+extension PassioNutritionAI : PassioNutritionAISDK.PassioStatusDelegate {
 
     public func completedDownloadingAllFiles(filesLocalURLs: [PassioNutritionAISDK.FileLocalURL])
 
     public func completedDownloadingFile(fileLocalURL: PassioNutritionAISDK.FileLocalURL, filesLeft: Int)
 
     public func downloadingError(message: String)
-}
 
-extension PassioNutritionAI : PassioNutritionAISDK.PassioStatusDelegate {
+    public func passioStatusChanged(status: PassioNutritionAISDK.PassioStatus)
 
-    public func passioSDKChanged(status: PassioNutritionAISDK.PassioStatus)
+    public func passioProccessing(filesLeft: Int)
 }
 
 extension PassioNutritionAI.FramesPerSecond : Equatable {
@@ -1140,7 +1179,7 @@ public enum PassioSDKError : LocalizedError {
 
     case modelsNotValid
 
-    case autoUpdateFailed
+    case modelsDownloadFailed
 
     case noModelsFilesFound
 
@@ -1316,7 +1355,15 @@ public struct PassioStatus {
 /// Implement the protocol to receive status updates
 public protocol PassioStatusDelegate : AnyObject {
 
-    func passioSDKChanged(status: PassioNutritionAISDK.PassioStatus)
+    func passioStatusChanged(status: PassioNutritionAISDK.PassioStatus)
+
+    func passioProccessing(filesLeft: Int)
+
+    func completedDownloadingAllFiles(filesLocalURLs: [PassioNutritionAISDK.FileLocalURL])
+
+    func completedDownloadingFile(fileLocalURL: PassioNutritionAISDK.FileLocalURL, filesLeft: Int)
+
+    func downloadingError(message: String)
 }
 
 public struct PersonalizedAlternative : Codable, Equatable {
@@ -1654,6 +1701,5 @@ extension simd_float4x4 : ContiguousBytes {
 }
 
 
-
 ```
-<sup>Copyright 2021 Passio Inc</sup>
+<sup>Copyright 2022 Passio Inc</sup>

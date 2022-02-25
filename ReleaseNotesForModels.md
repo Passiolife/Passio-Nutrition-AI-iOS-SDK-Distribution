@@ -1,6 +1,6 @@
 # Passio SDK  Release Notes for Models
 
-## V1.4.16 / V2.1.1
+## V1.4.16 / V2.1.1/ V2.1.2
 
 * Number of food items recognized via HNN: 3777
 * Number of logos recognized: 300
