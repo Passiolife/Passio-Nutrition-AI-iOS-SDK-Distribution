@@ -1,6 +1,164 @@
 # Passio SDK  Release Notes for Models
 
-## V1.4.16 / V2.1.1/ V2.1.2
+## V1.4.17 / V2.1.3
+
+* Number of food items recognized via HNN: 3907
+* Number of logos recognized: 300
+* Nutrition database version: passio_nutrition.3907.0.300
+
+### New included HNN foods
+```
+breakfast best pancakes & sausage
+chex package
+kroger regular honey
+generic chicken package
+nesquik protein banana strawberry milk
+hersheys nuggets
+sargento swiss cheese slices
+humm kombucha bottle
+carlo forte tuna
+cheerios with yogurt
+fish steak
+bacon-wrapped meat
+dried maitake mushrooms
+cape cod potato chips
+bio brand boxed milk
+oreo lemon cookies package
+chicken of the sea tuna
+great value ketchup
+chobani probiotic yogurt drink
+trolli gummies
+heinz tomato juice
+tapatio hot sauce
+kroger chicken breast cutlets package
+unbranded bag of flour
+latti boxed milk
+cheese bun
+ranch water can
+boost chocolate drink
+kroger hot honey
+sea salt kettle chips
+oscar mayar turkey and asiago snack tray
+365 cranberry orange goat cheese
+mazola cooking spray
+bodyarmor strawberry banana superdrink
+homemade canned tomato sauce
+mash peanut butter
+safeway chicken package
+merci chocolate
+no name brand baking powder
+nestle cocoa powder
+sour punch bites
+backyard bbq kettle chips
+brookshire cooking spray
+cepita valle orange juice carton
+hit orange juice carton
+activia lowfat yogurt blueberry
+kroger half and half
+oreo mint cookies package
+good and gather seasoning package
+great value fruit smiles box
+bodyarmor orange mango superdrink
+365 organic erythritol
+trader joes egg frittata
+egg white omelette
+snack selects snack tray
+rice with beef
+allos oat cuisine
+generic can of corn
+salt & pepper kettle chips
+heinz mayo sachet
+publix dried dates
+green milkshake
+milka chocolate bar
+tillamook ice cream
+oreo original cookies package
+kroger oatmeal package
+raw marinated potato wedges with skin
+dr mcdougalls soup
+allos rice almond milk
+marys gone crackers package
+wonderful pistachios
+great value bread crumbs
+salt & vinegar kettle chips
+apple jacks jumbo snacks
+hellmanns olive oil mayonnaise
+koita boxed milk
+kirkland almond milk
+bodyarmor fruit punch superdrink
+cadbury mini eggs
+brookshire cream cheese package
+skinny pop box
+bobs red mill coconut flour
+pacific foods soup
+365 organic sandwich cookies
+signature select stir fry vegetable mix
+russell stover sugar free chocolate candy
+silk unsweetened vanilla almond milk
+post banana nut crunch
+brookshires peanuts
+koolaid jammers pouch
+planters nutrition mix
+kroger milk
+simple mills crackers
+busseto california snacking tray
+knorr rice sides
+mastro lunch meat
+prawn crackers
+skinny pop microwave bag
+so delicious coconut milk
+forrelli tomato ketchup
+sargento cheddar cheese slices
+ocean spray craisins
+jose ole taquitos
+simple truth organic coconut flour
+generic chocolate syrup bottle
+nestle carnation evaporated milk
+top ramen instant noodle pack
+kodiak cakes oatmeal
+kinder surprise egg
+presidents choice meat assortment
+atkins vanilla latte protein shake
+corn nuts package
+powerade orange
+nescafe clasico coffee
+pub cheese sharp cheddar spread
+oreo chocolate extreme cookies package
+thousand island salad dressing
+jalapeno kettle chips
+bisquick pancake baking mix
+chocolate iced cake
+quest protein chips
+tito's handmade vodka
+oscar mayer turkey bacon package
+chobani greek yogurt drink
+quaker oatmeal squares package
+kroger ground beef package
+kroger whipped honey
+butter finger bits
+lactaid boxed milk
+quicksy pancake syrup bottle
+archway windmill cookies package
+planters pistachios
+garden salad with chicken
+allos rice coconut milk
+ring pop package
+pirouline wafers
+great value boneless chicken package
+```
+
+### Excluded HNN foods
+```
+packaged chocolate candy
+generic olive oil bottle
+boxed orange juice
+sargento sliced cheese
+packaged chicken
+kettle chips
+packaged lunch meat
+```
+
+## V1.4.16 / V2.1.1
 
 * Number of food items recognized via HNN: 3777
 * Number of logos recognized: 300

@@ -26,8 +26,8 @@ By default the SDK does not record/store any photos or videos. Instead, as the e
 
 2. To use the SDK please make sure you receive your SDK license key from Passio. The SDK WILL NOT WORK without a valid SDK key.
 
-3. You will have to download the latest releases from the link below. The command "git clone" **WILL NOT** download the PassioSDK.framework. <https://github.com/Passiolife/Passio-Nutrition-AI-iOS-SDK-Distribution/releases>. 
-Download the ```PassioSDKQuickStart.zip``` or the ```PassioSDKFullDemo.zip``` and copy the ```PassioSDKiOS.xcframework``` to your project. Make sure you have followed the directions in the README files.
+3. You will have to download the latest releases from the link below. The command "git clone" **WILL NOT** download the PassioNutritionAISDK.xcframework. <https://github.com/Passiolife/Passio-Nutrition-AI-iOS-SDK-Distribution/releases>. 
+Download the ```PassioSDKQuickStart.zip``` or the ```PassioSDKFullDemo.zip``` and copy the ```PassioNutritionAISDK.xcframework``` to your project. Make sure you have followed the directions in the README files.
 
 ## Minimum Requirements
 
@@ -56,16 +56,7 @@ In order to use the PassioSDK your app needs to meet the following minimal requi
 
 ## Adding Passio SDK into your project
 
-XCFramework can be used for min iOS version 13.0 or newer.
-If you configured the SDK with Framework before, here are the steps to remove it.
-
-1. Open the project and delete the PassioSDK.framework.
-2. Delete the Script at: Select the Project, Choose Target → Project Name → Select Build Phases → Run Script Phase
-3. In project "build settings" change "Validate Workspace" to "No"
-4. Rename all the "import PassioSDK" to "import PassioSDKiOS"
-
-
-### Add the XCframework to your project
+### Drag & drop the XCframework to your project
 
 * Drag and drop the "PassioNutritionAISDK.xcframework" into your project. Make sure to select "Copy items if needed".
   
@@ -83,15 +74,6 @@ If you configured the SDK with Framework before, here are the steps to remove it
 
  ```XML
 `<key>>NSCameraUsageDescription</key><string>For real-time food recognition</string>`.
-```
-
-* To allow the data collection API (please contact support@passiolife.com for more information) add:
-
- ```XML
-`<key>NSMicrophoneUsageDescription</key>
- <string>To record videos with sound for classification</string>`
- `<key>NSPhotoLibraryAddUsageDescription</key>
- <string>To select images and videos for classification</string>`
 ```
 
 ***

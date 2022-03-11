@@ -1,6 +1,6 @@
 # Passio PassioNutritionAISDK 
 
-## Version  2.1.2
+## Version  2.1.3
 ```Swift
 import ARKit
 import AVFoundation
@@ -80,24 +80,6 @@ public protocol DetectedCandidate {
 
     /// Scanned AmountEstimate
     var amountEstimate: PassioNutritionAISDK.AmountEstimate? { get }
-}
-
-public struct DetectedCandidateImp : PassioNutritionAISDK.DetectedCandidate {
-
-    /// PassioID recognized by the MLModel
-    public var passioID: PassioNutritionAISDK.PassioID
-
-    /// Confidence (0.0 to 1.0) of the associated PassioID recognized by the MLModel
-    public var confidence: Double
-
-    /// boundingBox CGRect representing the predicted bounding box in normalized coordinates.
-    public var boundingBox: CGRect
-
-    /// The image that the detection was preformed upon
-    public var croppedImage: UIImage?
-
-    /// Scanned AmountEstimate
-    public var amountEstimate: PassioNutritionAISDK.AmountEstimate?
 }
 
 public enum EstimationQuality {
@@ -203,105 +185,11 @@ public protocol FoodRecognitionDelegate : AnyObject {
     func recognitionResults(candidates: PassioNutritionAISDK.FoodCandidates?, image: UIImage?, nutritionFacts: PassioNutritionAISDK.PassioNutritionFacts?)
 }
 
-public enum LabelForNutrient {
+public struct MeasurementIU {
 
-    case calories
+    public var value: Double
 
-    case fat
-
-    case satFat
-
-    case transFat
-
-    case monounsaturatedFat
-
-    case polyunsaturatedFat
-
-    case cholesterol
-
-    case sodium
-
-    case carbs
-
-    case fiber
-
-    case sugarTotal
-
-    case sugarAdded
-
-    case protein
-
-    case vitaminD
-
-    case calcium
-
-    case iron
-
-    case potassium
-
-    case vitaminA
-
-    case vitaminC
-
-    case sugarAlcohol
-
-    case vitaminB12Added
-
-    case vitaminB12
-
-    case vitaminB6
-
-    case vitaminE
-
-    case vitaminEAdded
-
-    case magnesium
-
-    case phosphorus
-
-    case iodine
-
-    public var label: String { get }
-
-    /// Returns a Boolean value indicating whether two values are equal.
-    ///
-    /// Equality is the inverse of inequality. For any values `a` and `b`,
-    /// `a == b` implies that `a != b` is `false`.
-    ///
-    /// - Parameters:
-    ///   - lhs: A value to compare.
-    ///   - rhs: Another value to compare.
-    public static func == (a: PassioNutritionAISDK.LabelForNutrient, b: PassioNutritionAISDK.LabelForNutrient) -> Bool
-
-    /// Hashes the essential components of this value by feeding them into the
-    /// given hasher.
-    ///
-    /// Implement this method to conform to the `Hashable` protocol. The
-    /// components used for hashing must be the same as the components compared
-    /// in your type's `==` operator implementation. Call `hasher.combine(_:)`
-    /// with each of these components.
-    ///
-    /// - Important: Never call `finalize()` on `hasher`. Doing so may become a
-    ///   compile-time error in the future.
-    ///
-    /// - Parameter hasher: The hasher to use when combining the components
-    ///   of this instance.
-    public func hash(into hasher: inout Hasher)
-
-    /// The hash value.
-    ///
-    /// Hash values are not guaranteed to be equal across different executions of
-    /// your program. Do not save hash values to use during a future execution.
-    ///
-    /// - Important: `hashValue` is deprecated as a `Hashable` requirement. To
-    ///   conform to `Hashable`, implement the `hash(into:)` requirement instead.
-    public var hashValue: Int { get }
-}
-
-extension LabelForNutrient : Equatable {
-}
-
-extension LabelForNutrient : Hashable {
+    public let unit: String
 }
 
 /// The ObjectDetectionCandidate protocol returns the object detection result
@@ -460,63 +348,63 @@ public struct PassioFoodItemData : Equatable, Codable {
 
     public var siblingsPassioID: [PassioNutritionAISDK.PassioID]? { get }
 
-    public var totalCalories: Double? { get }
+    public var totalCalories: Measurement<UnitEnergy>? { get }
 
-    public var totalCarbs: Double? { get }
+    public var totalCarbs: Measurement<UnitMass>? { get }
 
-    public var totalFat: Double? { get }
+    public var totalFat: Measurement<UnitMass>? { get }
 
-    public var totalProteins: Double? { get }
+    public var totalProteins: Measurement<UnitMass>? { get }
 
-    public var totalSaturatedFat: Double? { get }
+    public var totalSaturatedFat: Measurement<UnitMass>? { get }
 
-    public var totalTransFat: Double? { get }
+    public var totalTransFat: Measurement<UnitMass>? { get }
 
-    public var totalMonounsaturatedFat: Double? { get }
+    public var totalMonounsaturatedFat: Measurement<UnitMass>? { get }
 
-    public var totalPolyunsaturatedFat: Double? { get }
+    public var totalPolyunsaturatedFat: Measurement<UnitMass>? { get }
 
-    public var totalCholesterol: Double? { get }
+    public var totalCholesterol: Measurement<UnitMass>? { get }
 
-    public var totalSodium: Double? { get }
+    public var totalSodium: Measurement<UnitMass>? { get }
 
-    public var totalFibers: Double? { get }
+    public var totalFibers: Measurement<UnitMass>? { get }
 
-    public var totalSugars: Double? { get }
+    public var totalSugars: Measurement<UnitMass>? { get }
 
-    public var totalSugarsAdded: Double? { get }
+    public var totalSugarsAdded: Measurement<UnitMass>? { get }
 
-    public var totalVitaminD: Double? { get }
+    public var totalVitaminD: Measurement<UnitMass>? { get }
 
-    public var totalCalcium: Double? { get }
+    public var totalCalcium: Measurement<UnitMass>? { get }
 
-    public var totalIron: Double? { get }
+    public var totalIron: Measurement<UnitMass>? { get }
 
-    public var totalPotassium: Double? { get }
+    public var totalPotassium: Measurement<UnitMass>? { get }
 
-    public var totalVitaminA: Double? { get }
+    public var totalVitaminA: PassioNutritionAISDK.MeasurementIU? { get }
 
-    public var totalVitaminC: Double? { get }
+    public var totalVitaminC: Measurement<UnitMass>? { get }
 
-    public var totalAlcohol: Double? { get }
+    public var totalAlcohol: Measurement<UnitMass>? { get }
 
-    public var totalSugarAlcohol: Double? { get }
+    public var totalSugarAlcohol: Measurement<UnitMass>? { get }
 
-    public var totalVitaminB12Added: Double? { get }
+    public var totalVitaminB12Added: Measurement<UnitMass>? { get }
 
-    public var totalVitaminB12: Double? { get }
+    public var totalVitaminB12: Measurement<UnitMass>? { get }
 
-    public var totalVitaminB6: Double? { get }
+    public var totalVitaminB6: Measurement<UnitMass>? { get }
 
-    public var totalVitaminE: Double? { get }
+    public var totalVitaminE: Measurement<UnitMass>? { get }
 
-    public var totalVitaminEAdded: Double? { get }
+    public var totalVitaminEAdded: Measurement<UnitMass>? { get }
 
-    public var totalMagnesium: Double? { get }
+    public var totalMagnesium: Measurement<UnitMass>? { get }
 
-    public var totalPhosphorus: Double? { get }
+    public var totalPhosphorus: Measurement<UnitMass>? { get }
 
-    public var totalIodine: Double? { get }
+    public var totalIodine: Measurement<UnitMass>? { get }
 
     public var summary: String { get }
 
@@ -1038,7 +926,7 @@ extension PassioNutritionAI : PassioNutritionAISDK.PassioStatusDelegate {
 
     public func passioStatusChanged(status: PassioNutritionAISDK.PassioStatus)
 
-    public func passioProccessing(filesLeft: Int)
+    public func passioProcessing(filesLeft: Int)
 }
 
 extension PassioNutritionAI.FramesPerSecond : Equatable {
@@ -1119,7 +1007,7 @@ public class PassioNutritionFacts {
 
     final public let titleProtein: String
 
-    public var servingSizeQuantity: Int
+    public var servingSizeQuantity: Double
 
     public var servingSizeUnitName: String?
 
@@ -1183,7 +1071,7 @@ public enum PassioSDKError : LocalizedError {
 
     case noModelsFilesFound
 
-    case noInterenetConnection
+    case noInternetConnection
 
     case notLicensedForThisProject
 
@@ -1357,7 +1245,7 @@ public protocol PassioStatusDelegate : AnyObject {
 
     func passioStatusChanged(status: PassioNutritionAISDK.PassioStatus)
 
-    func passioProccessing(filesLeft: Int)
+    func passioProcessing(filesLeft: Int)
 
     func completedDownloadingAllFiles(filesLocalURLs: [PassioNutritionAISDK.FileLocalURL])
 
@@ -1430,6 +1318,8 @@ public struct UPCProduct : Codable {
     /// Component of UPC Product decoding struct
     public struct NutrientUPC : Codable {
 
+        public let id: Double?
+
         public let nutrient: PassioNutritionAISDK.UPCProduct.InternalNutrient?
 
         public let amount: Double?
@@ -1457,17 +1347,11 @@ public struct UPCProduct : Codable {
     /// Component of UPC Product decoding struct
     public struct InternalNutrient : Codable {
 
-        public let id: Double?
-
         public let name: String?
 
         public let unit: String?
 
         public let shortName: String?
-
-        public let value: String?
-
-        public let origin: [PassioNutritionAISDK.UPCProduct.Origin]?
 
         /// Encodes this value into the given encoder.
         ///

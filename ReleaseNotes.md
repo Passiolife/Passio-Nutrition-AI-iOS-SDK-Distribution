@@ -1,7 +1,24 @@
-# Passio SDK V2.1.1. Beta Release Notes
+# Passio SDK V2.1.3. Beta Release Notes
 
-Version 2.1.2 which is still in Beta is not recommended for production. APIs are subject to change from version to version.
+Version 2.1.3 which is still in Beta is not recommended for production. APIs are subject to change from version to version.
 
+## New for V2.1.3
+
+### Models
+
+* Number of food items recognized via HNN: 3907
+* Number of logos recognized: 300
+* Nutrition database version: passio_nutrition.3907.0.300
+
+### API Updates
+The servingSizeQuantity was modified from 
+```swift
+public var servingSizeQuantity: Int
+```
+to:
+```swift
+public var servingSizeQuantity: Double
+```
 
 ## New for V2.1.2
 
