@@ -26,4 +26,15 @@
 2) ```status.mode == .isReadyForNutrition``` use only ```.isReadyForDetection```
 
 
+### PassioDownloadDelegate was merged into the PassioStatusDelegate
+```swift
+public protocol PassioStatusDelegate : AnyObject {
+    func passioStatusChanged(status: PassioNutritionAISDK.PassioStatus)
+    func passioProccessing(filesLeft: Int)
+    func completedDownloadingAllFiles(filesLocalURLs: [PassioNutritionAISDK.FileLocalURL])
+    func completedDownloadingFile(fileLocalURL: PassioNutritionAISDK.FileLocalURL, filesLeft: Int)
+    func downloadingError(message: String)
+}
+```
+
 <sup>Copyright 2022 Passio Inc</sup>
