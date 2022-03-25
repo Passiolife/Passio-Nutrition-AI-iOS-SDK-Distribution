@@ -1,6 +1,6 @@
 # Passio PassioNutritionAISDK 
 
-## Version  2.1.3
+## Version  2.1.4
 ```Swift
 import ARKit
 import AVFoundation
@@ -14,7 +14,6 @@ import Foundation
 import Metal
 import MetalPerformanceShaders
 import SQLite3
-import SwiftUI
 import UIKit
 import VideoToolbox
 import Vision
@@ -412,7 +411,7 @@ public struct PassioFoodItemData : Equatable, Codable {
 
     public mutating func setServingUnitKeepWeight(unitName: String) -> Bool
 
-    public init(upcProduct: PassioNutritionAISDK.UPCProduct)
+    public init(upcProduct: PassioNutritionAISDK.UPCProduct) throws
 
     /// Returns a Boolean value indicating whether two values are equal.
     ///
@@ -442,6 +441,54 @@ public struct PassioFoodItemData : Equatable, Codable {
     ///
     /// - Parameter decoder: The decoder to read data from.
     public init(from decoder: Decoder) throws
+}
+
+public enum PassioFoodItemDataError : LocalizedError {
+
+    case noUnitMassInServingSizes
+
+    /// A localized message describing what error occurred.
+    public var errorDescription: String? { get }
+
+    /// Returns a Boolean value indicating whether two values are equal.
+    ///
+    /// Equality is the inverse of inequality. For any values `a` and `b`,
+    /// `a == b` implies that `a != b` is `false`.
+    ///
+    /// - Parameters:
+    ///   - lhs: A value to compare.
+    ///   - rhs: Another value to compare.
+    public static func == (a: PassioNutritionAISDK.PassioFoodItemDataError, b: PassioNutritionAISDK.PassioFoodItemDataError) -> Bool
+
+    /// Hashes the essential components of this value by feeding them into the
+    /// given hasher.
+    ///
+    /// Implement this method to conform to the `Hashable` protocol. The
+    /// components used for hashing must be the same as the components compared
+    /// in your type's `==` operator implementation. Call `hasher.combine(_:)`
+    /// with each of these components.
+    ///
+    /// - Important: Never call `finalize()` on `hasher`. Doing so may become a
+    ///   compile-time error in the future.
+    ///
+    /// - Parameter hasher: The hasher to use when combining the components
+    ///   of this instance.
+    public func hash(into hasher: inout Hasher)
+
+    /// The hash value.
+    ///
+    /// Hash values are not guaranteed to be equal across different executions of
+    /// your program. Do not save hash values to use during a future execution.
+    ///
+    /// - Important: `hashValue` is deprecated as a `Hashable` requirement. To
+    ///   conform to `Hashable`, implement the `hash(into:)` requirement instead.
+    public var hashValue: Int { get }
+}
+
+extension PassioFoodItemDataError : Equatable {
+}
+
+extension PassioFoodItemDataError : Hashable {
 }
 
 public struct PassioFoodOrigin : Codable, Equatable {
@@ -737,6 +784,8 @@ public class PassioNutritionAI {
 
     /// Shared Instance
     public class var shared: PassioNutritionAISDK.PassioNutritionAI { get }
+
+    public var requestCompressedFiles: Bool
 
     /// Get the PassioStatus directly or implement the PassioStatusDelegate for updates.
     public var status: PassioNutritionAISDK.PassioStatus { get }
@@ -1583,6 +1632,10 @@ extension simd_float4x4 : ContiguousBytes {
     ///            outside of the lifetime of the call to the closure.
     public func withUnsafeBytes<R>(_ body: (UnsafeRawBufferPointer) throws -> R) rethrows -> R
 }
+
+infix operator .+ : DefaultPrecedence
+
+infix operator ./ : DefaultPrecedence
 
 
 ```

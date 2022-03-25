@@ -1,6 +1,10 @@
-# Passio SDK V2.1.3. Beta Release Notes
+# Passio SDK V2.1.4 Beta Release Notes
 
-Version 2.1.3 which is still in Beta is not recommended for production. APIs are subject to change from version to version.
+Version 2.1.4 which is still in Beta is not recommended for production. APIs are subject to change from version to version.
+
+## New for V2.1.4
+
+Version 2.1.4 was focused on improving weight/volume estimation with no API changes. 
 
 ## New for V2.1.3
 

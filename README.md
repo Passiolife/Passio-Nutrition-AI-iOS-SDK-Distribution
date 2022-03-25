@@ -41,6 +41,21 @@ In order to use the PassioSDK your app needs to meet the following minimal requi
     * iPhone 12 mini, Pro & pro Max
     * iPhone 13 Pro & Pro Max are not enabled for weight estimation during the Beta period.
 
+
+## Getting the ml models to the device
+
+The SDK will automatically download the models according to the SDK version, by default the SDK will download compressed files. The download is faster and lighter, and it will take several seconds to decompress on the device. To download uncompressed files and shorter processing on the device you can set a flag below to false.
+```swift
+PassioNutritionAI.shared.requestCompressedFiles = false
+```
+
+After obtaining special approval the developer can also host the models on an internal server.
+```swift
+var passioConfig = PassioConfiguration(key: "your_key")
+passioConfig.sdkDownloadsModels = false
+```
+ In that case, the models be served  directly to the SDK. To find out more about this special configuration please contact us. 
+
 ## Try first to run the Quick Start Demo
 
   A fast and easy way to get started with the SDK is to test it inside of PassioSDKQuickStart Demo App included in this package. Here are the steps:
