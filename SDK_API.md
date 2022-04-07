@@ -1,6 +1,6 @@
 # Passio PassioNutritionAISDK 
 
-## Version  2.1.4
+## Version  2.1.5
 ```Swift
 import ARKit
 import AVFoundation
@@ -184,6 +184,67 @@ public protocol FoodRecognitionDelegate : AnyObject {
     func recognitionResults(candidates: PassioNutritionAISDK.FoodCandidates?, image: UIImage?, nutritionFacts: PassioNutritionAISDK.PassioNutritionFacts?)
 }
 
+public enum IconSize : String {
+
+    case px90
+
+    case px180
+
+    case px360
+
+    /// Creates a new instance with the specified raw value.
+    ///
+    /// If there is no value of the type that corresponds with the specified raw
+    /// value, this initializer returns `nil`. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     print(PaperSize(rawValue: "Legal"))
+    ///     // Prints "Optional("PaperSize.Legal")"
+    ///
+    ///     print(PaperSize(rawValue: "Tabloid"))
+    ///     // Prints "nil"
+    ///
+    /// - Parameter rawValue: The raw value to use for the new instance.
+    public init?(rawValue: String)
+
+    /// The raw type that can be used to represent all values of the conforming
+    /// type.
+    ///
+    /// Every distinct value of the conforming type has a corresponding unique
+    /// value of the `RawValue` type, but there may be values of the `RawValue`
+    /// type that don't have a corresponding value of the conforming type.
+    public typealias RawValue = String
+
+    /// The corresponding value of the raw type.
+    ///
+    /// A new instance initialized with `rawValue` will be equivalent to this
+    /// instance. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     let selectedSize = PaperSize.Letter
+    ///     print(selectedSize.rawValue)
+    ///     // Prints "Letter"
+    ///
+    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
+    ///     // Prints "true"
+    public var rawValue: String { get }
+}
+
+extension IconSize : Equatable {
+}
+
+extension IconSize : Hashable {
+}
+
+extension IconSize : RawRepresentable {
+}
+
 public struct MeasurementIU {
 
     public var value: Double
@@ -311,8 +372,6 @@ public struct PassioFoodItemData : Equatable, Codable {
 
     public var name: String { get }
 
-    public var imageName: String { get }
-
     public var selectedQuantity: Double { get }
 
     public var selectedUnit: String { get }
@@ -330,8 +389,6 @@ public struct PassioFoodItemData : Equatable, Codable {
     public var foodOrigins: [PassioNutritionAISDK.PassioFoodOrigin]? { get }
 
     public var isOpenFood: Bool { get }
-
-    public var image: UIImage? { get }
 
     public var computedWeight: Measurement<UnitMass> { get }
 
@@ -530,8 +587,6 @@ public struct PassioFoodRecipe : Equatable, Codable {
 
     public var name: String { get }
 
-    public var imageName: String { get }
-
     public var servingSizes: [PassioNutritionAISDK.PassioServingSize] { get }
 
     public var servingUnits: [PassioNutritionAISDK.PassioServingUnit] { get }
@@ -544,11 +599,9 @@ public struct PassioFoodRecipe : Equatable, Codable {
 
     public var foodItems: [PassioNutritionAISDK.PassioFoodItemData] { get }
 
-    public var image: UIImage? { get }
-
     public var computedWeight: Measurement<UnitMass> { get }
 
-    public init(passioID: PassioNutritionAISDK.PassioID, name: String, fileNameIcon: String, foodItems: [PassioNutritionAISDK.PassioFoodItemData], selectedUnit: String, selectedQuantity: Double, servingSizes: [PassioNutritionAISDK.PassioServingSize], servingUnits: [PassioNutritionAISDK.PassioServingUnit])
+    public init(passioID: PassioNutritionAISDK.PassioID, name: String, foodItems: [PassioNutritionAISDK.PassioFoodItemData], selectedUnit: String, selectedQuantity: Double, servingSizes: [PassioNutritionAISDK.PassioServingSize], servingUnits: [PassioNutritionAISDK.PassioServingUnit])
 
     /// Returns a Boolean value indicating whether two values are equal.
     ///
@@ -609,13 +662,9 @@ public struct PassioIDAttributes : Equatable, Codable {
 
     public var passioFoodItemData: PassioNutritionAISDK.PassioFoodItemData? { get }
 
-    public var imageName: String { get }
-
     public var recipe: PassioNutritionAISDK.PassioFoodRecipe? { get }
 
     public var isOpenFood: Bool { get }
-
-    public var image: UIImage? { get }
 
     public init(passioID: PassioNutritionAISDK.PassioID, name: String, foodItemDataForDefault: PassioNutritionAISDK.PassioFoodItemData?, entityType: PassioNutritionAISDK.PassioIDEntityType = .barcode)
 
@@ -927,14 +976,10 @@ public class PassioNutritionAI {
     /// - Returns: PassioIDAttributes
     public func lookupPassioIDAttributesFor(passioID: PassioNutritionAISDK.PassioID) -> PassioNutritionAISDK.PassioIDAttributes?
 
-    /// Lookup an icon by its name
-    /// - Parameter imageName: the name of the image.
-    public func lookupImageBy(imageName: String) -> UIImage?
-
     /// Lookup Name For PassioID
     /// - Parameter passioID: PassioID
     /// - Returns: Name : String?
-    public func lookupNameForPassioID(passioID: PassioNutritionAISDK.PassioID) -> String?
+    public func lookupNameFor(passioID: PassioNutritionAISDK.PassioID) -> String?
 
     /// Search for food will return a list of potential food items ordered and optimized for user selection.
     /// - Parameter byText: User typed in key words
@@ -945,6 +990,22 @@ public class PassioNutritionAI {
     /// - Parameter barcode: Barcode number
     /// - Parameter completion: Receive a closure with optional PassioIDAttributes
     public func fetchPassioIDAttributesFor(barcode: PassioNutritionAISDK.Barcode, completion: @escaping ((PassioNutritionAISDK.PassioIDAttributes?) -> Void))
+
+    /// Lookup for an icon for a PassioID. You will receive an icon and a bool, The boolean is true if the icons is food icon or false if it's a placeholder icon. If you get false you can use the asycronous funcion to "fetchIconFor" the icons from the web.
+    /// - Parameters:
+    ///   - passioID: PassioIC
+    ///   - size: 90, 180 or 360 px
+    ///   - entityType: PassioEntityType to return the right placeholder.
+    /// - Returns: UIImage and a bool, The boolean is true if the icons is food icon or false if it's a placeholder icon. If you get false you can use the asycronous funcion to "fetchIconFor" the icons from
+    public func lookupIconFor(passioID: PassioNutritionAISDK.PassioID, size: PassioNutritionAISDK.IconSize = IconSize.px90, entityType: PassioNutritionAISDK.PassioIDEntityType = .item) -> (UIImage, Bool)
+
+    /// Fetch icons from the web.
+    /// - Parameters:
+    ///   - passioID: PassioIC
+    ///   - size: 90, 180 or 360 px
+    ///   - entityType: PassioEntityType to return the right placeholder.
+    ///   - completion: Optional Icon. 
+    public func fetchIconFor(passioID: PassioNutritionAISDK.PassioID, size: PassioNutritionAISDK.IconSize = IconSize.px90, entityType: PassioNutritionAISDK.PassioIDEntityType = .item, completion: @escaping (UIImage?) -> Void)
 
     /// Fetch from Passio web-service the PassioIDAttributes for a packagedFoodCode by its number
     /// - Parameters:
@@ -1622,6 +1683,11 @@ extension VolumeDetectionMode : Hashable {
 extension VolumeDetectionMode : RawRepresentable {
 }
 
+extension UIImageView {
+
+    public func loadPassioIconBy(passioID: PassioNutritionAISDK.PassioID, entityType: PassioNutritionAISDK.PassioIDEntityType, size: PassioNutritionAISDK.IconSize = .px90, completion: @escaping (PassioNutritionAISDK.PassioID, UIImage) -> Void)
+}
+
 extension simd_float4x4 : ContiguousBytes {
 
     /// Calls the given closure with the contents of underlying storage.
@@ -1636,6 +1702,7 @@ extension simd_float4x4 : ContiguousBytes {
 infix operator .+ : DefaultPrecedence
 
 infix operator ./ : DefaultPrecedence
+
 
 
 ```

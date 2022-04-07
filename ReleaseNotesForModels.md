@@ -1,5 +1,192 @@
 # Passio SDK  Release Notes for Models
 
+## V1.4.18 / V2.1.4
+
+* Number of food items recognized via HNN: 4049
+* Nutrition database version: passio_nutrition.4049.0.300
+
+### New included HNN foods
+```
+arm and hammer baking soda
+wasa multigrain crackers
+mrs butterworth maple syrup
+oderich corn
+brads crunchy kale cheeze
+rama butter spread
+diet pepsi can
+shredded wheat original
+golden oreo cookies package
+blue bell ice cream
+365 organic mac and cheese
+john morrell bacon
+365 organic mustard
+promos red maraschino cherries
+shot bar
+ruffles queso chips
+365 everyday value coconut oil
+bread with caramel spread
+activia yogurt cup
+truffle sea salt kettle chips
+kirkland organic hummus
+hunts stewed tomatoes
+oatmeal muffin
+schweppes ginger ale bottle
+natures garden deluxe nut mix
+chocolate filled sandwich cookies
+365 organic whole tomatoes
+365 organic marinara
+chocolate covered figs
+natures garden keto choconut mix
+parmesan garlic kettle chips
+food club raisins
+mash hot sauce
+generic vinegar bottle
+powerade purple
+generic tuna can
+fruco soy sauce
+jovial whole wheat flour
+natures path oats package
+pearl milling company pancake waffle mix
+365 cheese curls
+eden apple cider vinegar
+broccoli slaw
+gardein plant based chick'n filets
+mitica almonds
+generic flour package
+atkins pizza
+favorite day ice cream cone
+dill pickle kettle chips
+heb sliced jalapenos jar
+zev soy sauce
+halo top ice cream
+snapple fruit punch
+cheerios oat crunch almond package
+habanero lime kettle chips
+ruffles spicy cheddar chips
+newmans own marinara
+made good granola minis
+breaded patties
+hunts tomato sauce
+activia yogurt drink bottle
+pepperidge farm double chocolate nantucket
+stuffed tostones
+open face ground beef sandwich
+365 organic chickpeas
+carnation breakfast essentials drink mix
+365 organic ketchup
+kagi bar
+swanson canned chicken
+annies cheddar squares
+brookshires butter
+hunts diced tomatoes
+skinny syrups keto syrup
+senior rico caramel flan
+chosen foods avocado oil
+carrs water crackers
+goya mayo ketchup
+daisy cottage cheese with pineapple
+planters hot spicy cashews
+generic can of beans
+latti yogurt drink
+brads crunchy kale naked
+a1 steak sauce
+martha white blueberry muffin mix
+mccormick vanilla extract
+omi lemonade
+cooked salmon with marinade
+nescafe tradicion instant coffee
+hormel corned beef hash
+bodyarmor strawberry lemonade
+progresso bread crumbs
+beyond meat packaged patties
+hersheys strawberry syrup
+365 organic tomato sauce
+raw fish filet with skin
+ricotta
+365 tortilla chips package
+annies cheddar bunnies
+muscle milk vanilla creme
+a&w root beer can
+maggi instant noodle pack
+del monte corn
+ring pop candy
+stewed tomatoes
+pepperoncini kettle chips
+ground cloves package
+generic olive oil bottle
+omi water bottle
+motts fruit snack package
+brookshire sour cream
+nuzart chocolate spread
+chocolate peanut butter cheerios package
+kythos natural chips
+kythos caseras chips
+nut clusters
+everything bagel seasoning package
+daphnes beef & lamb gyro slices
+bread with marmalade and cream cheese
+poppy seed package
+ruffles cheddar & sour cream chips
+del monte cut green beans
+yais thai coconut curry sauce
+great value organic apple juice
+heart shaped pralines
+smithfield bacon
+motts apple juice
+activia yogurt container
+nerds package
+pick up chocolate sandwich cookies
+chopped fennel
+muscle milk strawberries creme
+think bar box
+aderezos soy sauce
+kirkland chunky guacamole mini
+kroger apple cider vinegar
+brookshires cut green beans
+crav'n vanilla wafers
+mighty sesame co tahini
+baron tahini
+bisto gravy
+bread with red jam and cream cheese
+don olio cooking spray
+generic boxed chocolate milk
+ruffles all dressed chips
+fruco ketchup
+raw king trumpet mushrooms
+shredded wheat frosted
+arcor tomato sauce
+kraft singles
+martha white strawberry cheesecake muffin mix
+brads crunchy kale original
+blue diamond nut thins
+generic vanilla extract bottle
+baby kale
+365 organic mayonnaise
+ferrero rondnoir package
+ruffles sour cream & onion chips
+nutiva coconut oil
+```
+
+### Excluded HNN foods
+```
+closed can of chicken
+activia strawberry yogurt drink 93ml
+silk unsweetened almond milk
+deep fried chikuwa
+cool whip
+activia lowfat yogurt blueberry
+breaded camembert
+activia lowfat yogurt peach
+activia lowfat yogurt black cherry
+clear alcoholic drink
+activia lowfat yogurt vanillla
+shredded wheat original package
+ruffles chips
+activia nonfat yogurt
+activia lowfat yogurt strawberry
+kale chips package
+```
+
 ## V1.4.17 / V2.1.3
 
 * Number of food items recognized via HNN: 3907

@@ -1,3 +1,42 @@
+# Passio SDK V2.1.5 Beta Release Notes
+Version 2.1.5 which is still in Beta is not recommended for production. APIs are subject to change from version to version.
+
+
+### Models
+
+* Number of food items recognized via HNN: 4049
+* Nutrition database version: passio_nutrition.4049.0.300
+
+## Remove from the SDK 
+
+all the image
+```swift
+public var image: UIImage? { get }
+public var imageName: String { get }
+```
+
+the function
+```swift
+public func lookupNameForPassioID(passioID: PassioNutritionAISDK.PassioID) -> String?
+```
+was renamed to 
+```swift 
+public func lookupIconFor(passioID: PassioNutritionAISDK.PassioID, size: PassioNutritionAISDK.IconSize = IconSize.px90, entityType: PassioNutritionAISDK.PassioIDEntityType = .item) -> (UIImage, Bool)
+```
+where the Bool Returns: UIImage and a bool, The boolean is true if the icons is food icon or false if it's a placeholder icon. If you get false you can use the asycronous funcion to "fetchIconFor" the icons from
+
+```swift 
+public func fetchIconFor(passioID: PassioNutritionAISDK.PassioID, size: PassioNutritionAISDK.IconSize = IconSize.px90, entityType: PassioNutritionAISDK.PassioIDEntityType = .item, completion: @escaping (UIImage?) -> Void)
+```
+
+Also added UIImageView extension please check demo app to check how to use it. 
+
+```swift
+extension UIImageView {
+    public func loadPassioIconBy(passioID: PassioNutritionAISDK.PassioID, entityType: PassioNutritionAISDK.PassioIDEntityType, size: PassioNutritionAISDK.IconSize = .px90, completion: @escaping (PassioNutritionAISDK.PassioID, UIImage) -> Void)
+}
+```
+
 # Passio SDK V2.1.4 Beta Release Notes
 
 Version 2.1.4 which is still in Beta is not recommended for production. APIs are subject to change from version to version.
