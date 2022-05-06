@@ -1,6 +1,6 @@
 # Passio PassioNutritionAISDK 
 
-## Version  2.1.6
+## Version  2.2.0
 ```Swift
 import ARKit
 import AVFoundation
@@ -243,6 +243,84 @@ extension IconSize : Hashable {
 }
 
 extension IconSize : RawRepresentable {
+}
+
+public struct KetoFood {
+
+    public let passioID: String
+
+    public var color: UIColor
+
+    public static var ketoFoods: [PassioNutritionAISDK.KetoFood] { get }
+}
+
+public struct KetoMealPlan {
+
+    public let mealTime: PassioNutritionAISDK.MealTime
+
+    public let ketoFood: [PassioNutritionAISDK.KetoFood]
+
+    public static var mealPlans: [PassioNutritionAISDK.KetoMealPlan] { get }
+}
+
+public struct MealSuggestion {
+
+    public let mealTime: PassioNutritionAISDK.MealTime
+
+    public let ketoFoods: [PassioNutritionAISDK.KetoFood]
+
+    public static var mealSuggestions: [PassioNutritionAISDK.MealSuggestion] { get }
+}
+
+public enum MealTime {
+
+    case breakfast
+
+    case lunch
+
+    case dinner
+
+    case snack
+
+    /// Returns a Boolean value indicating whether two values are equal.
+    ///
+    /// Equality is the inverse of inequality. For any values `a` and `b`,
+    /// `a == b` implies that `a != b` is `false`.
+    ///
+    /// - Parameters:
+    ///   - lhs: A value to compare.
+    ///   - rhs: Another value to compare.
+    public static func == (a: PassioNutritionAISDK.MealTime, b: PassioNutritionAISDK.MealTime) -> Bool
+
+    /// Hashes the essential components of this value by feeding them into the
+    /// given hasher.
+    ///
+    /// Implement this method to conform to the `Hashable` protocol. The
+    /// components used for hashing must be the same as the components compared
+    /// in your type's `==` operator implementation. Call `hasher.combine(_:)`
+    /// with each of these components.
+    ///
+    /// - Important: Never call `finalize()` on `hasher`. Doing so may become a
+    ///   compile-time error in the future.
+    ///
+    /// - Parameter hasher: The hasher to use when combining the components
+    ///   of this instance.
+    public func hash(into hasher: inout Hasher)
+
+    /// The hash value.
+    ///
+    /// Hash values are not guaranteed to be equal across different executions of
+    /// your program. Do not save hash values to use during a future execution.
+    ///
+    /// - Important: `hashValue` is deprecated as a `Hashable` requirement. To
+    ///   conform to `Hashable`, implement the `hash(into:)` requirement instead.
+    public var hashValue: Int { get }
+}
+
+extension MealTime : Equatable {
+}
+
+extension MealTime : Hashable {
 }
 
 public struct MeasurementIU {
@@ -831,6 +909,8 @@ extension PassioMode : Hashable {
 /// Passio SDK - Copyright © 2022 Passio Inc. All rights reserved.
 public class PassioNutritionAI {
 
+    final public let filesVersion: Int
+
     /// Shared Instance
     public class var shared: PassioNutritionAISDK.PassioNutritionAI { get }
 
@@ -920,15 +1000,7 @@ public class PassioNutritionAI {
     public func stopFoodDetection()
 
     @available(iOS 13.0, *)
-    public func detectFoodIn(image: UIImage, detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), completion: @escaping (PassioNutritionAISDK.FoodCandidates?) -> Void)
-
-    /// Detect food in an image
-    /// - Parameters:
-    ///   - image: Image for detection
-    ///   - slicingRects: Array of rectangulares for granular detection
-    ///   - completion: Array of detection [DetectedCandidate]
-    @available(iOS 13.0, *)
-    public func detectFoodInSlicedRects(image: UIImage, slicingRects: [CGRect]? = nil, completion: @escaping ([PassioNutritionAISDK.DetectedCandidate]) -> Void)
+    public func detectFoodIn(image: UIImage, detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), slicingRects: [CGRect]? = nil, completion: @escaping (PassioNutritionAISDK.FoodCandidates?) -> Void)
 
     /// Detect barcodes "BarcodeCandidate" in an image
     /// - Parameter image: Image for the detection
@@ -1005,7 +1077,7 @@ public class PassioNutritionAI {
     ///   - size: 90, 180 or 360 px
     ///   - entityType: PassioEntityType to return the right placeholder.
     ///   - completion: Optional Icon. 
-    public func fetchIconFor(passioID: PassioNutritionAISDK.PassioID, size: PassioNutritionAISDK.IconSize = IconSize.px90, entityType: PassioNutritionAISDK.PassioIDEntityType = .item, completion: @escaping (UIImage?) -> Void)
+    public func fetchIconFor(passioID: PassioNutritionAISDK.PassioID, size: PassioNutritionAISDK.IconSize = IconSize.px90, completion: @escaping (UIImage?) -> Void)
 
     /// Fetch from Passio web-service the PassioIDAttributes for a packagedFoodCode by its number
     /// - Parameters:
@@ -1024,6 +1096,8 @@ public class PassioNutritionAI {
 
     /// Return the best Volume detection Mode for this iPhone
     public var bestVolumeDetectionMode: PassioNutritionAISDK.VolumeDetectionMode { get }
+
+    public var version: String { get }
 }
 
 extension PassioNutritionAI : PassioNutritionAISDK.PassioStatusDelegate {

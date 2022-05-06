@@ -1,15 +1,18 @@
-# Passio SDK V2.1.6 Beta Release Notes
+# Passio SDK V2.2.0  Release Notes
+Version 2.2.0 is recommended for production and will replace the 1.4.x branch soon. We recommend for all our customers to switch to the 2.2.x branch. 
+
+
 Version 2.1.6 which is still in Beta is not recommended for production. APIs are subject to change from version to version.
 
 ### Models 
 
+Internal volume optimization. 
+
+No API changes.
 No updates to the models. 
-
-
 
 # Passio SDK V2.1.5 Beta Release Notes
 Version 2.1.5 which is still in Beta is not recommended for production. APIs are subject to change from version to version.
-
 
 ### Models
 
