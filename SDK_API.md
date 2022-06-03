@@ -1,6 +1,6 @@
 # Passio PassioNutritionAISDK 
 
-## Version  2.2.0
+## Version  2.2.1
 ```Swift
 import ARKit
 import AVFoundation
@@ -20,8 +20,10 @@ import Vision
 import _Concurrency
 import simd
 
+/// Returning all information of Amount estimation and directions how to move the device for better estimation
 public protocol AmountEstimate {
 
+    /// Scanned Volume estimate in ml
     var volumeEstimate: Double? { get }
 
     /// Scanned Amount in grams
@@ -29,6 +31,12 @@ public protocol AmountEstimate {
 
     /// The quality of the estimate (eventually for feedback to the user or SDK-based app developer)
     var estimationQuality: PassioNutritionAISDK.EstimationQuality? { get }
+
+    /// Hints how to move the device for better estimation.
+    var moveDevice: PassioNutritionAISDK.MoveDirection? { get }
+
+    /// The Angel in radians from the perpendicular surface.
+    var viewingAngle: Double? { get }
 }
 
 /// Barcode (typealias String) is the string representation of the barcode id
@@ -81,7 +89,7 @@ public protocol DetectedCandidate {
     var amountEstimate: PassioNutritionAISDK.AmountEstimate? { get }
 }
 
-public enum EstimationQuality {
+public enum EstimationQuality : String {
 
     case good
 
@@ -89,45 +97,59 @@ public enum EstimationQuality {
 
     case poor
 
-    /// Returns a Boolean value indicating whether two values are equal.
-    ///
-    /// Equality is the inverse of inequality. For any values `a` and `b`,
-    /// `a == b` implies that `a != b` is `false`.
-    ///
-    /// - Parameters:
-    ///   - lhs: A value to compare.
-    ///   - rhs: Another value to compare.
-    public static func == (a: PassioNutritionAISDK.EstimationQuality, b: PassioNutritionAISDK.EstimationQuality) -> Bool
+    case noEstimation
 
-    /// Hashes the essential components of this value by feeding them into the
-    /// given hasher.
+    /// Creates a new instance with the specified raw value.
     ///
-    /// Implement this method to conform to the `Hashable` protocol. The
-    /// components used for hashing must be the same as the components compared
-    /// in your type's `==` operator implementation. Call `hasher.combine(_:)`
-    /// with each of these components.
+    /// If there is no value of the type that corresponds with the specified raw
+    /// value, this initializer returns `nil`. For example:
     ///
-    /// - Important: Never call `finalize()` on `hasher`. Doing so may become a
-    ///   compile-time error in the future.
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
     ///
-    /// - Parameter hasher: The hasher to use when combining the components
-    ///   of this instance.
-    public func hash(into hasher: inout Hasher)
+    ///     print(PaperSize(rawValue: "Legal"))
+    ///     // Prints "Optional("PaperSize.Legal")"
+    ///
+    ///     print(PaperSize(rawValue: "Tabloid"))
+    ///     // Prints "nil"
+    ///
+    /// - Parameter rawValue: The raw value to use for the new instance.
+    public init?(rawValue: String)
 
-    /// The hash value.
+    /// The raw type that can be used to represent all values of the conforming
+    /// type.
     ///
-    /// Hash values are not guaranteed to be equal across different executions of
-    /// your program. Do not save hash values to use during a future execution.
+    /// Every distinct value of the conforming type has a corresponding unique
+    /// value of the `RawValue` type, but there may be values of the `RawValue`
+    /// type that don't have a corresponding value of the conforming type.
+    public typealias RawValue = String
+
+    /// The corresponding value of the raw type.
     ///
-    /// - Important: `hashValue` is deprecated as a `Hashable` requirement. To
-    ///   conform to `Hashable`, implement the `hash(into:)` requirement instead.
-    public var hashValue: Int { get }
+    /// A new instance initialized with `rawValue` will be equivalent to this
+    /// instance. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     let selectedSize = PaperSize.Letter
+    ///     print(selectedSize.rawValue)
+    ///     // Prints "Letter"
+    ///
+    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
+    ///     // Prints "true"
+    public var rawValue: String { get }
 }
 
 extension EstimationQuality : Equatable {
 }
 
 extension EstimationQuality : Hashable {
+}
+
+extension EstimationQuality : RawRepresentable {
 }
 
 public typealias FileLocalURL = URL
@@ -328,6 +350,71 @@ public struct MeasurementIU {
     public var value: Double
 
     public let unit: String
+}
+
+public enum MoveDirection : String {
+
+    case away
+
+    case ok
+
+    case up
+
+    case down
+
+    case around
+
+    /// Creates a new instance with the specified raw value.
+    ///
+    /// If there is no value of the type that corresponds with the specified raw
+    /// value, this initializer returns `nil`. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     print(PaperSize(rawValue: "Legal"))
+    ///     // Prints "Optional("PaperSize.Legal")"
+    ///
+    ///     print(PaperSize(rawValue: "Tabloid"))
+    ///     // Prints "nil"
+    ///
+    /// - Parameter rawValue: The raw value to use for the new instance.
+    public init?(rawValue: String)
+
+    /// The raw type that can be used to represent all values of the conforming
+    /// type.
+    ///
+    /// Every distinct value of the conforming type has a corresponding unique
+    /// value of the `RawValue` type, but there may be values of the `RawValue`
+    /// type that don't have a corresponding value of the conforming type.
+    public typealias RawValue = String
+
+    /// The corresponding value of the raw type.
+    ///
+    /// A new instance initialized with `rawValue` will be equivalent to this
+    /// instance. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     let selectedSize = PaperSize.Letter
+    ///     print(selectedSize.rawValue)
+    ///     // Prints "Letter"
+    ///
+    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
+    ///     // Prints "true"
+    public var rawValue: String { get }
+}
+
+extension MoveDirection : Equatable {
+}
+
+extension MoveDirection : Hashable {
+}
+
+extension MoveDirection : RawRepresentable {
 }
 
 /// The ObjectDetectionCandidate protocol returns the object detection result
@@ -909,6 +996,7 @@ extension PassioMode : Hashable {
 /// Passio SDK - Copyright © 2022 Passio Inc. All rights reserved.
 public class PassioNutritionAI {
 
+    /// The latest models and files version the SDK will request.
     final public let filesVersion: Int
 
     /// Shared Instance
@@ -922,7 +1010,7 @@ public class PassioNutritionAI {
     /// Delegate to track PassioStatus changes. You will get the same status via the configure function.
     weak public var statusDelegate: PassioNutritionAISDK.PassioStatusDelegate?
 
-    /// Available frames per seconds
+    /// Available frames per seconds. The default set for two (2) fps.
     public enum FramesPerSecond : Int32 {
 
         case one
@@ -977,28 +1065,23 @@ public class PassioNutritionAI {
         public var rawValue: Int32 { get }
     }
 
-    /// Call this API to configure the SDK
-    /// - Parameters:
-    ///   - PassioConfiguration: Your desired configuration, must include your developer key
-    ///   - completion: Receive back the status of the SDK
     @available(iOS 13.0, *)
     public func configure(passioConfiguration: PassioNutritionAISDK.PassioConfiguration, completion: @escaping (PassioNutritionAISDK.PassioStatus) -> Void)
 
     /// Shut down the Passio SDK and release all resources
     public func shutDownPassioSDK()
 
-    /// Core functionality of the PassioSDK is to detect food via pointing the camera at food
-    /// - Parameters:
-    ///   - detectionConfig: send FoodDetectionConfiguration() object with the configuration
-    ///   - foodRecognitionDelegate: add self to implement the FoodRecognitionDelegate
-    ///   - packagedFoodDelegate: add self to implement packaged food detection PackagedFoodDelegate
-    ///   - completion: Listen to success or failure of the startFoodDetection.
     @available(iOS 13.0, *)
     public func startFoodDetection(detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), foodRecognitionDelegate: PassioNutritionAISDK.FoodRecognitionDelegate, completion: @escaping (Bool) -> Void)
 
     /// Stop Food Detection to remove camera completely use public func removeVidoeLayer()
     public func stopFoodDetection()
 
+    ///
+    /// - Parameters:
+    ///   - image:
+    ///   - detectionConfig: Detection configuration
+    ///   - completion: Array of detection [FoodCandidates]
     @available(iOS 13.0, *)
     public func detectFoodIn(image: UIImage, detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), slicingRects: [CGRect]? = nil, completion: @escaping (PassioNutritionAISDK.FoodCandidates?) -> Void)
 
@@ -1054,9 +1137,10 @@ public class PassioNutritionAI {
     public func lookupNameFor(passioID: PassioNutritionAISDK.PassioID) -> String?
 
     /// Search for food will return a list of potential food items ordered and optimized for user selection.
-    /// - Parameter byText: User typed in key words
-    /// - Returns: All potential PassioIDAndName.
-    public func searchForFood(byText: String) -> [PassioNutritionAISDK.PassioIDAndName]
+    /// - Parameters:
+    ///   - byText: User typed in ter
+    ///   - completion: All potential PassioIDAndName.
+    public func searchForFood(byText: String, completion: @escaping ([PassioNutritionAISDK.PassioIDAndName]) -> Void)
 
     /// Fetch from Passio web-service the PassioIDAttributes for a barcode by its number
     /// - Parameter barcode: Barcode number
@@ -1076,7 +1160,7 @@ public class PassioNutritionAI {
     ///   - passioID: PassioIC
     ///   - size: 90, 180 or 360 px
     ///   - entityType: PassioEntityType to return the right placeholder.
-    ///   - completion: Optional Icon. 
+    ///   - completion: Optional Icon.
     public func fetchIconFor(passioID: PassioNutritionAISDK.PassioID, size: PassioNutritionAISDK.IconSize = IconSize.px90, completion: @escaping (UIImage?) -> Void)
 
     /// Fetch from Passio web-service the PassioIDAttributes for a packagedFoodCode by its number
@@ -1776,7 +1860,6 @@ extension simd_float4x4 : ContiguousBytes {
 infix operator .+ : DefaultPrecedence
 
 infix operator ./ : DefaultPrecedence
-
 
 
 ```

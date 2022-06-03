@@ -1,6 +1,116 @@
 # Passio SDK  Release Notes for Models
 
-## V1.4.18 / V2.1.5/ V2.1.6
+
+## V1.4.19 / V2.2.1
+
+* Number of food items recognized via HNN: 4091
+* Nutrition database version: passio_nutrition.4091.0.301
+
+
+### New included HNN foods
+```
+san pellegrino tonica
+cracker with smoked salmon
+pulled meat sandwich
+pink jello
+pacific foods box soup
+edamame pasta
+scones with purple jam and cream
+nestle hot chocolate packet
+thin mints
+queso
+chilaquiles
+silk unsweetened almond milk
+spinach salad
+hersheys cocoa powder
+dr pepper can
+meatball subs
+german maultaschen soup
+grated lime zest
+water chestnuts
+raw beef roast
+colorful truffles
+crab salad sandwich
+bresaola and arugula salad
+green smoothie drink
+ruffles bbq chips
+mashed potatoes with potato skin
+meat pizza
+celery salad
+garden salad with salmon
+meditterranean salad
+great value canned chicken
+cooked intestines
+cracker with brie cheese
+cracker with avocado
+pepsi zero bottle
+ruffles original chips
+sausage and egg mcmuffin
+broccoli cheese soup
+green pureed soups
+coconut milk jelly
+dried blueberries
+cooked thin pasta
+rice with soy sauce
+brown pureed soups
+cracker with cheddar cheese
+green sweet mini peppers
+cracker with cheese and jam
+orange pureed soups
+amazon red pepper sauce
+shrimp jambalaya
+sliced muenster cheese
+whole peeled avocado
+wonton soup
+dairy milk fruit and nut bar
+grated orange zest
+chocolate palmiers
+creamy macaroni salad
+red velvet latte
+meat jambalaya
+san pellegrino blood orange
+red pureed soups
+open face egg salad sandwich
+chicken alfredo
+raw sardines
+cooked chard
+trader joes sliced cheddar
+grated lemon zest
+croque madame
+```
+
+### Excluded HNN foods
+```
+stew
+mcdonalds sausage egg mcmuffin
+cream of broccoli soup
+dr pepper 355ml can
+pasta spaghetti
+coffee with foam
+pepsi max bottle
+green fruit smoothie
+tomato bisque soup
+cream of asparagus
+cow intestines
+frozen beverages
+pacific foods soup
+topped cracker
+whipped cream with topping
+carrot ginger soup
+rice with beef
+golden split pea soup
+bean chili
+pumpkin soup
+mushroom bisque
+cream of celery soup
+activia yogurt container
+tomato soup
+green pea soup
+mcdonalds sausage egg biscuit
+```
+
+
+## V1.4.18 / V2.1.5
 
 * Number of food items recognized via HNN: 4049
 * Nutrition database version: passio_nutrition.4049.0.300
