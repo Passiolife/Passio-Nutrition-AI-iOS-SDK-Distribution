@@ -1,6 +1,6 @@
 # Passio PassioNutritionAISDK 
 
-## Version  2.2.1
+## Version  2.2.2
 ```Swift
 import ARKit
 import AVFoundation
@@ -1074,7 +1074,7 @@ public class PassioNutritionAI {
     @available(iOS 13.0, *)
     public func startFoodDetection(detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), foodRecognitionDelegate: PassioNutritionAISDK.FoodRecognitionDelegate, completion: @escaping (Bool) -> Void)
 
-    /// Stop Food Detection to remove camera completely use public func removeVidoeLayer()
+    /// Stop Food Detection to remove camera completely use public func removeVideoLayer()
     public func stopFoodDetection()
 
     ///
@@ -1103,7 +1103,7 @@ public class PassioNutritionAI {
     public func getPreviewLayerWithGravity(sessionPreset: AVCaptureSession.Preset = .hd1920x1080, volumeDetectionMode: PassioNutritionAISDK.VolumeDetectionMode = .none, videoGravity: AVLayerVideoGravity = .resizeAspectFill) -> AVCaptureVideoPreviewLayer?
 
     /// Don't call this function if you need to use the Passio layer again. Only call this function to set the PassioSDK Preview layer to nil
-    public func removeVidoeLayer()
+    public func removeVideoLayer()
 
     /// Use this function to get the bounding box relative to the previewLayerBonds
     /// - Parameter boundingBox: The bounding box from the delegate
@@ -1860,6 +1860,7 @@ extension simd_float4x4 : ContiguousBytes {
 infix operator .+ : DefaultPrecedence
 
 infix operator ./ : DefaultPrecedence
+
 
 
 ```

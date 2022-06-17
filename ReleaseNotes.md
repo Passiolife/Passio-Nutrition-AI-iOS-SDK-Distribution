@@ -1,4 +1,20 @@
-# Passio SDK V2.2.1  Release Notes
+# Passio SDK V2.2.2  Release Notes
+### API changes
+
+```swift
+    public func removeVidoeLayer()
+```
+was renamed
+
+```swift 
+    public func removeVideoLayer()
+```
+
+### Models 
+
+No updates
+
+## Passio SDK V2.2.1  Release Notes
 
 ### Models 
 
