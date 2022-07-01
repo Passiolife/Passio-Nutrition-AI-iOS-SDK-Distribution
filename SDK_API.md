@@ -1,6 +1,6 @@
 # Passio PassioNutritionAISDK 
 
-## Version  2.2.2
+## Version  2.2.3
 ```Swift
 import ARKit
 import AVFoundation
@@ -516,6 +516,9 @@ public struct PassioConfiguration : Equatable {
 
     /// If you set allowInternetConnection = false without working with Passio the SDK will not work. The SDK will not connect to the internet for key validations, barcode data and packaged food data.
     public var allowInternetConnection: Bool
+
+    /// Only use latest models. Don't use models previous installed.
+    public var onlyUseLatestModels: Bool
 
     public init(key: String)
 
@@ -1860,7 +1863,6 @@ extension simd_float4x4 : ContiguousBytes {
 infix operator .+ : DefaultPrecedence
 
 infix operator ./ : DefaultPrecedence
-
 
 
 ```

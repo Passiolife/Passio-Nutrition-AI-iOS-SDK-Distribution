@@ -1,7 +1,47 @@
 # Passio SDK  Release Notes for Models
 
+## V2.2.3
 
-## V1.4.19 / V2.2.1
+* Number of food items recognized via HNN: 4099
+* Nutrition database version: passio_nutrition.4100.0.301
+
+
+### New included HNN foods
+```
+rope gummies
+coleslaw soup
+asian noodle salad
+ham and egg mcmuffin
+rice with lentils
+rice with beef
+honey mango
+raw diced mixed root vegetables
+picadillo
+foie gras
+cracker with canned fish
+cap n crunch berry with milk
+chicken stir fry
+raw diced potatoes with skin
+raw flatfish
+pink slushi
+white pureed soups
+bacon and egg mcmuffin
+```
+
+### Excluded HNN foods
+```
+veggie burger
+burger king whopper
+orange juice in cup
+raw bream
+korean chive salad
+dark juice in cup
+clear apple juice in cup
+veggie mix with grains
+```
+
+
+## V1.4.19 / V2.2.1 / V2.2.2
 
 * Number of food items recognized via HNN: 4091
 * Nutrition database version: passio_nutrition.4091.0.301
