@@ -1,5 +1,53 @@
 # Passio SDK  Release Notes for Models
 
+## V2.2.5
+
+* Number of food items recognized via HNN: 4111
+* Nutrition database version: passio_nutrition.4111.0.301
+
+
+### New included HNN foods
+```
+orange chicken
+bitterballen
+raw lasagna in casserole
+quinoa-stuffed peppers
+jalapeno poppers
+potato smileys
+beef fritters
+raw pizza piccolinis
+balsamico dressing
+candied ginger
+open face ham sandwich
+frozen waffle fries
+raw pork belly cubes
+raw rack of lamb
+cooked purple sweet potato
+duchess potatoes
+soup with rice
+yellow ice cream
+banana walnut cake
+cooked pork chop
+raw gratin casserole
+quinoa salad
+```
+
+### Excluded HNN foods
+
+```
+standard dressing
+turkey breast
+frankfurter
+couscous salad
+bread with lunch meat
+chicken rice soup
+flatbread sandwich
+wiener sausage
+coconut milk jelly
+hot link
+roast goose
+```
+
 ## V2.2.3
 
 * Number of food items recognized via HNN: 4099

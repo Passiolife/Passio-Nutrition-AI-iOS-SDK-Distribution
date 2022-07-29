@@ -1,7 +1,15 @@
-# Passio SDK V2.2.3  Release Notes
+# Passio SDK V2.2.5  Release Notes
+
+
+## V2.2.5
+### No API changes
+### Models 
+* Number of food items recognized via HNN: 4111
+* Nutrition database version: passio_nutrition.4111.0.301
+
+
 
 ## V2.2.3
-
 ### API changes
 
 Added to PassioConfiguration a new variable onlyUseLatestModels. If set to true the SDK will not use previously installed models. 
@@ -16,7 +24,7 @@ public var onlyUseLatestModels = false
 * Nutrition database version: passio_nutrition.4100.0.301
 
 
-# Passio SDK V2.2.2  Release Notes
+## V2.2.2 
 ### API changes
 
 ```swift
@@ -32,7 +40,7 @@ was renamed
 
 No updates
 
-## Passio SDK V2.2.1  Release Notes
+## V2.2.1 
 
 ### Models 
 
