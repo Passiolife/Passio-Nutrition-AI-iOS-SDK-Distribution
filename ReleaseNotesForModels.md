@@ -1,5 +1,76 @@
 # Passio SDK  Release Notes for Models
 
+## V2.2.7
+
+* Number of food items recognized via HNN: 4122
+* Nutrition database version: passio_nutrition.4123.0.301
+
+### New included HNN foods
+```
+kroger wrapped cheese
+yellow rice with chicken
+condensed milk can
+can of sweet peas
+roasted beef and pork sausages
+mollete
+open face tomato sandwich
+yellow ice cream scoop in a cone
+chili powder package
+curry powder package
+soup with corn cob
+white rice with chicken
+bean stew
+perrier can
+meat spread
+banana muffin
+ground meat stuffed peppers
+open face cucumber sandwich
+beef barley pickle soup
+veggie burger
+hillshire farm lunch meat
+schweppes soda bottle
+kabanos
+gazpacho
+martini
+mojito
+brown rice with chicken
+raw beef and pork sausages
+kroger gala apple package
+chai tea latte
+ground ginger package
+mayonnaise in pouche
+open face mushroom sandwich
+strawberry daquiri
+pina colada
+```
+
+### Excluded HNN foods
+```
+raw bratwurst
+philippine can
+fried bratwurst
+deli market mustard
+chorizo
+compliments peach halves
+strawberry dressing
+365 organic orange juice
+no name soy sauce
+no name pear halves
+kraft singles
+hot chocolate in glass
+compliments peach slices
+presidents choice wrapped cheese
+cocktails
+standard sausage
+open face veggie sandwich
+foie gras
+rice with chicken
+goose island can
+pumpkin spice package
+kagi bar
+canned french onion soup
+```
+
 ## V2.2.5
 
 * Number of food items recognized via HNN: 4111
