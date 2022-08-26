@@ -1,6 +1,5 @@
 # Passio SDK V2.2.7  Release Notes
 
-
 ## V2.2.7
 
 ### No API changes
@@ -9,7 +8,7 @@
 * Nutrition database version: passio_nutrition.4123.0.301
 
 ### Under the hood
-* SDK will recognize food only if is stable. This improve the false positives and the weight calculations stability. 
+* The SDK will recognize food only if the phone is stable. This improves overall recognition results and the weight calculations stability. 
 
 ## V2.2.5
 ### No API changes
