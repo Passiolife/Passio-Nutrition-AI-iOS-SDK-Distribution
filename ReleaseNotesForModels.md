@@ -1,5 +1,65 @@
 # Passio SDK  Release Notes for Models
 
+## V2.2.9
+
+* Number of food items recognized via HNN: 4164
+* Nutrition database version: passio_nutrition.4165.0.301
+
+
+### New included HNN foods
+```
+bulgur salad
+cracker with white cheese
+parsley tempura
+basque cheesecake
+slice of cheese pizza
+slice of meat pizza
+prune puree
+sweet potato fritters
+mushroom and barley soup
+slice of hawaiian pizza
+slice of white cake with fruit
+potato roses
+asparagus risotto
+coconut cookies
+tricolor tortellini with cheese
+miso soup with shrimp
+cooked red rice
+whole white pizza
+fried pickles
+coconut sandwich cookies
+slice of chicken pizza
+breakfast casserole
+slice of white pizza
+raw filled orange squash
+asparagus tempura
+slice of vegetarian pizza
+chocolate danish butter cookies
+slice of seafood pizza
+strawberry cream cheese bagel
+slice of pizza rucola
+slice of pepperoni pizza
+slice of mushroom pizza
+whole jalapeno pizza
+whipping cream can
+raw catfish
+slice of ground beef pizza
+blood sausage coil
+artichoke salad
+slice of basque cheesecake
+baked potato casserole
+egg waffles
+cooked collard greens
+packaged bagels
+tripe soup
+```
+
+### Excluded HNN foods
+```
+thomas bagels package
+reddi whip can
+```
+
 ## V2.2.7
 
 * Number of food items recognized via HNN: 4122
