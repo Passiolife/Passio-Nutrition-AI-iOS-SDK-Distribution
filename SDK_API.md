@@ -1,11 +1,10 @@
 # Passio PassioNutritionAISDK 
 
-## Version  2.2.3
+## Version  2.2.11
 ```Swift
 import ARKit
 import AVFoundation
 import Accelerate
-import Combine
 import CommonCrypto
 import CoreML
 import CoreMedia
@@ -18,6 +17,7 @@ import UIKit
 import VideoToolbox
 import Vision
 import _Concurrency
+import _StringProcessing
 import simd
 
 /// Returning all information of Amount estimation and directions how to move the device for better estimation
@@ -167,6 +167,8 @@ public protocol FoodCandidates {
 
     /// The packaged food candidates if available
     var packagedFoodCandidates: [PassioNutritionAISDK.PackagedFoodCandidate]? { get }
+
+    var deviceStability: Double? { get }
 }
 
 /// FoodDetectionConfiguration is need to configure the food detection
@@ -265,33 +267,6 @@ extension IconSize : Hashable {
 }
 
 extension IconSize : RawRepresentable {
-}
-
-public struct KetoFood {
-
-    public let passioID: String
-
-    public var color: UIColor
-
-    public static var ketoFoods: [PassioNutritionAISDK.KetoFood] { get }
-}
-
-public struct KetoMealPlan {
-
-    public let mealTime: PassioNutritionAISDK.MealTime
-
-    public let ketoFood: [PassioNutritionAISDK.KetoFood]
-
-    public static var mealPlans: [PassioNutritionAISDK.KetoMealPlan] { get }
-}
-
-public struct MealSuggestion {
-
-    public let mealTime: PassioNutritionAISDK.MealTime
-
-    public let ketoFoods: [PassioNutritionAISDK.KetoFood]
-
-    public static var mealSuggestions: [PassioNutritionAISDK.MealSuggestion] { get }
 }
 
 public enum MealTime {
@@ -508,6 +483,9 @@ public struct PassioConfiguration : Equatable {
     /// If you have chosen to remove the files from the SDK and provide the SDK different URLs for this files please use this variable.
     public var filesLocalURLs: [PassioNutritionAISDK.FileLocalURL]?
 
+    /// Only use provided models. Don't use models previously installed.
+    public var forceInstallLocalURLs: Bool
+
     /// If you set this option to true, the SDK will download the models relevant for this version from Passio's bucket.
     public var sdkDownloadsModels: Bool
 
@@ -516,9 +494,6 @@ public struct PassioConfiguration : Equatable {
 
     /// If you set allowInternetConnection = false without working with Passio the SDK will not work. The SDK will not connect to the internet for key validations, barcode data and packaged food data.
     public var allowInternetConnection: Bool
-
-    /// Only use latest models. Don't use models previous installed.
-    public var onlyUseLatestModels: Bool
 
     public init(key: String)
 
@@ -1088,22 +1063,20 @@ public class PassioNutritionAI {
     @available(iOS 13.0, *)
     public func detectFoodIn(image: UIImage, detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), slicingRects: [CGRect]? = nil, completion: @escaping (PassioNutritionAISDK.FoodCandidates?) -> Void)
 
-    /// Detect barcodes "BarcodeCandidate" in an image
-    /// - Parameter image: Image for the detection
-    /// - Parameter completion: Receives back Array of "BarcodeCandidate" for that image
+    @available(iOS 13.0, *)
     public func detectBarcodesIn(image: UIImage, completion: @escaping ([PassioNutritionAISDK.BarcodeCandidate]) -> Void)
 
-    /// List all food enabled for weight estimations
-    /// - Returns: List of PassioIDs
+    @available(iOS 13.0, *)
     public func listFoodEnabledForAmountEstimation() -> [PassioNutritionAISDK.PassioID]
 
-    /// use getPreviewLayer if you don't plan to rotate the PreviewLayer.
-    /// - Returns: AVCaptureVideoPreviewLayer
+    @available(iOS 13.0, *)
     public func getPreviewLayer() -> AVCaptureVideoPreviewLayer?
 
-    /// use getPreviewLayerWithGravity if you plan to rotate the PreviewLayer.
-    /// - Returns: AVCaptureVideoPreviewLayer
+    @available(iOS 13.0, *)
     public func getPreviewLayerWithGravity(sessionPreset: AVCaptureSession.Preset = .hd1920x1080, volumeDetectionMode: PassioNutritionAISDK.VolumeDetectionMode = .none, videoGravity: AVLayerVideoGravity = .resizeAspectFill) -> AVCaptureVideoPreviewLayer?
+
+    @available(iOS 13.0, *)
+    public func getPreviewLayerForFrontCamera() -> AVCaptureVideoPreviewLayer?
 
     /// Don't call this function if you need to use the Passio layer again. Only call this function to set the PassioSDK Preview layer to nil
     public func removeVideoLayer()
@@ -1129,59 +1102,34 @@ public class PassioNutritionAI {
     /// Clean all records
     public func cleanAllPersonalization()
 
-    /// Lookup PassioIDAttributes from PassioID
-    /// - Parameter passioID: PassioID
-    /// - Returns: PassioIDAttributes
+    @available(iOS 13.0, *)
     public func lookupPassioIDAttributesFor(passioID: PassioNutritionAISDK.PassioID) -> PassioNutritionAISDK.PassioIDAttributes?
 
-    /// Lookup Name For PassioID
-    /// - Parameter passioID: PassioID
-    /// - Returns: Name : String?
+    @available(iOS 13.0, *)
     public func lookupNameFor(passioID: PassioNutritionAISDK.PassioID) -> String?
 
-    /// Search for food will return a list of potential food items ordered and optimized for user selection.
-    /// - Parameters:
-    ///   - byText: User typed in ter
-    ///   - completion: All potential PassioIDAndName.
+    @available(iOS 13.0, *)
     public func searchForFood(byText: String, completion: @escaping ([PassioNutritionAISDK.PassioIDAndName]) -> Void)
 
-    /// Fetch from Passio web-service the PassioIDAttributes for a barcode by its number
-    /// - Parameter barcode: Barcode number
-    /// - Parameter completion: Receive a closure with optional PassioIDAttributes
+    @available(iOS 13.0, *)
     public func fetchPassioIDAttributesFor(barcode: PassioNutritionAISDK.Barcode, completion: @escaping ((PassioNutritionAISDK.PassioIDAttributes?) -> Void))
 
-    /// Lookup for an icon for a PassioID. You will receive an icon and a bool, The boolean is true if the icons is food icon or false if it's a placeholder icon. If you get false you can use the asycronous funcion to "fetchIconFor" the icons from the web.
-    /// - Parameters:
-    ///   - passioID: PassioIC
-    ///   - size: 90, 180 or 360 px
-    ///   - entityType: PassioEntityType to return the right placeholder.
-    /// - Returns: UIImage and a bool, The boolean is true if the icons is food icon or false if it's a placeholder icon. If you get false you can use the asycronous funcion to "fetchIconFor" the icons from
+    @available(iOS 13.0, *)
     public func lookupIconFor(passioID: PassioNutritionAISDK.PassioID, size: PassioNutritionAISDK.IconSize = IconSize.px90, entityType: PassioNutritionAISDK.PassioIDEntityType = .item) -> (UIImage, Bool)
 
-    /// Fetch icons from the web.
-    /// - Parameters:
-    ///   - passioID: PassioIC
-    ///   - size: 90, 180 or 360 px
-    ///   - entityType: PassioEntityType to return the right placeholder.
-    ///   - completion: Optional Icon.
+    @available(iOS 13.0, *)
     public func fetchIconFor(passioID: PassioNutritionAISDK.PassioID, size: PassioNutritionAISDK.IconSize = IconSize.px90, completion: @escaping (UIImage?) -> Void)
 
-    /// Fetch from Passio web-service the PassioIDAttributes for a packagedFoodCode by its number
-    /// - Parameters:
-    ///   - packagedFoodCode: packagedFoodCode
-    ///   - completion: Receive a closure with optional PassioIDAttributes
+    @available(iOS 13.0, *)
     public func fetchPassioIDAttributesFor(packagedFoodCode: PassioNutritionAISDK.PackagedFoodCode, completion: @escaping ((PassioNutritionAISDK.PassioIDAttributes?) -> Void))
 
-    /// lookupAllDescendantsFor PassioID
-    /// - Parameter passioID: PassioID
-    /// - Returns: PassioID Array of all Descendants
+    @available(iOS 13.0, *)
     public func lookupAllDescendantsFor(passioID: PassioNutritionAISDK.PassioID) -> [PassioNutritionAISDK.PassioID]
 
-    /// Return a sorted list of available Volume Detections mode.
-    /// Recommended mode is .auto
+    @available(iOS 13.0, *)
     public var availableVolumeDetectionModes: [PassioNutritionAISDK.VolumeDetectionMode] { get }
 
-    /// Return the best Volume detection Mode for this iPhone
+    @available(iOS 13.0, *)
     public var bestVolumeDetectionMode: PassioNutritionAISDK.VolumeDetectionMode { get }
 
     public var version: String { get }
@@ -1846,7 +1794,7 @@ extension VolumeDetectionMode : RawRepresentable {
 
 extension UIImageView {
 
-    public func loadPassioIconBy(passioID: PassioNutritionAISDK.PassioID, entityType: PassioNutritionAISDK.PassioIDEntityType, size: PassioNutritionAISDK.IconSize = .px90, completion: @escaping (PassioNutritionAISDK.PassioID, UIImage) -> Void)
+    @MainActor public func loadPassioIconBy(passioID: PassioNutritionAISDK.PassioID, entityType: PassioNutritionAISDK.PassioIDEntityType, size: PassioNutritionAISDK.IconSize = .px90, completion: @escaping (PassioNutritionAISDK.PassioID, UIImage) -> Void)
 }
 
 extension simd_float4x4 : ContiguousBytes {

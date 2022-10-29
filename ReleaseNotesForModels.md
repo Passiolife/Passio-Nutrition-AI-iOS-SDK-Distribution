@@ -1,5 +1,42 @@
 # Passio SDK  Release Notes for Models
 
+## V2.2.11
+
+* Number of food items recognized via HNN: 4175
+* Nutrition database version: passio_nutrition.4176.0.301
+
+### New included HNN foods
+```
+catalina crunch chocolate cereal
+chopped water chestnuts
+cooked breaded meat
+cooked cream of wheat
+fried butter pearls soup
+frozen brussel sprouts
+manhattan clam chowder
+margarita
+mixed bruschetta
+pasta ruote
+plain tricolor tortellini
+raw breaded meat
+slice of grilled onion pizza
+slice of jalapeno pizza
+slice of margherita pizza
+tom yum soup
+tomato bruschetta
+```
+
+### Excluded HNN foods
+```
+bruschetta
+cooked schnitzel
+crowie picas
+deep fried fish
+mcdonalds sausage egg mcmuffin package
+raw schnitzel
+```
+
+
 ## V2.2.9
 
 * Number of food items recognized via HNN: 4164
