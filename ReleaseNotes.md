@@ -1,5 +1,27 @@
 # Passio SDK V2.2.11  Release Notes
 
+## V2.2.13
+### Models 
+* Number of food items recognized via HNN: 4175
+* Nutrition database version: passio_nutrition.4176.0.301
+
+### Additional API 
+```swift
+public struct PassioMetadataService {
+
+    public var passioMetadata: PassioNutritionAISDK.PassioMetadata? { get }
+
+    public var getModelNames: [String]? { get }
+
+    public var getlabelIcons: [PassioNutritionAISDK.PassioID : PassioNutritionAISDK.PassioID]? { get }
+
+    public func getPassioIDs(byModelName: String) -> [PassioNutritionAISDK.PassioID]?
+
+    public func getLabel(passioID: PassioNutritionAISDK.PassioID, languageCode: String = "en") -> String?
+
+    public init()
+}
+```
 
 ## V2.2.11
 

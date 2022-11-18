@@ -1,8 +1,7 @@
 # Passio PassioNutritionAISDK 
 
-## Version  2.2.11
+## Version  2.2.13
 ```Swift
-import ARKit
 import AVFoundation
 import Accelerate
 import CommonCrypto
@@ -37,6 +36,28 @@ public protocol AmountEstimate {
 
     /// The Angel in radians from the perpendicular surface.
     var viewingAngle: Double? { get }
+}
+
+public struct ArchitectureStructure : Codable {
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: Encoder) throws
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    public init(from decoder: Decoder) throws
 }
 
 /// Barcode (typealias String) is the string representation of the barcode id
@@ -87,6 +108,28 @@ public protocol DetectedCandidate {
 
     /// Scanned AmountEstimate
     var amountEstimate: PassioNutritionAISDK.AmountEstimate? { get }
+}
+
+public struct EnsembleArchitecture : Codable {
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: Encoder) throws
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    public init(from decoder: Decoder) throws
 }
 
 public enum EstimationQuality : String {
@@ -267,6 +310,28 @@ extension IconSize : Hashable {
 }
 
 extension IconSize : RawRepresentable {
+}
+
+public struct LabelMetaData : Codable {
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: Encoder) throws
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    public init(from decoder: Decoder) throws
 }
 
 public enum MealTime {
@@ -917,6 +982,43 @@ extension PassioIDEntityType : Hashable {
 extension PassioIDEntityType : RawRepresentable {
 }
 
+public struct PassioMetadata : Codable {
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: Encoder) throws
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    public init(from decoder: Decoder) throws
+}
+
+public struct PassioMetadataService {
+
+    public var passioMetadata: PassioNutritionAISDK.PassioMetadata? { get }
+
+    public var getModelNames: [String]? { get }
+
+    public var getlabelIcons: [PassioNutritionAISDK.PassioID : PassioNutritionAISDK.PassioID]? { get }
+
+    public func getPassioIDs(byModelName: String) -> [PassioNutritionAISDK.PassioID]?
+
+    public func getLabel(passioID: PassioNutritionAISDK.PassioID, languageCode: String = "en") -> String?
+
+    public init()
+}
+
 /// PassioMode will report the mode the SDK is currently in.
 public enum PassioMode {
 
@@ -1515,6 +1617,28 @@ public struct PersonalizedAlternative : Codable, Equatable {
     public init(from decoder: Decoder) throws
 }
 
+public struct SynonymLang : Codable {
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: Encoder) throws
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    public init(from decoder: Decoder) throws
+}
+
 /// UPC Product decoding struct
 public struct UPCProduct : Codable {
 
@@ -1794,6 +1918,7 @@ extension VolumeDetectionMode : RawRepresentable {
 
 extension UIImageView {
 
+    @available(iOS 13.0, *)
     @MainActor public func loadPassioIconBy(passioID: PassioNutritionAISDK.PassioID, entityType: PassioNutritionAISDK.PassioIDEntityType, size: PassioNutritionAISDK.IconSize = .px90, completion: @escaping (PassioNutritionAISDK.PassioID, UIImage) -> Void)
 }
 
@@ -1811,6 +1936,7 @@ extension simd_float4x4 : ContiguousBytes {
 infix operator .+ : DefaultPrecedence
 
 infix operator ./ : DefaultPrecedence
+
 
 
 ```
