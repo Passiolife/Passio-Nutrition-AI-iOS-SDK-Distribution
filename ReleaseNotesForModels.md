@@ -1,5 +1,47 @@
 # Passio SDK  Release Notes for Models
 
+## V2.2.17
+
+* Number of food items recognized via HNN: 4154
+* Nutrition database version: passio_nutrition.4155.0.301
+* Number of products recognized via OCR: 9848 
+
+### New included HNN foods
+```
+egg carton
+packaged bread
+strawberry cupcake
+```
+
+### Excluded HNN foods
+```
+365 organic egg carton
+cheesecake factory bread
+country harvest
+dave killer bread powerseed
+daves killer bread whole grains and seeds
+dempsters bread
+dimpilmeier bread
+ezekiel bread
+generic bread package
+generic egg carton
+goldminer bread
+great value egg carton
+hovis seed sensations bread
+judys family farm egg carton
+l oven fresh keto bread
+natures own bread
+old mill bread
+oroweat bread
+perfection deli bread
+plastic egg carton
+sara lee bread
+stonefire bread
+vital farms egg carton
+wonder bread
+```
+
+
 ## V2.2.13
 
 * Number of food items recognized via HNN: 4175

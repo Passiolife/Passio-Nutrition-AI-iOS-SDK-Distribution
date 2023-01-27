@@ -39,8 +39,8 @@ In order to use the PassioSDK your app needs to meet the following minimal requi
 * Weight/Volume estimation will run only on iPhones with Dual Wide Camera (not on DualCamera). 
     * iPhone 11 Pro & Pro Max
     * iPhone 12 mini, Pro & pro Max
-    * iPhone 13 Pro & Pro Max are not enabled for weight estimation during the Beta period.
-
+    * iPhone 13 Pro & Pro Max
+    * iPhone 14, Pro, Pro Max & Plus
 
 ## Getting the ml models to the device
 

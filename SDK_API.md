@@ -1,6 +1,6 @@
 # Passio PassioNutritionAISDK 
 
-## Version  2.2.13
+## Version  2.2.17
 ```Swift
 import AVFoundation
 import Accelerate
@@ -39,6 +39,16 @@ public protocol AmountEstimate {
 }
 
 public struct ArchitectureStructure : Codable {
+
+    public let modelName: String?
+
+    public let modelId: String?
+
+    public let datasetId: String?
+
+    public let trainingRunId: String?
+
+    public let filename: PassioNutritionAISDK.FileName?
 
     /// Encodes this value into the given encoder.
     ///
@@ -111,6 +121,10 @@ public protocol DetectedCandidate {
 }
 
 public struct EnsembleArchitecture : Codable {
+
+    public let name: String
+
+    public let structure: [PassioNutritionAISDK.ArchitectureStructure]
 
     /// Encodes this value into the given encoder.
     ///
@@ -313,6 +327,18 @@ extension IconSize : RawRepresentable {
 }
 
 public struct LabelMetaData : Codable {
+
+    public let displayName: String?
+
+    public let synonyms: [String : [PassioNutritionAISDK.SynonymLang]]?
+
+    public let models: [String]?
+
+    public let labelId: String
+
+    public let description: String?
+
+    public var modelName: String? { get }
 
     /// Encodes this value into the given encoder.
     ///
@@ -547,9 +573,6 @@ public struct PassioConfiguration : Equatable {
 
     /// If you have chosen to remove the files from the SDK and provide the SDK different URLs for this files please use this variable.
     public var filesLocalURLs: [PassioNutritionAISDK.FileLocalURL]?
-
-    /// Only use provided models. Don't use models previously installed.
-    public var forceInstallLocalURLs: Bool
 
     /// If you set this option to true, the SDK will download the models relevant for this version from Passio's bucket.
     public var sdkDownloadsModels: Bool
@@ -984,6 +1007,16 @@ extension PassioIDEntityType : RawRepresentable {
 
 public struct PassioMetadata : Codable {
 
+    public let projectId: String
+
+    public let ensembleId: String?
+
+    public let ensembleVersion: Int?
+
+    public let architecture: PassioNutritionAISDK.EnsembleArchitecture?
+
+    public var labelMetadata: [PassioNutritionAISDK.PassioID : PassioNutritionAISDK.LabelMetaData]? { get }
+
     /// Encodes this value into the given encoder.
     ///
     /// If the value fails to encode anything, `encoder` will encode an empty
@@ -1016,7 +1049,7 @@ public struct PassioMetadataService {
 
     public func getLabel(passioID: PassioNutritionAISDK.PassioID, languageCode: String = "en") -> String?
 
-    public init()
+    public init(metatadataURL: URL? = nil)
 }
 
 /// PassioMode will report the mode the SDK is currently in.
@@ -1076,8 +1109,9 @@ extension PassioMode : Hashable {
 /// Passio SDK - Copyright © 2022 Passio Inc. All rights reserved.
 public class PassioNutritionAI {
 
-    /// The latest models and files version the SDK will request.
     final public let filesVersion: Int
+
+    public var version: String { get }
 
     /// Shared Instance
     public class var shared: PassioNutritionAISDK.PassioNutritionAI { get }
@@ -1233,8 +1267,6 @@ public class PassioNutritionAI {
 
     @available(iOS 13.0, *)
     public var bestVolumeDetectionMode: PassioNutritionAISDK.VolumeDetectionMode { get }
-
-    public var version: String { get }
 }
 
 extension PassioNutritionAI : PassioNutritionAISDK.PassioStatusDelegate {
@@ -1619,6 +1651,8 @@ public struct PersonalizedAlternative : Codable, Equatable {
 
 public struct SynonymLang : Codable {
 
+    public let synonym: String?
+
     /// Encodes this value into the given encoder.
     ///
     /// If the value fails to encode anything, `encoder` will encode an empty
@@ -1938,6 +1972,5 @@ infix operator .+ : DefaultPrecedence
 infix operator ./ : DefaultPrecedence
 
 
-
 ```
-<sup>Copyright 2022 Passio Inc</sup>
+<sup>Copyright 2023 Passio Inc</sup>
