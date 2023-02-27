@@ -1,13 +1,17 @@
 # Passio SDK V2.X  Release Notes
 
+
+## V2.2.19
+### Models
+* Number of food items recognized via HNN: 4136
+* Nutrition database version: passio_nutrition.4137.0.301
+* Number of products recognized via OCR: 14288 
+
 ## V2.2.17
 ### Models 
 * Number of food items recognized via HNN: 4154
 * Nutrition database version: passio_nutrition.4155.0.301
 * Number of products recognized via OCR: 9848 
-
-
-
 
 ## V2.2.15
 ### Models 

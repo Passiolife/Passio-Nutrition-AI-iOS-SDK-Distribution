@@ -1,5 +1,47 @@
 # Passio SDK  Release Notes for Models
 
+## V2.2.19
+
+* Number of food items recognized via HNN: 4136
+* Nutrition database version: passio_nutrition.4137.0.301
+* Number of products recognized via OCR: 14288 
+
+### New included HNN foods
+```
+apple cider vinegar bottle
+olive oil bottle
+vanilla extract bottle
+white vinegar bottle
+```
+
+### Excluded HNN foods
+```
+acetum apple cider vinegar
+amazon red pepper sauce
+bertolli olive oil
+bragg apple cider vinegar
+carlini olive oil
+colmans vinegar
+compliments white vinegar
+dos anclas vanilla extract
+eden apple cider vinegar
+el castillo vanilla extract
+filippo berio olive oil
+generic apple cider vinegar bottle
+generic olive oil bottle
+generic vanilla extract bottle
+generic vinegar bottle
+golden apple cider vinegar
+kirkland olive oil
+kroger apple cider vinegar
+la coruna vinegar
+levapan vanilla extract
+mccormick vanilla extract
+winco foods vanilla extract
+```
+
+
+
 ## V2.2.17
 
 * Number of food items recognized via HNN: 4154
