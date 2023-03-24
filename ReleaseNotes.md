@@ -1,5 +1,18 @@
 # Passio SDK V2.X  Release Notes
 
+## V2.2.21
+
+### Recognition
+There is an improvement recognizing food a bit further away than before. Below the hood the bounding box of the object detections was improved. 
+
+### Package Recognition and Barcode
+
+The SDK will return alternatives (parents, siblings, children ) if available in the PassioIDAttributes of Package Recognition and Barcode
+### Models
+* Number of food items recognized via HNN: 4128
+* Nutrition database version: passio_nutrition.4129.0.301
+* Number of products recognized via OCR: 18225 
+
 
 ## V2.2.19
 ### Models

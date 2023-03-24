@@ -1,5 +1,42 @@
 # Passio SDK  Release Notes for Models
 
+## V2.2.21
+
+* Number of food items recognized via HNN: 4128
+* Nutrition database version: passio_nutrition.4129.0.301
+* Number of products recognized via OCR: 18225 
+
+### New included HNN foods
+```
+agave syrup bottle
+can of pumpkin
+can of ravioli
+chocolate spread jar
+closed can of chicken
+packaged potatoes
+packaged tortillas
+```
+
+### Excluded HNN foods
+```
+agave in the raw
+chef boyardee ravioli
+great value canned chicken
+idahoan mashed potatoes
+libbys pumpkin puree
+mission carb balance tortillas
+mission tortillas
+nusco chocolate spread
+nutella chocolate spread
+nuzart chocolate spread
+ole tortillas
+organic biologique agave syrup
+rapiditas tortillas
+schullo agave syrup
+swanson canned chicken
+```
+
+
 ## V2.2.19
 
 * Number of food items recognized via HNN: 4136
