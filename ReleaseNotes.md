@@ -1,5 +1,40 @@
 # Passio SDK V2.X  Release Notes
 
+## V2.2.23
+
+### Recognition
+There is additional improvement recognizing multiple foods in the same frame. 
+
+### Models
+
+* Number of food items recognized via HNN: 4117
+* Nutrition database version: passio_nutrition.4118.0.301
+* Number of products recognized via OCR: 21423
+
+### New included HNN foods
+```
+packaged pills and supplements
+white tortillas
+```
+
+### Excluded HNN foods
+```
+arazo nutrition omega 3
+benefiber bar
+benefiber probiotic
+emergen-c pouch
+flour tortilla
+goli gummies
+jakoten
+metamucil package
+metamucil pouch
+nordic naturals bottle
+solaray bottle
+vitafusion multivites bottle
+webber naturals bottle
+```
+
+
 ## V2.2.21
 
 ### Recognition

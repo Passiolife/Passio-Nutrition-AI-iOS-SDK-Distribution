@@ -1,5 +1,34 @@
 # Passio SDK  Release Notes for Models
 
+## V2.2.23
+
+* Number of food items recognized via HNN: 4117
+* Nutrition database version: passio_nutrition.4118.0.301
+* Number of products recognized via OCR: 21423
+
+### New included HNN foods
+```
+packaged pills and supplements
+white tortillas
+```
+
+### Excluded HNN foods
+```
+arazo nutrition omega 3
+benefiber bar
+benefiber probiotic
+emergen-c pouch
+flour tortilla
+goli gummies
+jakoten
+metamucil package
+metamucil pouch
+nordic naturals bottle
+solaray bottle
+vitafusion multivites bottle
+webber naturals bottle
+```
+
 ## V2.2.21
 
 * Number of food items recognized via HNN: 4128
@@ -35,6 +64,8 @@ rapiditas tortillas
 schullo agave syrup
 swanson canned chicken
 ```
+
+
 
 
 ## V2.2.19
