@@ -24,7 +24,7 @@ By default the SDK does not record/store any photos or videos. Instead, as the e
 
 "This record contains information from Open Food Facts (https://en.openfoodfacts.org), which is made available here under the Open Database License (https://opendatacommons.org/licenses/odbl/1-0)"
 
-2. To use the SDK please make sure you receive your SDK license key from Passio. The SDK WILL NOT WORK without a valid SDK key.
+2. To use the SDK sign up at https://www.passio.ai/nutrition-ai. The SDK WILL NOT WORK without a valid SDK key.
 
 3. You will have to download the latest releases from the link below. The command "git clone" **WILL NOT** download the PassioNutritionAISDK.xcframework. <https://github.com/Passiolife/Passio-Nutrition-AI-iOS-SDK-Distribution/releases>. 
 Download the ```PassioSDKQuickStart.zip``` or the ```PassioSDKFullDemo.zip``` and copy the ```PassioNutritionAISDK.xcframework``` to your project. Make sure you have followed the directions in the README files.
@@ -61,7 +61,7 @@ passioConfig.sdkDownloadsModels = false
   A fast and easy way to get started with the SDK is to test it inside of PassioSDKQuickStart Demo App included in this package. Here are the steps:
   
   1. Open the project in Xcode:
-  2. Replace the SDK Key in the PassioQuickStartViewController.swift file with the license key you get from Passio
+  2. Replace the SDK Key in the PassioQuickStartViewController.swift file with the key you obtained by signing up at https://www.passio.ai/nutrition-ai
   3. Connect your iPhone and run
   4. Modify the app bundle from "com.PassioDemoApp.demo" to "com.yourcompany...."
   5. Run the demo app on your iPhone.
@@ -109,13 +109,13 @@ let passioSDK = PassioNutritionAI.shared
 var videoLayer: AVCaptureVideoPreviewLayer?
 ```
 
-3) In viewDidLoad configure the SDK with the Key you have received form Passio. 
+3) In viewDidLoad configure the SDK with the Key you obtained by signing up at https://www.passio.ai/nutrition-ai. 
 
 ```swift 
 override func viewDidLoad() {
         super.viewDidLoad()
         let key = "Your_PassioSDK_Key"
-        //* Use the API key you received from us or request a key from [support@passiolife.com](support@passiolife.com).
+        //* To obtain a key please sign up at https://www.passio.ai/nutrition-ai 
         let passioConfig = PassioConfiguration(key: key)
         passioSDK.configure(passioConfiguration: passioConfig) { (status) in
             print("Mode = \(status.mode)\nmissingfiles = \(String(describing: status.missingFiles))" )

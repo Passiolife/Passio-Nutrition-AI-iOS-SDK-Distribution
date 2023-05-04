@@ -1,9 +1,22 @@
 # Passio SDK V2.X  Release Notes
 
+## V2.3.0
+
+### Improvement and enhancements
+* Fix a rare issue where the SDK will not configure under unresponsive network.
+* Limit the ```byText``` parameter below to 100 characters. 
+```swift 
+ public func searchForFood(byText: String, 
+                            completion: @escaping ([PassioIDAndName]) 
+ ```
+
+### Models
+* Same models as V2.2.23 
+
 ## V2.2.23
 
 ### Recognition
-There is additional improvement recognizing multiple foods in the same frame. 
+Additional improvement in recognizing multiple foods in the same frame. 
 
 ### Models
 
