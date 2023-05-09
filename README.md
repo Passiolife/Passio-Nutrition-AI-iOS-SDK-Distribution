@@ -26,8 +26,6 @@ By default the SDK does not record/store any photos or videos. Instead, as the e
 
 2. To use the SDK sign up at https://www.passio.ai/nutrition-ai. The SDK WILL NOT WORK without a valid SDK key.
 
-3. You will have to download the latest releases from the link below. The command "git clone" **WILL NOT** download the PassioNutritionAISDK.xcframework. <https://github.com/Passiolife/Passio-Nutrition-AI-iOS-SDK-Distribution/releases>. 
-Download the ```PassioSDKQuickStart.zip``` or the ```PassioSDKFullDemo.zip``` and copy the ```PassioNutritionAISDK.xcframework``` to your project. Make sure you have followed the directions in the README files.
 
 ## Minimum Requirements
 
@@ -69,17 +67,17 @@ passioConfig.sdkDownloadsModels = false
 
 ***
 
-## Adding Passio SDK into your project
+## Add the PassioNutritionAISDK swift package to your project
 
-### Drag & drop the XCframework to your project
-
-* Drag and drop the "PassioNutritionAISDK.xcframework" into your project. Make sure to select "Copy items if needed".
-  
-  ![drag and drop the framework](./READMEIMAGES/1AddXCFramework.png)
-
-
-### Change Framework to "Embed & Sign"
-* In project "General" -> "Frameworks, Libraries and Embedded Content" Change to "Embed & Sign"
+1. Open your Xcode project.
+2. Go to File > Swift Packages > Add Package Dependency.
+3. In the "Add Package Dependency" dialog box, paste the URL: https://github.com/Passiolife/Passio-Nutrition-AI-iOS-SDK-Distribution
+4. Click "Next". Xcode will validate the package and its dependencies.
+5. In the next dialog box, you'll be asked to specify the version or branch you want to use. You can choose main for the latest version or specify a specific version or branch.
+6. After you've made your selection, click "Next".
+7. You'll then be prompted to select the targets in your project that should include the package. Check the boxes for the targets you want to include.
+8. Click "Finish" to add the package to your project.
+9. Xcode will download and add the PassioNutritionAISDK to your project. You can now import and start using the PassioNutritionAISDK.
 
  ![drag and drop the framework](./READMEIMAGES/2EmbedAndSign.png)
 ### Edit your Info.plist
