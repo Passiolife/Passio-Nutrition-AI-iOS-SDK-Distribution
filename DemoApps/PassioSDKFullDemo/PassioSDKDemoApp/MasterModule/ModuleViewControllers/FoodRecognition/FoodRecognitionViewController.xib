@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FoodRecognitionViewController" customModule="Passio_Beta_161" customModuleProvider="target">
+            <connections>
+                <outlet property="activeIndicator" destination="vji-wh-BCe" id="4fg-o3-icC"/>
+                <outlet property="backgroundImage" destination="KNs-jt-nst" id="yap-RT-KXN"/>
+                <outlet property="buttonContinueScanning" destination="FhL-kw-xbH" id="m3l-P9-RbT"/>
+                <outlet property="buttonDismiss" destination="jMg-ht-jSU" id="fmM-xv-D0w"/>
+                <outlet property="view" destination="i0p-b1-MO8" id="ARz-wp-jM8"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="i0p-b1-MO8">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SignupScreen" translatesAutoresizingMaskIntoConstraints="NO" id="KNs-jt-nst">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FhL-kw-xbH">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                    <state key="normal" title="Button"/>
+                    <buttonConfiguration key="configuration" style="plain"/>
+                    <connections>
+                        <action selector="pressPlay:" destination="-1" eventType="touchUpInside" id="A7w-IZ-Sv1"/>
+                    </connections>
+                </button>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="vji-wh-BCe">
+                    <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
+                    <color key="color" name="CustomBase"/>
+                </activityIndicatorView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jMg-ht-jSU">
+                    <rect key="frame" x="0.0" y="44" width="50" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="50" id="ABu-0D-y1B"/>
+                        <constraint firstAttribute="height" constant="50" id="d6u-CZ-uX9"/>
+                    </constraints>
+                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <state key="normal" title="Button"/>
+                    <buttonConfiguration key="configuration" style="plain" image="cancel_circle"/>
+                    <connections>
+                        <action selector="dismissView:" destination="-1" eventType="touchUpInside" id="gwT-Id-rLr"/>
+                    </connections>
+                </button>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="yKz-1U-NuX"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="KNs-jt-nst" secondAttribute="bottom" id="K9e-N8-NQa"/>
+                <constraint firstItem="vji-wh-BCe" firstAttribute="centerX" secondItem="i0p-b1-MO8" secondAttribute="centerX" id="KwK-sd-lbr"/>
+                <constraint firstItem="KNs-jt-nst" firstAttribute="leading" secondItem="yKz-1U-NuX" secondAttribute="leading" id="MQB-i0-d4I"/>
+                <constraint firstItem="FhL-kw-xbH" firstAttribute="leading" secondItem="yKz-1U-NuX" secondAttribute="leading" id="UIW-r8-gIl"/>
+                <constraint firstItem="FhL-kw-xbH" firstAttribute="trailing" secondItem="yKz-1U-NuX" secondAttribute="trailing" id="bKd-vi-q1v"/>
+                <constraint firstItem="jMg-ht-jSU" firstAttribute="top" secondItem="i0p-b1-MO8" secondAttribute="top" constant="44" id="bwl-2p-aUp"/>
+                <constraint firstItem="KNs-jt-nst" firstAttribute="top" secondItem="i0p-b1-MO8" secondAttribute="top" id="cyK-Qv-iAd"/>
+                <constraint firstItem="FhL-kw-xbH" firstAttribute="top" secondItem="i0p-b1-MO8" secondAttribute="top" id="hTi-cO-5aR"/>
+                <constraint firstItem="KNs-jt-nst" firstAttribute="trailing" secondItem="yKz-1U-NuX" secondAttribute="trailing" id="kV7-sH-ake"/>
+                <constraint firstAttribute="bottom" secondItem="FhL-kw-xbH" secondAttribute="bottom" id="lgO-f0-bGr"/>
+                <constraint firstItem="vji-wh-BCe" firstAttribute="centerY" secondItem="i0p-b1-MO8" secondAttribute="centerY" id="p34-m3-fWO"/>
+                <constraint firstItem="jMg-ht-jSU" firstAttribute="leading" secondItem="yKz-1U-NuX" secondAttribute="leading" id="vQB-67-08I"/>
+            </constraints>
+            <point key="canvasLocation" x="292.75362318840581" y="209.59821428571428"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="SignupScreen" width="1125" height="2436"/>
+        <image name="cancel_circle" width="24" height="24"/>
+        <namedColor name="CustomBase">
+            <color red="0.0" green="0.25490196078431371" blue="0.67450980392156867" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+    </resources>
+</document>

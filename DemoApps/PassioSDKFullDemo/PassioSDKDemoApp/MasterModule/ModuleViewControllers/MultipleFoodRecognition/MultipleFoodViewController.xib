@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MultipleFoodViewController" customModule="SDKApp" customModuleProvider="target">
+            <connections>
+                <outlet property="backgroundImage" destination="77Y-zx-tuU" id="k64-rP-g3J"/>
+                <outlet property="buttonAddAll" destination="sS5-Tm-a2W" id="Oy0-3C-viE"/>
+                <outlet property="buttonClear" destination="QUv-GH-dtC" id="FDg-YN-53g"/>
+                <outlet property="buttonDismiss" destination="j1z-OD-HEK" id="ap5-rf-Exn"/>
+                <outlet property="buttonRecipe" destination="KRv-IT-VkF" id="2Ru-yR-SHD"/>
+                <outlet property="dashView" destination="goO-ks-OAB" id="lJz-IB-0Ac"/>
+                <outlet property="heighOfTrayView" destination="Wd3-dO-E7W" id="ZVd-i2-Eim"/>
+                <outlet property="tableView" destination="mzX-8m-9S0" id="Jja-3f-ZsU"/>
+                <outlet property="trayView" destination="zIK-3a-7Sy" id="dhQ-pa-Mog"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SignupScreen" translatesAutoresizingMaskIntoConstraints="NO" id="77Y-zx-tuU">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                </imageView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zIK-3a-7Sy">
+                    <rect key="frame" x="0.0" y="796" width="414" height="100"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="goO-ks-OAB">
+                            <rect key="frame" x="187" y="4" width="40" height="4"/>
+                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="4" id="Ioh-CD-bCR"/>
+                                <constraint firstAttribute="width" constant="40" id="lEN-c9-Tjo"/>
+                            </constraints>
+                        </view>
+                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="11" translatesAutoresizingMaskIntoConstraints="NO" id="un6-RI-WsM">
+                            <rect key="frame" x="0.0" y="8" width="414" height="30"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QUv-GH-dtC">
+                                    <rect key="frame" x="0.0" y="0.0" width="130.5" height="30"/>
+                                    <state key="normal" title="Clear">
+                                        <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </state>
+                                    <state key="disabled">
+                                        <color key="titleColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="clearAll:" destination="-1" eventType="touchUpInside" id="qbU-dz-5JY"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KRv-IT-VkF">
+                                    <rect key="frame" x="141.5" y="0.0" width="131" height="30"/>
+                                    <state key="normal" title="New recipe">
+                                        <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </state>
+                                    <state key="disabled">
+                                        <color key="titleColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="addRecipe:" destination="-1" eventType="touchUpInside" id="KFx-4E-8uD"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sS5-Tm-a2W">
+                                    <rect key="frame" x="283.5" y="0.0" width="130.5" height="30"/>
+                                    <state key="normal" title="Add all">
+                                        <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </state>
+                                    <state key="disabled">
+                                        <color key="titleColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="addAll:" destination="-1" eventType="touchUpInside" id="V9C-g2-Y45"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="Hiv-JO-6kV"/>
+                            </constraints>
+                        </stackView>
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="mzX-8m-9S0">
+                            <rect key="frame" x="0.0" y="38" width="414" height="62"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </tableView>
+                    </subviews>
+                    <color key="backgroundColor" name="PassioWhite50"/>
+                    <constraints>
+                        <constraint firstItem="un6-RI-WsM" firstAttribute="top" secondItem="zIK-3a-7Sy" secondAttribute="top" constant="8" id="0RQ-4z-bJH"/>
+                        <constraint firstItem="mzX-8m-9S0" firstAttribute="leading" secondItem="zIK-3a-7Sy" secondAttribute="leading" id="3Sg-mc-nS3"/>
+                        <constraint firstItem="goO-ks-OAB" firstAttribute="centerX" secondItem="zIK-3a-7Sy" secondAttribute="centerX" id="4DF-rw-zfU"/>
+                        <constraint firstAttribute="trailing" secondItem="un6-RI-WsM" secondAttribute="trailing" id="7JD-9v-yNg"/>
+                        <constraint firstItem="un6-RI-WsM" firstAttribute="leading" secondItem="zIK-3a-7Sy" secondAttribute="leading" id="Cb8-au-ASM"/>
+                        <constraint firstItem="mzX-8m-9S0" firstAttribute="top" secondItem="un6-RI-WsM" secondAttribute="bottom" id="KVB-Lb-TSt"/>
+                        <constraint firstAttribute="bottom" secondItem="mzX-8m-9S0" secondAttribute="bottom" id="QZJ-Kx-t7v"/>
+                        <constraint firstAttribute="height" constant="100" id="Wd3-dO-E7W"/>
+                        <constraint firstItem="un6-RI-WsM" firstAttribute="centerX" secondItem="zIK-3a-7Sy" secondAttribute="centerX" id="Wkp-F4-Hg5"/>
+                        <constraint firstAttribute="trailing" secondItem="mzX-8m-9S0" secondAttribute="trailing" id="mtG-hY-zie"/>
+                        <constraint firstItem="goO-ks-OAB" firstAttribute="top" secondItem="zIK-3a-7Sy" secondAttribute="top" constant="4" id="wcK-yp-ze9"/>
+                    </constraints>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j1z-OD-HEK">
+                    <rect key="frame" x="0.0" y="44" width="50" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="50" id="3E9-Jh-IzJ"/>
+                        <constraint firstAttribute="height" constant="50" id="5d8-7a-SRG"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="MT2-0t-hl8"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="mcm-JS-JxV"/>
+                    </constraints>
+                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <state key="normal" title="Button"/>
+                    <buttonConfiguration key="configuration" style="plain" image="cancel_circle"/>
+                    <connections>
+                        <action selector="dismissView:" destination="-1" eventType="touchUpInside" id="lWe-Z5-v9D"/>
+                    </connections>
+                </button>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="77Y-zx-tuU" secondAttribute="bottom" id="3Hw-Hb-Lkp"/>
+                <constraint firstItem="77Y-zx-tuU" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="4Ah-Nl-iBk"/>
+                <constraint firstItem="77Y-zx-tuU" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="DdQ-0j-hhU"/>
+                <constraint firstAttribute="bottom" secondItem="zIK-3a-7Sy" secondAttribute="bottom" id="eqa-wu-f0Q"/>
+                <constraint firstItem="j1z-OD-HEK" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="g88-Nz-JDt"/>
+                <constraint firstItem="zIK-3a-7Sy" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="nUB-Po-fMK"/>
+                <constraint firstItem="77Y-zx-tuU" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="vas-HF-Xib"/>
+                <constraint firstItem="zIK-3a-7Sy" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="vwv-dK-f1t"/>
+                <constraint firstItem="j1z-OD-HEK" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="z4P-oe-qo2"/>
+            </constraints>
+            <point key="canvasLocation" x="140.57971014492756" y="153.34821428571428"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="SignupScreen" width="1125" height="2436"/>
+        <image name="cancel_circle" width="24" height="24"/>
+        <namedColor name="PassioWhite50">
+            <color red="1" green="1" blue="1" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="groupTableViewBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

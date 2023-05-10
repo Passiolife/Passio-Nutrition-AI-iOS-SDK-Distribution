@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="IngredientEditorView" customModule="Passio_Beta_161" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="gY5-Ch-u4k">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="597"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </tableView>
+                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="uCh-Hk-x1H">
+                    <rect key="frame" x="20" y="617" width="335" height="30"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X8h-xO-ciA">
+                            <rect key="frame" x="0.0" y="0.0" width="157.5" height="30"/>
+                            <color key="backgroundColor" name="CustomBase"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="Lfr-gO-Vko"/>
+                            </constraints>
+                            <state key="normal" title="Cancel">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <connections>
+                                <action selector="cancel:" destination="iN0-l3-epB" eventType="touchUpInside" id="e4n-uW-Rjy"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XLf-i8-8f5">
+                            <rect key="frame" x="177.5" y="0.0" width="157.5" height="30"/>
+                            <color key="backgroundColor" name="CustomBase"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="AhQ-vJ-QWn"/>
+                            </constraints>
+                            <state key="normal" title="Save">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <connections>
+                                <action selector="saveIngredient:" destination="iN0-l3-epB" eventType="touchUpInside" id="HNk-Lf-zdg"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" name="PassioBackgroundWhite"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="uCh-Hk-x1H" secondAttribute="bottom" constant="20" id="45q-bk-py2"/>
+                <constraint firstItem="uCh-Hk-x1H" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="4hn-8A-sLh"/>
+                <constraint firstItem="gY5-Ch-u4k" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Dsa-Ro-fp2"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="uCh-Hk-x1H" secondAttribute="trailing" constant="20" id="Im2-4F-tGZ"/>
+                <constraint firstItem="uCh-Hk-x1H" firstAttribute="top" secondItem="gY5-Ch-u4k" secondAttribute="bottom" constant="20" id="ghy-HH-Yqe"/>
+                <constraint firstItem="gY5-Ch-u4k" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="l3c-Q1-LXk"/>
+                <constraint firstItem="gY5-Ch-u4k" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="pp0-XC-LRz"/>
+            </constraints>
+            <connections>
+                <outlet property="buttonCancel" destination="X8h-xO-ciA" id="jXD-0W-hwM"/>
+                <outlet property="buttonSave" destination="XLf-i8-8f5" id="Z94-t9-svX"/>
+                <outlet property="tableView" destination="gY5-Ch-u4k" id="N1C-No-9Yc"/>
+            </connections>
+            <point key="canvasLocation" x="-377" y="-3"/>
+        </view>
+    </objects>
+    <resources>
+        <namedColor name="CustomBase">
+            <color red="0.31764705882352939" green="0.17647058823529413" blue="0.6588235294117647" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <namedColor name="PassioBackgroundWhite">
+            <color red="0.90196078431372551" green="0.92941176470588238" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

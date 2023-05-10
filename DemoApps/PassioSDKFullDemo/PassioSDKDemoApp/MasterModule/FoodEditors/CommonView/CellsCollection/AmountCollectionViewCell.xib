@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="AmountCollectionViewCell" id="MDu-iw-UTs" customClass="AmountCollectionViewCell" customModule="SDKApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="50" height="40"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                <rect key="frame" x="0.0" y="0.0" width="50" height="40"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5HQ-Ah-FR9">
+                        <rect key="frame" x="0.0" y="5" width="50" height="30"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="Sjj-z2-WbN"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="17"/>
+                        <color key="textColor" name="CustomBase"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="HIx-wc-CQd"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="5HQ-Ah-FR9" firstAttribute="leading" secondItem="MDu-iw-UTs" secondAttribute="leading" id="AyN-g7-LH8"/>
+                <constraint firstAttribute="trailing" secondItem="5HQ-Ah-FR9" secondAttribute="trailing" id="JLk-ed-IHp"/>
+                <constraint firstItem="5HQ-Ah-FR9" firstAttribute="centerX" secondItem="MDu-iw-UTs" secondAttribute="centerX" id="lTh-Vc-1qe"/>
+                <constraint firstItem="5HQ-Ah-FR9" firstAttribute="centerY" secondItem="MDu-iw-UTs" secondAttribute="centerY" id="odn-Wy-aDK"/>
+            </constraints>
+            <connections>
+                <outlet property="labelAmountCollection" destination="5HQ-Ah-FR9" id="Kmx-O3-TKp"/>
+            </connections>
+            <point key="canvasLocation" x="-160" y="44"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <namedColor name="CustomBase">
+            <color red="0.31764705882352939" green="0.17647058823529413" blue="0.6588235294117647" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+    </resources>
+</document>

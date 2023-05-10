@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina3_5" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="UnitPickerView" customModule="Passio_Beta_161" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <pickerView contentMode="scaleToFill" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Hkj-0U-Rdd">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
+                </pickerView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LlO-pe-SfY">
+                    <rect key="frame" x="80" y="226" width="160" height="30"/>
+                    <color key="backgroundColor" name="CustomBase"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="nTy-U8-rgo"/>
+                        <constraint firstAttribute="width" constant="160" id="z1p-cO-1B8"/>
+                    </constraints>
+                    <state key="normal" title="Button">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
+                    <connections>
+                        <action selector="selectAndClose:" destination="iN0-l3-epB" eventType="touchUpInside" id="9w9-vH-tTp"/>
+                    </connections>
+                </button>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" name="PassioBackgroundWhite"/>
+            <constraints>
+                <constraint firstItem="Hkj-0U-Rdd" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="G4j-rY-ET6"/>
+                <constraint firstItem="Hkj-0U-Rdd" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="PAG-aw-ZFA"/>
+                <constraint firstItem="LlO-pe-SfY" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="Qus-ca-Y91"/>
+                <constraint firstItem="Hkj-0U-Rdd" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="XWl-45-cGv"/>
+                <constraint firstItem="Hkj-0U-Rdd" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="ZQf-A3-kqc"/>
+                <constraint firstItem="LlO-pe-SfY" firstAttribute="top" secondItem="Hkj-0U-Rdd" secondAttribute="bottom" constant="10" id="iBP-r1-4mD"/>
+                <constraint firstItem="Hkj-0U-Rdd" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="v10-CA-AIh"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="LlO-pe-SfY" secondAttribute="bottom" constant="10" id="vOW-Wc-xJ7"/>
+            </constraints>
+            <connections>
+                <outlet property="buttonSelect" destination="LlO-pe-SfY" id="0dg-dV-RCS"/>
+                <outlet property="picker" destination="Hkj-0U-Rdd" id="yAh-Q4-6oR"/>
+            </connections>
+            <point key="canvasLocation" x="60" y="38.75"/>
+        </view>
+    </objects>
+    <resources>
+        <namedColor name="CustomBase">
+            <color red="0.31764705882352939" green="0.17647058823529413" blue="0.6588235294117647" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <namedColor name="PassioBackgroundWhite">
+            <color red="0.90196078431372551" green="0.92941176470588238" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

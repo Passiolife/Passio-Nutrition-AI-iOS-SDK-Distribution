@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="AmountQuickMiniTableViewCell" rowHeight="72" id="3x8-Vd-FiN" customClass="AmountQuickMiniTableViewCell" customModule="Passio_Beta_161" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="459" height="72"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="3x8-Vd-FiN" id="xqM-FP-2o8">
+                <rect key="frame" x="0.0" y="0.0" width="459" height="72"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LUw-tb-Mws">
+                        <rect key="frame" x="4" y="0.0" width="451" height="66"/>
+                        <color key="backgroundColor" name="PassioBlack40"/>
+                    </view>
+                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="DwQ-da-EvQ">
+                        <rect key="frame" x="12" y="8" width="435" height="50"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="50" id="b8r-D0-KJc"/>
+                        </constraints>
+                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Wnd-Qb-mP9">
+                            <size key="itemSize" width="50" height="40"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells/>
+                    </collectionView>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="LUw-tb-Mws" secondAttribute="trailing" constant="4" id="3yK-Es-47q"/>
+                    <constraint firstItem="DwQ-da-EvQ" firstAttribute="top" secondItem="LUw-tb-Mws" secondAttribute="top" constant="8" id="7OQ-fu-t67"/>
+                    <constraint firstItem="DwQ-da-EvQ" firstAttribute="leading" secondItem="LUw-tb-Mws" secondAttribute="leading" constant="8" id="GGk-UV-iWG"/>
+                    <constraint firstItem="LUw-tb-Mws" firstAttribute="trailing" secondItem="DwQ-da-EvQ" secondAttribute="trailing" constant="8" id="JE3-T5-6Ud"/>
+                    <constraint firstItem="LUw-tb-Mws" firstAttribute="bottom" secondItem="DwQ-da-EvQ" secondAttribute="bottom" constant="8" id="TUz-Ng-GMQ"/>
+                    <constraint firstItem="LUw-tb-Mws" firstAttribute="leading" secondItem="xqM-FP-2o8" secondAttribute="leading" constant="4" id="Toa-H5-LF8"/>
+                    <constraint firstItem="LUw-tb-Mws" firstAttribute="top" secondItem="xqM-FP-2o8" secondAttribute="top" id="l4b-2s-Zgz"/>
+                    <constraint firstAttribute="bottom" secondItem="LUw-tb-Mws" secondAttribute="bottom" constant="4" id="vgN-Qn-z0l"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <connections>
+                <outlet property="collectionAmounts" destination="DwQ-da-EvQ" id="V6F-3H-CTC"/>
+                <outlet property="insetBackground" destination="LUw-tb-Mws" id="f3W-VP-9Hl"/>
+            </connections>
+            <point key="canvasLocation" x="29.600000000000001" y="-113.3433283358321"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <namedColor name="PassioBlack40">
+            <color red="0.0" green="0.0" blue="0.0" alpha="0.40000000596046448" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>
