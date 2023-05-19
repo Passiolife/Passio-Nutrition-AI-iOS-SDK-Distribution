@@ -1,5 +1,8 @@
 # Passio Nutrition-AI iOS SDK
 
+## Now available as Swift package at: https://github.com/Passiolife/Passio-Nutrition-AI-iOS-SDK-Distribution
+
+
 ## Overview
 
 Welcome to Passio Nutrition-AI iOS SDK!
@@ -79,7 +82,6 @@ passioConfig.sdkDownloadsModels = false
 8. Click "Finish" to add the package to your project.
 9. Xcode will download and add the PassioNutritionAISDK to your project. You can now import and start using the PassioNutritionAISDK.
 
- ![drag and drop the framework](./READMEIMAGES/2EmbedAndSign.png)
 ### Edit your Info.plist
 
 * If opening from Xcode, right click and select 'open as source code'
