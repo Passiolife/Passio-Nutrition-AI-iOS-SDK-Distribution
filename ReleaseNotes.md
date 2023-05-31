@@ -1,6 +1,6 @@
 # Passio SDK V2.X  Release Notes
 
-## V2.3.0
+## V2.3.1
 
 ### Improvement and enhancements
 * Fix a rare issue where the SDK will not configure under unresponsive network.

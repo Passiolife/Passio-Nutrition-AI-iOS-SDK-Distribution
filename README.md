@@ -2,7 +2,6 @@
 
 ## Now available as Swift package at: https://github.com/Passiolife/Passio-Nutrition-AI-iOS-SDK-Distribution
 
-
 ## Overview
 
 Welcome to Passio Nutrition-AI iOS SDK!
