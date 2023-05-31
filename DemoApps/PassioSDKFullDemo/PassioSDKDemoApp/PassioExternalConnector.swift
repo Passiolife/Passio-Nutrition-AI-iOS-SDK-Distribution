@@ -248,8 +248,6 @@ extension PassioExternalConnector: PassioConnector {
         0
     }
 
-    
-
     var bundleForModule: Bundle {
         Bundle(for: PassioInternalConnector.self)
     }

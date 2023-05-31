@@ -19,7 +19,7 @@ class VideoCameraPhotosViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var stackTreshold: UIStackView!
     @IBOutlet weak var textTreshold: UITextField!
-    
+
     var yellowView: UIView?
 
     var autoVideoStart = true
@@ -144,7 +144,7 @@ class VideoCameraPhotosViewController: UIViewController {
     }
 
     func detectCandidatesInImagePassio(image: UIImage) {
-        
+
         yellowView?.removeFromSuperview()
         tableView.isHidden = false
         activityIndicator.startAnimating()
@@ -186,10 +186,8 @@ class VideoCameraPhotosViewController: UIViewController {
                     }
                 }
             }
-            
-            
-            
-            candidates?.observasions?.forEach{
+
+            candidates?.observasions?.forEach {
                 let topCandidate = $0.topCandidates(1)
                 if  let candidate = topCandidate.first {
                     let text = candidate.string
@@ -198,17 +196,17 @@ class VideoCameraPhotosViewController: UIViewController {
 //                    if let boundingBox = try? candidate.boundingBox(for: range) {
 //                        print (" boundingBox = \(boundingBox)")
 //                    }
-                    
-                    if text == "KIND" || text.lowercased() == "nutrition facts"  {
-                        let range:Range<String.Index> = text.startIndex..<text.endIndex
+
+                    if text == "KIND" || text.lowercased() == "nutrition facts" {
+                        let range: Range<String.Index> = text.startIndex..<text.endIndex
                         if let rectObservation = try? candidate.boundingBox(for: range) {
                             self.tableView.isHidden = true
-                            print ("rectObservation = \(rectObservation.boundingBox)")
+                            print("rectObservation = \(rectObservation.boundingBox)")
                             let bounds = self.passioSDK.transformCGRectForm(boundingBox: rectObservation.boundingBox,
                                                                              toRect: self.imageView.bounds)
-                            
+
                             let newView = UIView(frame: bounds)
-                            
+
                             newView.backgroundColor = .yellow
                             newView.alpha = 0.5
                             self.yellowView = newView
@@ -220,7 +218,7 @@ class VideoCameraPhotosViewController: UIViewController {
         }
     }
 
-    func drawBoundingBox(rect : VNRectangleObservation) -> CGRect {
+    func drawBoundingBox(rect: VNRectangleObservation) -> CGRect {
         let transform = CGAffineTransform(scaleX: 1, y: -1).translatedBy(x: 0,
                                                                          y: imageView.frame.height)
 
@@ -243,7 +241,7 @@ class VideoCameraPhotosViewController: UIViewController {
 
         view.layer.insertSublayer(maskLayer, at: 1)
     }
-    
+
 }
 
 extension VideoCameraPhotosViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {

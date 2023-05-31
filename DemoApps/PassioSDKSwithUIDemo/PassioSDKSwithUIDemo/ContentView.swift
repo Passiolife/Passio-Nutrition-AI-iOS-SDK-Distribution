@@ -6,25 +6,22 @@
 //  Copyright © 2023 Passiolife Inc. All rights reserved.
 
 import SwiftUI
+import Combine
 import PassioNutritionAISDK
 
 struct ContentView: View {
-    
-    @State var foodBinder: FoodRecognitionBinder?
-    @State var messageBinder: String?
-    @State var sdkConfigured = false
-    
+
+    @ObservedObject var passioResults: PassioResults
+
     let passioSDK = PassioNutritionAI.shared
-    
+
     var passioID: PassioID? {
-        foodBinder?.candidates?.detectedCandidates.first?.passioID
+        passioResults.foodRecognitionResults?.candidates?.detectedCandidates.first?.passioID
     }
-    
+
     var body: some View {
         ZStack(alignment: .bottom) {
-            PassioRepresentable(foodBinder: $foodBinder,
-                                messagesBinder: $messageBinder,
-                                sdkConfigured: $sdkConfigured)
+            PassioRepresentable(passioResults: passioResults)
             ZStack(alignment: .leading) {
                 Text(getNameOfFood)
                     .frame(maxWidth: .infinity, alignment: .center)
@@ -50,12 +47,14 @@ struct ContentView: View {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
                         .scaleEffect(2)
-                        .padding()
+                        .padding(20.0)
                 }
-            }.padding()
+            }
+            .padding()
         }
+        .edgesIgnoringSafeArea(.all)
     }
-    
+
     var foundImage: Image? {
         guard let passioID = passioID else {
             return nil
@@ -63,15 +62,14 @@ struct ContentView: View {
         let (image, _) = passioSDK.lookupIconFor(passioID: passioID)
         return Image(uiImage: image)
     }
-    
+
     var getNameOfFood: String {
-        
-        if let message = messageBinder {
+        if let message = passioResults.foodRecognitionResults?.downloadingMessage {
             return message
         } else if let passioID = passioID {
             let name = passioSDK.lookupNameFor(passioID: passioID) ?? "No Name"
             return "\(name.capitalized)"
-        } else if sdkConfigured {
+        } else if passioSDK.status.mode == .isReadyForDetection {
             return "Keep scanning for food"
         } else {
             return "SDK is being configured"
@@ -82,7 +80,7 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
 
     static var previews: some View {
-        ContentView()
+        ContentView(passioResults: PassioResults())
     }
-    
+
 }

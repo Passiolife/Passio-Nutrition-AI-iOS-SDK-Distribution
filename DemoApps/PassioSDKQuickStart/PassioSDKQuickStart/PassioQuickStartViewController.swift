@@ -20,8 +20,7 @@ class PassioQuickStartViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        var passioConfig = PassioConfiguration(key: passioSDKKey)
-        passioConfig.debugMode = 31418
+        let passioConfig = PassioConfiguration(key: passioSDKKey)
         passioSDK.statusDelegate = self
         passioSDK.configure(passioConfiguration: passioConfig) { (status) in
             print("Mode = \(status.mode)\nmissingfiles = \(String(describing: status.missingFiles))" )
@@ -49,7 +48,7 @@ class PassioQuickStartViewController: UIViewController {
         passioRunning = true
         passioSDK.startFoodDetection(foodRecognitionDelegate: self) { (ready) in
             if !ready { print("SDK was not configured correctly") }
-            
+
         }
     }
 

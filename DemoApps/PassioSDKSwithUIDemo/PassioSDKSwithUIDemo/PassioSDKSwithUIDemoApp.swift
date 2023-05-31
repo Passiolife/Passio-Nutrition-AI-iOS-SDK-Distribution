@@ -11,7 +11,7 @@ import SwiftUI
 struct PassioSDKSwithUIDemoApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(passioResults: PassioResults())
         }
     }
 }

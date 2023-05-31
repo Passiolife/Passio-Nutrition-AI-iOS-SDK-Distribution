@@ -23,7 +23,7 @@ public protocol PassioConnector: AnyObject {
     func deleteFavorite(foodRecord: FoodRecord)
     func fetchFavorites(completion: @escaping ([FoodRecord]) -> Void)
     // Photos
-    //var passioKeyForSDK: String { get }
+    // var passioKeyForSDK: String { get }
     var bundleForModule: Bundle { get }
     var offsetFoodEditor: CGFloat { get }
 }
@@ -75,7 +75,7 @@ public class PassioInternalConnector {
     private func startModule(dismisswithAnimation: Bool = false,
                              presentingViewController: UIViewController) {
         var vc = UIViewController()
-        //let keyForDef = "TutorialWasDisplayed202201"
+        // let keyForDef = "TutorialWasDisplayed202201"
         vc = MyLogViewController()
         if let navController = presentingViewController.navigationController {
             navController.pushViewController(vc, animated: true)

@@ -5,67 +5,87 @@
 //  Copyright © 2023 Passiolife Inc. All rights reserved.
 
 import SwiftUI
+import Combine
 import PassioNutritionAISDK
+
+struct FoodRecognitionResults {
+    let candidates: FoodCandidates?
+    let image: UIImage?
+    let nutritionFacts: PassioNutritionFacts?
+    let downloadingMessage: String?
+}
+
+//class PassioResults: ObservableObject {
+//    @Published var foodRecognitionResults: FoodRecognitionResults?
+//}
+
+
+class PassioResults: ObservableObject {
+    var objectWillChange = PassthroughSubject<Void, Never>()
+    var foodRecognitionResults: FoodRecognitionResults? {
+        didSet {
+            Task {@MainActor in
+                self.objectWillChange.send()
+            }
+        }
+    }
+}
+    
 
 struct PassioRepresentable: UIViewControllerRepresentable {
 
-    let foodBinder: Binding<FoodRecognitionBinder?>
-    let messagesBinder: Binding<String?>
-    let sdkConfigured: Binding<Bool>
+    let passioResults: PassioResults
 
     class Coordinator: FoodRecognitionDelegate, PassioStatusDelegate {
         
-        let foodBinder: Binding<FoodRecognitionBinder?>
-        let messagesBinder: Binding<String?>
-        let sdkConfigured: Binding<Bool>
-        
-        init(foodBinder: Binding<FoodRecognitionBinder?>,
-             messagesBinder: Binding<String?>,
-             sdkConfigured: Binding<Bool>) {
-            self.foodBinder = foodBinder
-            self.messagesBinder = messagesBinder
-            self.sdkConfigured = sdkConfigured
+        let passioResults: PassioResults
+
+        var message: String? {
+            didSet {
+                    passioResults.foodRecognitionResults = FoodRecognitionResults(candidates: nil,
+                                                                                  image: nil,
+                                                                                  nutritionFacts: nil,
+                                                                                  downloadingMessage: message)
+            }
         }
-        
+
+        init(passioResults: PassioResults) {
+            self.passioResults = passioResults
+        }
+
         func recognitionResults(candidates: FoodCandidates?,
                                 image: UIImage?,
                                 nutritionFacts: PassioNutritionFacts?) {
-            messagesBinder.wrappedValue = nil
-            foodBinder.wrappedValue = FoodRecognitionBinder(candidates: candidates,
-                                                          image: image,
-                                                          nutritionFacts: nutritionFacts)
+                passioResults.foodRecognitionResults = FoodRecognitionResults(candidates: candidates,
+                                                                              image: image,
+                                                                              nutritionFacts: nutritionFacts,
+                                                                              downloadingMessage: nil)
         }
-        
+
         func passioStatusChanged(status: PassioStatus) {
             print("SDK Status = \(status)")
-            if status.mode == .isReadyForDetection {
-                sdkConfigured.wrappedValue = true
-            }
         }
-        
+
         func passioProcessing(filesLeft: Int) {
-            messagesBinder.wrappedValue = "Files left to Process \(filesLeft)"
+            message = "Files left to Process \(filesLeft)"
         }
-        
+
         func completedDownloadingAllFiles(filesLocalURLs: [PassioNutritionAISDK.FileLocalURL]) {
-            messagesBinder.wrappedValue = "Completed downloading all files"
+            message = "Completed downloading all files"
         }
-        
+
         func completedDownloadingFile(fileLocalURL: PassioNutritionAISDK.FileLocalURL, filesLeft: Int) {
-            messagesBinder.wrappedValue = "Files left to download \(filesLeft)"
+            message = "Files left to download \(filesLeft)"
         }
-        
+
         func downloadingError(message: String) {
-            messagesBinder.wrappedValue = ("Downloading error: \(message)")
+            self.message = ("Downloading error: \(message)")
         }
-        
-        
+
     }
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(foodBinder: foodBinder,
-                    messagesBinder: messagesBinder,
-                    sdkConfigured: sdkConfigured)
+        Coordinator(passioResults: passioResults)
     }
 
     func makeUIViewController(context: Context) -> PassioViewController {
@@ -76,12 +96,5 @@ struct PassioRepresentable: UIViewControllerRepresentable {
     }
 
     func updateUIViewController(_ uiViewController: PassioViewController, context: Context) {
-        // Updates the state of the specified view controller with new information from SwiftUI.
     }
-}
-
-struct FoodRecognitionBinder {
-    let candidates: FoodCandidates?
-    let image: UIImage?
-    let nutritionFacts: PassioNutritionFacts?
 }

@@ -18,8 +18,7 @@ class PassioViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        var passioConfig = PassioConfiguration(key: passioSDKKey)
-        passioConfig.debugMode = 31418
+        let passioConfig = PassioConfiguration(key: passioSDKKey)
         passioSDK.statusDelegate = self
         passioSDK.configure(passioConfiguration: passioConfig) { (status) in
             print("PassioSDK status = \(status)" )
@@ -66,7 +65,7 @@ class PassioViewController: UIViewController {
 }
 
 extension PassioViewController: PassioStatusDelegate {
-    
+
     func passioStatusChanged(status: PassioStatus) {
         statusDelegate?.passioStatusChanged(status: status)
         if status.mode == .isReadyForDetection {

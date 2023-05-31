@@ -10,7 +10,7 @@ let package = Package(
     products: [
         .library(
             name: "PassioNutritionAISDK",
-            targets: ["PassioNutritionAISDK"]),
+            targets: ["PassioNutritionAISDK"])
     ],
     targets: [
         .binaryTarget(name: "PassioNutritionAISDK",
