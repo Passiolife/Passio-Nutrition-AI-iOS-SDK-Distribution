@@ -69,8 +69,24 @@ passioConfig.sdkDownloadsModels = false
 
 ***
 
-## Add the PassioNutritionAISDK swift package to your project
+## Adding the PassioNutritionAISDK (based on your Xcode version).
 
+<span style="color:red; font-size:18px">
+Manual Installation For Xcode lower than 14.3:
+</span>
+
+Please follow the steps in the file **"LegacyManuallyAddingTheFrameworkd.md"** otherwise you might get the error the below. 
+
+```swift
+error project: Failed to resolve dependencies 
+```
+
+
+
+<span style="color:green; font-size:18px">
+Install Swift Package for Xcode 14.3 or newer (available on MacOS Ventura)
+</span>
+ 
 1. Open your Xcode project.
 2. Go to File > Swift Packages > Add Package Dependency.
 3. In the "Add Package Dependency" dialog box, paste the URL: https://github.com/Passiolife/Passio-Nutrition-AI-iOS-SDK-Distribution

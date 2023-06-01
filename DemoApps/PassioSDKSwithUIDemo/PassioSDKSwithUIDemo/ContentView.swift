@@ -15,10 +15,6 @@ struct ContentView: View {
 
     let passioSDK = PassioNutritionAI.shared
 
-    var passioID: PassioID? {
-        passioResults.foodRecognitionResults?.candidates?.detectedCandidates.first?.passioID
-    }
-
     var body: some View {
         ZStack(alignment: .bottom) {
             PassioRepresentable(passioResults: passioResults)
@@ -54,14 +50,9 @@ struct ContentView: View {
         }
         .edgesIgnoringSafeArea(.all)
     }
-
-    var foundImage: Image? {
-        guard let passioID = passioID else {
-            return nil
-        }
-        let (image, _) = passioSDK.lookupIconFor(passioID: passioID)
-        return Image(uiImage: image)
-    }
+    
+    
+   
 
     var getNameOfFood: String {
         if let message = passioResults.foodRecognitionResults?.downloadingMessage {
@@ -75,6 +66,19 @@ struct ContentView: View {
             return "SDK is being configured"
         }
     }
+    
+    var foundImage: Image? {
+        guard let passioID = passioID else {
+            return nil
+        }
+        let (image, _) = passioSDK.lookupIconFor(passioID: passioID)
+        return Image(uiImage: image)
+    }
+    
+    var passioID: PassioID? {
+        passioResults.foodRecognitionResults?.candidates?.detectedCandidates.first?.passioID
+    }
+
 }
 
 struct ContentView_Previews: PreviewProvider {
