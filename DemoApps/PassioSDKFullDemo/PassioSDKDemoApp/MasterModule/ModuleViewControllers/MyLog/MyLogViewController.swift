@@ -15,19 +15,19 @@ import Charts
 #endif
 
 class MyLogViewController: UIViewController {
-
+    
     @IBOutlet weak var tableViewFeed: UITableView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var buttonAddItem: UIButton!
     @IBOutlet weak var labelNoItems: UILabel!
-
+    
     let passioSDK = PassioNutritionAI.shared
     let numberOfCellAbove = 2
     let refreshControl = UIRefreshControl()
     let connector = PassioInternalConnector.shared
     var userProfile = UserProfileModel()
-
-var selectedMeal: MealLabel? {
+    
+    var selectedMeal: MealLabel? {
         didSet {
             connector.mealLabel = selectedMeal
             tableViewFeed.reloadData()
@@ -44,7 +44,7 @@ var selectedMeal: MealLabel? {
         dayLog.getFoodRecordsByMeal(mealLabel: selectedMeal)
     }
     var dateSelector: DateSelectorUIView?
-
+    
     @IBAction func showDateSelector(_ sender: Any) {
         if dateSelector == nil {
             let nib = UINib(nibName: "DateSelectorUIView", bundle: connector.bundleForModule)
@@ -61,11 +61,11 @@ var selectedMeal: MealLabel? {
             animateDateSelector(directions: .upWards)
         }
     }
-
+    
     enum SelectorDirections {
         case down, upWards
     }
-
+    
     func animateDateSelector(directions: SelectorDirections) {
         let screenSize = UIScreen.main.bounds.size
         var frameEnd: CGRect
@@ -86,7 +86,7 @@ var selectedMeal: MealLabel? {
             }
         })
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         labelNoItems.text = "No food in log.\nPress Add Item below to start."
@@ -102,61 +102,56 @@ var selectedMeal: MealLabel? {
         UISegmentedControl.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black],
                                                                for: .normal)
     }
-
+    
     func addMoreButton() {
         let progress = UIBarButtonItem(title: "More",
-                                        style: .plain,
-                                        target: self,
-                                        action: #selector(showMoreMenu))
-                self.navigationItem.setRightBarButtonItems([progress], animated: true)
-                self.navigationItem.setLeftBarButton(nil, animated: false)
+                                       style: .plain,
+                                       target: self,
+                                       action: #selector(showMoreMenu))
+        self.navigationItem.setRightBarButtonItems([progress], animated: true)
+        self.navigationItem.setLeftBarButton(nil, animated: false)
     }
-
+    
     @objc func showMoreMenu() {
-            let alert = UIAlertController(title: "Menu".localized,
-                                          message: nil,
-                                          preferredStyle: .actionSheet)
-// #if canImport(Charts)
-//            alert.addAction(UIAlertAction(title: "Progress".localized,
-//                                          style: .default, handler: { _ in
-//                let vc = MyProgressViewController()
-//                vc.modalPresentationStyle = .fullScreen
-//                self.present(vc, animated: true)
-//            }))
-// #endif
-            alert.addAction(UIAlertAction(title: "Favorites".localized,
-                                          style: .default, handler: { _ in
-                let vc = MyFavoritesViewController()
-                vc.modalPresentationStyle = .fullScreen
-                vc.delegate  = self
-                // self.present(vc, animated: true)
-                self.navigationController?.pushViewController(vc, animated: true)
-            }))
-            alert.addAction(UIAlertAction(title: "Profile".localized,
-                                          style: .default, handler: { _ in
-                let vc = EditProfileViewController()
-                vc.userProfile = self.userProfile
-                // vc.dismmissToMyLog = true
-                vc.modalPresentationStyle = .fullScreen
-                self.present(vc, animated: true)
-            }))
-        if PassioNutritionAI.shared.availableVolumeDetectionModes.contains(VolumeDetectionMode.dualWideCamera) {
-            alert.addAction(UIAlertAction(title: "Weight estimated food".localized, style: .default, handler: { _ in
-                let vc = ListOfFoodViewController()
-                self.navigationController?.pushViewController(vc, animated: true)
-            }))
-        }
+        let alert = UIAlertController(title: "Menu".localized,
+                                      message: nil,
+                                      preferredStyle: .actionSheet)
+        // #if canImport(Charts)
+        //            alert.addAction(UIAlertAction(title: "Progress".localized,
+        //                                          style: .default, handler: { _ in
+        //                let vc = MyProgressViewController()
+        //                vc.modalPresentationStyle = .fullScreen
+        //                self.present(vc, animated: true)
+        //            }))
+        // #endif
+        alert.addAction(UIAlertAction(title: "Favorites".localized,
+                                      style: .default, handler: { _ in
+            let vc = MyFavoritesViewController()
+            vc.modalPresentationStyle = .fullScreen
+            vc.delegate  = self
+            // self.present(vc, animated: true)
+            self.navigationController?.pushViewController(vc, animated: true)
+        }))
+        alert.addAction(UIAlertAction(title: "Profile".localized,
+                                      style: .default, handler: { _ in
+            let vc = EditProfileViewController()
+            vc.userProfile = self.userProfile
+            // vc.dismmissToMyLog = true
+            vc.modalPresentationStyle = .fullScreen
+            self.present(vc, animated: true)
+        }))
+        
         alert.addAction(UIAlertAction(title: "Developer Views".localized,
                                       style: .default, handler: { _ in
             let vc = EngineeringViewController()
             self.navigationController?.pushViewController(vc, animated: true)
-
+            
         }))
         alert.addAction(UIAlertAction(title: "Cancel".localized,
                                       style: .cancel))
         present(alert, animated: true)
     }
-
+    
     func addButtonTitle(withDate: Date) {
         let dateFormatterPrint = DateFormatter()
         dateFormatterPrint.dateFormat = "EEEE MMM dd yyyy"
@@ -168,12 +163,12 @@ var selectedMeal: MealLabel? {
         navigationItem.titleView = button
         button.setTitleColor(.black, for: .normal)
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setDayLogForSelectedDate()
     }
-
+    
     func registerCellsAndTableDelegates() {
         tableViewFeed.delegate = self
         tableViewFeed.dataSource = self
@@ -187,11 +182,11 @@ var selectedMeal: MealLabel? {
             tableViewFeed.register(cell, forCellReuseIdentifier: cellName)
         }
     }
-
+    
     @objc func setDayLogForSelectedDate() {
         setDayLogFor(date: dayLog.date)
     }
-
+    
     func setDayLogFor(date: Date) {
         connector.fetchDayRecords(date: date) { (foodRecord) in
             self.dayLog = DayLog(date: date, records: foodRecord)
@@ -200,9 +195,9 @@ var selectedMeal: MealLabel? {
             self.refreshControl.endRefreshing()
         }
     }
-
+    
     @IBAction func actionAddItem(_ sender: UIButton) {
-
+        
         let alert = UIAlertController(title: "Add Item".localized,
                                       message: nil,
                                       preferredStyle: .actionSheet)
@@ -211,7 +206,7 @@ var selectedMeal: MealLabel? {
             let vc = FoodRecognitionViewController()
             vc.dismmissToMyLog = true
             vc.modalPresentationStyle = .fullScreen
-           // vc.delegate = self
+            // vc.delegate = self
             self.present(vc, animated: true)
         }))
         alert.addAction(UIAlertAction(title: "Multi-Food Scan".localized,
@@ -219,7 +214,7 @@ var selectedMeal: MealLabel? {
             let vc = MultipleFoodViewController()
             vc.dismmissToMyLog = true
             vc.modalPresentationStyle = .fullScreen
-           // vc.delegate  = self
+            // vc.delegate  = self
             self.present(vc, animated: true)
         }))
         alert.addAction(UIAlertAction(title: "By Text Search".localized,
@@ -246,18 +241,18 @@ var selectedMeal: MealLabel? {
 
 extension MyLogViewController: FavoritesViewDelegate {
     func userSelectedFavorite(favorite: FoodRecord) {
-
+        
     }
-
+    
     func numberOfFavotires(number: Int) {
-
+        
     }
-
+    
     func userAddedToLog(foodRecord: FoodRecord) {
         dayLog.add(record: foodRecord)
         tableViewFeed.reloadData()
     }
-
+    
 }
 
 extension MyLogViewController: TextSearchViewDelgate {
@@ -273,48 +268,48 @@ extension MyLogViewController: TextSearchViewDelgate {
             tableViewFeed.reloadData()
         }
     }
-
+    
 }
 
 extension MyLogViewController: UITableViewDataSource {
-
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         displayedRecords.count + numberOfCellAbove
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.row {
         case 0:
-
-// #if canImport(Charts)
-//            guard let cell = tableViewFeed.dequeueReusableCell(withIdentifier: "PassioChartsTableVCell",
-//                                                               for: indexPath) as? PassioChartsTableVCell else {
-//                                                                return UITableViewCell() }
-//
-//            let (calories, carbs, pro, fat) = getNutritionSummaryfor(foodRecords: displayedRecords)
-//            cell.chartNutrition = customizeNutritionChart(chart: cell.chartNutrition,
-//                                                          carbs: carbs,
-//                                                          pro: pro,
-//                                                          fat: fat,
-//                                                          valuesOrPercent: valuesOrPercent)
-//            cell.chartCalories = customizeCaloriesChart(chart: cell.chartCalories,
-//                                                        calories: calories,
-//                                                        dailyTarget: Double(userProfile.caloriesTarget),
-//                                                        numberOfDays: 1,
-//                                                        valuesOrPercent: .values)
-//            cell.selectionStyle = .none
-//            return cell
-// #else
+            
+            // #if canImport(Charts)
+            //            guard let cell = tableViewFeed.dequeueReusableCell(withIdentifier: "PassioChartsTableVCell",
+            //                                                               for: indexPath) as? PassioChartsTableVCell else {
+            //                                                                return UITableViewCell() }
+            //
+            //            let (calories, carbs, pro, fat) = getNutritionSummaryfor(foodRecords: displayedRecords)
+            //            cell.chartNutrition = customizeNutritionChart(chart: cell.chartNutrition,
+            //                                                          carbs: carbs,
+            //                                                          pro: pro,
+            //                                                          fat: fat,
+            //                                                          valuesOrPercent: valuesOrPercent)
+            //            cell.chartCalories = customizeCaloriesChart(chart: cell.chartCalories,
+            //                                                        calories: calories,
+            //                                                        dailyTarget: Double(userProfile.caloriesTarget),
+            //                                                        numberOfDays: 1,
+            //                                                        valuesOrPercent: .values)
+            //            cell.selectionStyle = .none
+            //            return cell
+            // #else
             let cell = UITableViewCell()
             cell.textLabel?.text = "Place holder for charts."
             cell.textLabel?.textAlignment = .center
-           return cell
-// #endif
-
+            return cell
+            // #endif
+            
         case 1:
             guard let cell = tableViewFeed.dequeueReusableCell(withIdentifier: "SegmentedTableViewCell",
                                                                for: indexPath) as? SegmentedTableViewCell else {
-                                                                return UITableViewCell() }
+                return UITableViewCell() }
             cell.segmented.removeAllSegments()
             var title: String
             var selectedSegment = 0
@@ -336,9 +331,9 @@ extension MyLogViewController: UITableViewDataSource {
         default:
             guard let cell = tableViewFeed.dequeueReusableCell(withIdentifier: "IngredientHeaderTableViewCell",
                                                                for: indexPath) as? IngredientHeaderTableViewCell else {
-                                                                return UITableViewCell()
+                return UITableViewCell()
             }
-
+            
             let records = dayLog.getFoodRecordsByMeal(mealLabel: selectedMeal)
             let recordIndex = indexPath.row - numberOfCellAbove
             guard 0 <= recordIndex, recordIndex < records.count else {
@@ -346,15 +341,15 @@ extension MyLogViewController: UITableViewDataSource {
             }
             let foodRecord = records[recordIndex]
             cell.labelName.text = foodRecord.name.capitalized
-
+            
             let quantity = foodRecord.selectedQuantity
             let title = foodRecord.selectedUnit.capitalized
             let weight = String(Int(foodRecord.computedWeight.value))
             let textAmount = quantity == Double(Int(quantity)) ? String(Int(quantity)) :
-                String(quantity.roundDigits(afterDecimal: 1))
+            String(quantity.roundDigits(afterDecimal: 1))
             let weightText = title == "g" ? "" : "(" + weight + " " + "g".localized + ") "
             cell.labelServing.text = textAmount + " " + title + " " + weightText
-
+            
             var calStr = "0"
             let cal = foodRecord.totalCalories
             if 0 < cal, cal < 1e6 {
@@ -373,13 +368,13 @@ extension MyLogViewController: UITableViewDataSource {
             }
             cell.imageFood.roundMyCorner()
             cell.labelTime.text = foodRecord.mealLabel.rawValue
-//            cell.insetBackground.backgroundColor = UIColor(named: Custom.insetBackgroundColor,
-//                                                           in: connector.bundleForModule, compatibleWith: nil)
+            //            cell.insetBackground.backgroundColor = UIColor(named: Custom.insetBackgroundColor,
+            //                                                           in: connector.bundleForModule, compatibleWith: nil)
             cell.selectionStyle = .none
             return cell
         }
     }
-
+    
     @objc func segmentedChanged(segemented: UISegmentedControl) {
         switch segemented.selectedSegmentIndex {
         case 0:
@@ -388,20 +383,20 @@ extension MyLogViewController: UITableViewDataSource {
             selectedMeal = MealLabel(rawValue: MealLabel.allValues[segemented.selectedSegmentIndex - 1].rawValue)
         }
     }
-
-//    @objc func mealSelected(button: UIButton) {
-//        switch button.tag {
-//        case -1:
-//            selectedMeal = nil
-//        default:
-//            selectedMeal = MealLabel(rawValue: MealLabel.allValues[button.tag].rawValue)
-//        }
-//    }
-
+    
+    //    @objc func mealSelected(button: UIButton) {
+    //        switch button.tag {
+    //        case -1:
+    //            selectedMeal = nil
+    //        default:
+    //            selectedMeal = MealLabel(rawValue: MealLabel.allValues[button.tag].rawValue)
+    //        }
+    //    }
+    
 }
 
 extension MyLogViewController: UITableViewDelegate {
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
@@ -415,13 +410,13 @@ extension MyLogViewController: UITableViewDelegate {
             navigateToEditor(foodRecord: record)
         }
     }
-
+    
     func navigateToEditor(foodRecord: FoodRecord) {
         let editVC = EditRecordViewController()
         editVC.foodRecord = foodRecord
         self.navigationController?.pushViewController(editVC, animated: true)
     }
-
+    
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) ->
     UISwipeActionsConfiguration? {
         guard indexPath.row >= numberOfCellAbove else { return nil }
@@ -433,7 +428,7 @@ extension MyLogViewController: UITableViewDelegate {
             self.dayLog.delete(record: record)
             self.tableViewFeed.reloadData()
         }
-
+        
         let editItem = UIContextualAction(style: .normal, title: "Edit".localized) { (_, _, _) in
             let indexAdjusted = indexPath.row - self.numberOfCellAbove
             guard indexAdjusted >= 0, self.displayedRecords.count > indexAdjusted  else { return }
@@ -442,27 +437,27 @@ extension MyLogViewController: UITableViewDelegate {
         }
         editItem.backgroundColor = UIColor(named: "CustomBase",
                                            in: connector.bundleForModule, compatibleWith: nil)
-
+        
         let swipeActions = UISwipeActionsConfiguration(actions: [deleteItem, editItem])
         return swipeActions
     }
-
+    
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) ->
     UITableViewCell.EditingStyle {
         return indexPath.row > numberOfCellAbove ? .delete : .none
     }
-
+    
 }
 
 extension MyLogViewController: DateSelectorUIViewDelegate {
-
+    
     func removeDateSelector(remove: Bool) {
         animateDateSelector(directions: .upWards)
     }
-
+    
     func dateFromPicker(date: Date) {
         connector.dateForLogging = date
         setDayLogFor(date: date)
     }
-
+    
 }

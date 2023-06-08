@@ -151,7 +151,6 @@
 		9E77F9D8278DF61000C66ABE /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E77F9CD278DF4D700C66ABE /* UIImage+Extension.swift */; };
 		9E77F9DA278DF61000C66ABE /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E77F9D0278DF4D700C66ABE /* String+Extension.swift */; };
 		9E77F9DB278DF61000C66ABE /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E77F9CA278DF4D700C66ABE /* Date+Extension.swift */; };
-		9E77F9DE278DF77F00C66ABE /* CustomConfigurations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E77F9DD278DF77F00C66ABE /* CustomConfigurations.swift */; };
 		9E8AB7B427ADB9C7006E8064 /* DetectedCandidatesStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8AB7B327ADB9C7006E8064 /* DetectedCandidatesStruct.swift */; };
 		9EBCDF5527BDA3A500776468 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBCDF5427BDA3A500776468 /* UIView+Extension.swift */; };
 		9EBF118F24AB843A007859FA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9EBF10E624AB8439007859FA /* Assets.xcassets */; };
@@ -162,6 +161,7 @@
 		9EBF120A24AB843A007859FA /* PassioExternalConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EBF118C24AB843A007859FA /* PassioExternalConnector.swift */; };
 		9EDABB9D2A0AD99800997AF9 /* PassioNutritionAISDK in Frameworks */ = {isa = PBXBuildFile; productRef = 9EDABB9C2A0AD99800997AF9 /* PassioNutritionAISDK */; };
 		9EDABBA52A0ADFC500997AF9 /* PassioSDKKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDABBA42A0ADFC500997AF9 /* PassioSDKKey.swift */; };
+		9EDD4A112A310562005206A2 /* CustomConfigurations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDD4A102A310562005206A2 /* CustomConfigurations.swift */; };
 		9EFCE10824BE173D0015AABB /* EngineeringViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9EFCE0F924BE173D0015AABB /* EngineeringViewController.xib */; };
 		9EFCE10924BE173D0015AABB /* TrackingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9EFCE0FB24BE173D0015AABB /* TrackingViewController.xib */; };
 		9EFCE10A24BE173D0015AABB /* TrackingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EFCE0FC24BE173D0015AABB /* TrackingViewController.swift */; };
@@ -334,7 +334,6 @@
 		9E77F9CF278DF4D700C66ABE /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
 		9E77F9D0278DF4D700C66ABE /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		9E77F9D2278DF4D700C66ABE /* GlobalFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalFunctions.swift; sourceTree = "<group>"; };
-		9E77F9DD278DF77F00C66ABE /* CustomConfigurations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomConfigurations.swift; sourceTree = "<group>"; };
 		9E8AB7B327ADB9C7006E8064 /* DetectedCandidatesStruct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetectedCandidatesStruct.swift; sourceTree = "<group>"; };
 		9EBCDF5427BDA3A500776468 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		9EBF10E624AB8439007859FA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -345,6 +344,7 @@
 		9EBF118C24AB843A007859FA /* PassioExternalConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PassioExternalConnector.swift; sourceTree = "<group>"; };
 		9ECB28ED243242800002F524 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		9EDABBA42A0ADFC500997AF9 /* PassioSDKKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassioSDKKey.swift; sourceTree = "<group>"; };
+		9EDD4A102A310562005206A2 /* CustomConfigurations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomConfigurations.swift; sourceTree = "<group>"; };
 		9EE5C4AE243BE86F00146352 /* MetalPerformanceShaders.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalPerformanceShaders.framework; path = System/Library/Frameworks/MetalPerformanceShaders.framework; sourceTree = SDKROOT; };
 		9EE5C4B0243BE87700146352 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
 		9EE5C4B2243BE88000146352 /* CoreML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreML.framework; path = System/Library/Frameworks/CoreML.framework; sourceTree = SDKROOT; };
@@ -422,6 +422,7 @@
 		9E77F881278DF3DF00C66ABE /* MasterModule */ = {
 			isa = PBXGroup;
 			children = (
+				9EDD4A0F2A310562005206A2 /* Customization */,
 				9E77F882278DF3DF00C66ABE /* PassioInternalConnector.swift */,
 				9E77F883278DF3DF00C66ABE /* Localizations */,
 				9E77F9C9278DF4D700C66ABE /* ExtensionsForDemo */,
@@ -861,18 +862,9 @@
 			path = ExtensionsForDemo;
 			sourceTree = "<group>";
 		};
-		9E77F9DC278DF77F00C66ABE /* Customization */ = {
-			isa = PBXGroup;
-			children = (
-				9E77F9DD278DF77F00C66ABE /* CustomConfigurations.swift */,
-			);
-			path = Customization;
-			sourceTree = "<group>";
-		};
 		9EBF10E524AB8439007859FA /* PassioSDKDemoApp */ = {
 			isa = PBXGroup;
 			children = (
-				9E77F9DC278DF77F00C66ABE /* Customization */,
 				9E77F881278DF3DF00C66ABE /* MasterModule */,
 				9EBF10E624AB8439007859FA /* Assets.xcassets */,
 				9EBF10E724AB8439007859FA /* EntryViewController.swift */,
@@ -908,6 +900,14 @@
 				9ECB28ED243242800002F524 /* Metal.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9EDD4A0F2A310562005206A2 /* Customization */ = {
+			isa = PBXGroup;
+			children = (
+				9EDD4A102A310562005206A2 /* CustomConfigurations.swift */,
+			);
+			path = Customization;
 			sourceTree = "<group>";
 		};
 		9EFCE0FA24BE173D0015AABB /* ODVotingwithRecent */ = {
@@ -1165,7 +1165,7 @@
 				9E77F9A8278DF3E000C66ABE /* ProfileHeaderTableViewCell.swift in Sources */,
 				9EFCE11324BE173D0015AABB /* EngineeringViewController.swift in Sources */,
 				9E77F950278DF3E000C66ABE /* NutritionHeaderTableViewCell.swift in Sources */,
-				9E77F9DE278DF77F00C66ABE /* CustomConfigurations.swift in Sources */,
+				9EDD4A112A310562005206A2 /* CustomConfigurations.swift in Sources */,
 				9E77F99C278DF3E000C66ABE /* MyFavoritesViewController.swift in Sources */,
 				9E77F9DB278DF61000C66ABE /* Date+Extension.swift in Sources */,
 				9E77F944278DF3E000C66ABE /* MealLabel.swift in Sources */,

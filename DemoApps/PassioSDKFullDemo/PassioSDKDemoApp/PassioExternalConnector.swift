@@ -9,10 +9,6 @@ import Foundation
 import UIKit
 import PassioNutritionAISDK
 
-#if canImport(PassioAppModule)
-import PassioAppModule
-#endif
-
 public typealias PassioID = String
 
 class PassioExternalConnector {

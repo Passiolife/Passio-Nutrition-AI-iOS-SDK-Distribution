@@ -9,10 +9,6 @@
 import UIKit
 import PassioNutritionAISDK
 
-#if canImport(PassioAppModule)
-import PassioAppModule
-#endif
-
 class EntryViewController: UIViewController {
 
     @IBOutlet weak var labelDownloading: UILabel!
