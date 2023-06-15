@@ -139,9 +139,6 @@ schullo agave syrup
 swanson canned chicken
 ```
 
-
-
-
 ## V2.2.19
 
 * Number of food items recognized via HNN: 4136

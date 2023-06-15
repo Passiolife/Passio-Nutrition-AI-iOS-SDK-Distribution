@@ -15,10 +15,6 @@
 		9E7162A327AC77E3008D3FFF /* AddedToLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7162A227AC77E3008D3FFF /* AddedToLogView.swift */; };
 		9E7162B427AC786A008D3FFF /* OpenFoodTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E7162B227AC786A008D3FFF /* OpenFoodTableViewCell.xib */; };
 		9E7162B527AC786A008D3FFF /* OpenFoodTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7162B327AC786A008D3FFF /* OpenFoodTableViewCell.swift */; };
-		9E7162BC27AC7916008D3FFF /* FoodVolumeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E7162B827AC7916008D3FFF /* FoodVolumeTableViewCell.xib */; };
-		9E7162BD27AC7916008D3FFF /* FoodVolumeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7162B927AC7916008D3FFF /* FoodVolumeTableViewCell.swift */; };
-		9E7162BE27AC7916008D3FFF /* ListOfFoodViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7162BA27AC7916008D3FFF /* ListOfFoodViewController.swift */; };
-		9E7162BF27AC7916008D3FFF /* ListOfFoodViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E7162BB27AC7916008D3FFF /* ListOfFoodViewController.xib */; };
 		9E77F93B278DF3E000C66ABE /* PassioInternalConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E77F882278DF3DF00C66ABE /* PassioInternalConnector.swift */; };
 		9E77F93C278DF3E000C66ABE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9E77F884278DF3DF00C66ABE /* Localizable.strings */; };
 		9E77F93D278DF3E000C66ABE /* UIFont+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E77F887278DF3DF00C66ABE /* UIFont+Extensions.swift */; };
@@ -198,10 +194,6 @@
 		9E7162A227AC77E3008D3FFF /* AddedToLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddedToLogView.swift; sourceTree = "<group>"; };
 		9E7162B227AC786A008D3FFF /* OpenFoodTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OpenFoodTableViewCell.xib; sourceTree = "<group>"; };
 		9E7162B327AC786A008D3FFF /* OpenFoodTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenFoodTableViewCell.swift; sourceTree = "<group>"; };
-		9E7162B827AC7916008D3FFF /* FoodVolumeTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FoodVolumeTableViewCell.xib; sourceTree = "<group>"; };
-		9E7162B927AC7916008D3FFF /* FoodVolumeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodVolumeTableViewCell.swift; sourceTree = "<group>"; };
-		9E7162BA27AC7916008D3FFF /* ListOfFoodViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListOfFoodViewController.swift; sourceTree = "<group>"; };
-		9E7162BB27AC7916008D3FFF /* ListOfFoodViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ListOfFoodViewController.xib; sourceTree = "<group>"; };
 		9E77F882278DF3DF00C66ABE /* PassioInternalConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PassioInternalConnector.swift; sourceTree = "<group>"; };
 		9E77F885278DF3DF00C66ABE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9E77F887278DF3DF00C66ABE /* UIFont+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+Extensions.swift"; sourceTree = "<group>"; };
@@ -398,25 +390,6 @@
 				9E6BF36129F961F800692E87 /* VideoCameraPhotosViewController.swift */,
 			);
 			path = VideoCameraPhotos;
-			sourceTree = "<group>";
-		};
-		9E7162B627AC7916008D3FFF /* ListOfFoodForVolume */ = {
-			isa = PBXGroup;
-			children = (
-				9E7162B727AC7916008D3FFF /* Cells */,
-				9E7162BA27AC7916008D3FFF /* ListOfFoodViewController.swift */,
-				9E7162BB27AC7916008D3FFF /* ListOfFoodViewController.xib */,
-			);
-			path = ListOfFoodForVolume;
-			sourceTree = "<group>";
-		};
-		9E7162B727AC7916008D3FFF /* Cells */ = {
-			isa = PBXGroup;
-			children = (
-				9E7162B827AC7916008D3FFF /* FoodVolumeTableViewCell.xib */,
-				9E7162B927AC7916008D3FFF /* FoodVolumeTableViewCell.swift */,
-			);
-			path = Cells;
 			sourceTree = "<group>";
 		};
 		9E77F881278DF3DF00C66ABE /* MasterModule */ = {
@@ -687,7 +660,6 @@
 		9E77F8F3278DF3DF00C66ABE /* ModuleViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				9E7162B627AC7916008D3FFF /* ListOfFoodForVolume */,
 				9E77F8F4278DF3DF00C66ABE /* TextSearch */,
 				9E77F8FC278DF3E000C66ABE /* FoodRecognition */,
 				9E77F8FF278DF3E000C66ABE /* Favorites */,
@@ -1037,13 +1009,11 @@
 				9EFCE10924BE173D0015AABB /* TrackingViewController.xib in Resources */,
 				9E77F9A4278DF3E000C66ABE /* ConstructionViewController.xib in Resources */,
 				9E6BF36429F961F800692E87 /* VCPTableViewCell.xib in Resources */,
-				9E7162BC27AC7916008D3FFF /* FoodVolumeTableViewCell.xib in Resources */,
 				9E77F93C278DF3E000C66ABE /* Localizable.strings in Resources */,
 				9E77F993278DF3E000C66ABE /* TextSearchTableViewCell.xib in Resources */,
 				9EFCE10824BE173D0015AABB /* EngineeringViewController.xib in Resources */,
 				9E77F94D278DF3E000C66ABE /* NutritionTitleTableViewCell.xib in Resources */,
 				9E77F952278DF3E000C66ABE /* NutritionFactsView.xib in Resources */,
-				9E7162BF27AC7916008D3FFF /* ListOfFoodViewController.xib in Resources */,
 				9E77F972278DF3E000C66ABE /* IngredientHeaderTableViewCell.xib in Resources */,
 				9E77F9B3278DF3E000C66ABE /* PickerPopUpView.xib in Resources */,
 				9E77F978278DF3E000C66ABE /* AmountSliderFullTableViewCell.xib in Resources */,
@@ -1132,7 +1102,6 @@
 				9E77F942278DF3E000C66ABE /* DayLog.swift in Sources */,
 				9E77F99A278DF3E000C66ABE /* FavoriteTableViewCell.swift in Sources */,
 				9EFCE10A24BE173D0015AABB /* TrackingViewController.swift in Sources */,
-				9E7162BE27AC7916008D3FFF /* ListOfFoodViewController.swift in Sources */,
 				9E8AB7B427ADB9C7006E8064 /* DetectedCandidatesStruct.swift in Sources */,
 				9E6BF36329F961F800692E87 /* VCPTableViewCell.swift in Sources */,
 				9E77F940278DF3E000C66ABE /* UITableView+Extention.swift in Sources */,
@@ -1161,7 +1130,6 @@
 				9E77F974278DF3E000C66ABE /* IngredientHeaderTableViewCell.swift in Sources */,
 				9E6BF36529F961F800692E87 /* VideoCameraPhotosViewController.swift in Sources */,
 				9EBF120924AB843A007859FA /* AppDelegate.swift in Sources */,
-				9E7162BD27AC7916008D3FFF /* FoodVolumeTableViewCell.swift in Sources */,
 				9E77F9A8278DF3E000C66ABE /* ProfileHeaderTableViewCell.swift in Sources */,
 				9EFCE11324BE173D0015AABB /* EngineeringViewController.swift in Sources */,
 				9E77F950278DF3E000C66ABE /* NutritionHeaderTableViewCell.swift in Sources */,
