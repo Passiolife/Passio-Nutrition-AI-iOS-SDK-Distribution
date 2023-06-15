@@ -1,7 +1,7 @@
 //
 //  ShowVotingViewController
 //
-//  Copyright © 2022 PassioLife Inc All rights reserved.
+//  Copyright © 2023 PassioLife Inc All rights reserved.
 //
 
 import UIKit

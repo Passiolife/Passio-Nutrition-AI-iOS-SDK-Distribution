@@ -50,9 +50,6 @@ struct ContentView: View {
         }
         .edgesIgnoringSafeArea(.all)
     }
-    
-    
-   
 
     var getNameOfFood: String {
         if let message = passioResults.foodRecognitionResults?.downloadingMessage {
@@ -66,7 +63,7 @@ struct ContentView: View {
             return "SDK is being configured"
         }
     }
-    
+
     var foundImage: Image? {
         guard let passioID = passioID else {
             return nil
@@ -74,7 +71,7 @@ struct ContentView: View {
         let (image, _) = passioSDK.lookupIconFor(passioID: passioID)
         return Image(uiImage: image)
     }
-    
+
     var passioID: PassioID? {
         passioResults.foodRecognitionResults?.candidates?.detectedCandidates.first?.passioID
     }

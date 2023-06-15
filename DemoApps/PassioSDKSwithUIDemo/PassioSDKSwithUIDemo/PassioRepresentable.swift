@@ -15,10 +15,9 @@ struct FoodRecognitionResults {
     let downloadingMessage: String?
 }
 
-//class PassioResults: ObservableObject {
+// class PassioResults: ObservableObject {
 //    @Published var foodRecognitionResults: FoodRecognitionResults?
-//}
-
+// }
 
 class PassioResults: ObservableObject {
     var objectWillChange = PassthroughSubject<Void, Never>()
@@ -30,14 +29,13 @@ class PassioResults: ObservableObject {
         }
     }
 }
-    
 
 struct PassioRepresentable: UIViewControllerRepresentable {
 
     let passioResults: PassioResults
 
     class Coordinator: FoodRecognitionDelegate, PassioStatusDelegate {
-        
+
         let passioResults: PassioResults
 
         var message: String? {

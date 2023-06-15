@@ -1,5 +1,79 @@
 # Passio SDK  Release Notes for Models
 
+## V2.3.3
+
+* Number of food items recognized via HNN: 4119
+* Nutrition database version: passio_nutrition.4120.0.301
+* Number of products recognized via OCR: 23863
+
+### New included HNN foods
+```
+365 organic orange juice
+bob evans liquid egg whites
+cheerio muesli bowl
+coffee tin
+cream of tartar package
+deli market mustard
+garden salad with figs
+instant coffee bottle
+keurig coffee pods
+natures heart granola package
+pabst can
+packaged apples
+packaged bacon
+packaged buns
+packaged canadian bacon
+packaged crimini mushrooms
+packaged donuts
+packaged frozen strawberries
+packaged fruit cups
+packaged muffins
+packaged oyster mushrooms
+packaged rosemary
+packaged salads
+packaged salmon
+packaged shiitake mushrooms
+packaged spinach
+packaged spring mix
+packaged turkey bacon
+packaged white fish filet
+packaged white mushrooms
+packaged whole ham
+```
+
+### Excluded HNN foods
+```
+bitterballen
+cinnamon roll cake
+cooked cream of wheat
+del monte red grapefruit cup
+eat smart salad
+folgers coffee package
+fresh express salad
+john morrell bacon
+jones canadian bacon
+kirkland frozen strawberries package
+kirkland ham
+kroger gala apple package
+nescafe clasico instant coffee
+nescafe tradicion instant coffee
+oscar mayer turkey bacon package
+packaged fortnum and mason royal blend
+packaged great value tea
+packaged greens
+packaged herbs
+packaged lipton teabags
+packaged mushrooms
+packaged twinings teabags
+packaged yorkshire teabags
+physicians choice collagen peptides
+smithfield bacon
+starbucks keurig pods
+tastykake powdered sugar mini donuts
+taylor farms salad
+vital proteins collagen
+```
+
 ## V2.2.23
 
 * Number of food items recognized via HNN: 4117
