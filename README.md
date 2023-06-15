@@ -337,4 +337,4 @@ class RotationViewController: UIViewController {
 
 ![Use this image to test recognition](./READMEIMAGES/passio_recognition_test.jpg)
 
-<sup>Copyright 2022 Passio Inc</sup>
+<sup>Copyright 2023 Passio Inc</sup>
