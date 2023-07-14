@@ -41,8 +41,10 @@ class PassioViewController: UIViewController {
     func startFoodDetection() {
         setupPreviewLayer()
         guard passioSDK.status.mode == .isReadyForDetection else { return }
-        passioSDK.startFoodDetection(foodRecognitionDelegate: self) { (ready) in
-            if !ready { print("SDK was not configured correctly") }
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.passioSDK.startFoodDetection(foodRecognitionDelegate: self) { (ready) in
+                if !ready { print("SDK was not configured correctly") }
+            }
         }
     }
 

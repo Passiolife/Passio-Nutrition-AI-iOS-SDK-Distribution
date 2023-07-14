@@ -137,13 +137,18 @@ class FoodRecognitionViewController: RotationViewController {
                                                          detectBarcodes: true,
                                                          detectPackagedFood: true,
                                                          nutritionFacts: true)
-        passioSDK.startFoodDetection(detectionConfig: detectionConfig,
-                                     foodRecognitionDelegate: self) { (ready) in
-            if  !ready {
-                print("SDK was not configured correctly")
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.passioSDK.startFoodDetection(detectionConfig: detectionConfig,
+                                         foodRecognitionDelegate: self) { (ready) in
+                if  !ready {
+                    print("SDK was not configured correctly")
+                }
+                DispatchQueue.main.async {
+                    self.view.bringSubviewToFront(self.buttonDismiss)
+                }
             }
-            self.view.bringSubviewToFront(self.buttonDismiss)
         }
+        
     }
 
     override func stopDetection() {

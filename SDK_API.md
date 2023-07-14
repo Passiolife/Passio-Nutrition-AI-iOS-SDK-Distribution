@@ -1,6 +1,6 @@
 # Passio PassioNutritionAISDK 
 
-## Version  2.3.3
+## Version  2.3.5
 ```Swift
 import AVFoundation
 import Accelerate

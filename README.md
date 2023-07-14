@@ -184,9 +184,11 @@ override func viewWillAppear(_ animated: Bool) {
 ```swift
   func startFoodDetection() {
         setupPreviewLayer()
-        passioSDK.startFoodDetection(foodRecognitionDelegate: self) { (ready) in
-            if !ready {
-                print("SDK was not configured correctly")
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.passioSDK.startFoodDetection(foodRecognitionDelegate: self) { (ready) in
+                if !ready {
+                    print("SDK was not configured correctly")
+                }
             }
         }
     }

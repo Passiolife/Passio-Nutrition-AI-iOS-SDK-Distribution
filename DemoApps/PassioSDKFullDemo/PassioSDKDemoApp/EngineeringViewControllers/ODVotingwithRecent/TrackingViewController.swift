@@ -62,10 +62,12 @@ class TrackingViewController: UIViewController {
         var detectionConfig = FoodDetectionConfiguration()
         detectionConfig.detectPackagedFood = true
         detectionConfig.detectBarcodes = true
-        passioSDK.startFoodDetection(detectionConfig: detectionConfig,
-                                     foodRecognitionDelegate: self) { (ready) in
-            if !ready {
-                print("SDK was not configured correctly")
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.passioSDK.startFoodDetection(detectionConfig: detectionConfig,
+                                         foodRecognitionDelegate: self) { (ready) in
+                if !ready {
+                    print("SDK was not configured correctly")
+                }
             }
         }
 

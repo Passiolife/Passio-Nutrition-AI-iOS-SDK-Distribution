@@ -1,5 +1,9 @@
 # Passio SDK  Release Notes for Models
 
+## V2.3.5
+
+Same models as 2.3.3
+
 ## V2.3.3
 
 * Number of food items recognized via HNN: 4119

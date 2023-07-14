@@ -92,11 +92,14 @@ class VideoCameraPhotosViewController: UIViewController {
 
     func startFoodDetection() {
         setupPreviewLayer()
-        passioSDK.startFoodDetection(foodRecognitionDelegate: self) { (ready) in
-            if !ready {
-                print("SDK was not configures correctly")
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.passioSDK.startFoodDetection(foodRecognitionDelegate: self) { (ready) in
+                if !ready {
+                    print("SDK was not configures correctly")
+                }
             }
         }
+        
     }
 
     func stopFoodDetection() {

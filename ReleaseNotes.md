@@ -1,5 +1,10 @@
 # Passio SDK V2.X  Release Notes
 
+## V2.3.5
+### Improvement and enhancements
+
+* StartFoodRecognition was accelerated by sending the packageFood object to by initialized in the userInitiated queue.
+
 ## V2.3.3
 ### Models
 
