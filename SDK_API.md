@@ -570,7 +570,7 @@ public struct PassioFoodItemData : Equatable, Codable {
 
     public var name: String { get }
 
-    public var tags: [String] { get }
+    public var tags: [String]? { get }
 
     public var selectedQuantity: Double { get }
 
