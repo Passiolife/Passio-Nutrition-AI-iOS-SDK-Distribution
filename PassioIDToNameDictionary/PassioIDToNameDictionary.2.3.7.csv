@@ -254,7 +254,7 @@
 1000452,root beer in glass
 1000453,deep fried chikuwa
 1000454,kinpira
-1000455,cooked whole fish
+1000455,cooked whole fish with head
 1000456,seared bonito
 1000457,parsley tempura
 1000458,jakoten
@@ -696,7 +696,6 @@
 1001065,generic protein powder package
 1001066,unwrapped tamales with white sauce
 1001067,sauerkraut salad
-1001068,kroger ground beef package
 1001069,tropicana grapefruit juice
 1001071,patron tequila bottle
 1001072,land o lakes butter
@@ -906,14 +905,13 @@
 1001324,kroger oatmeal package
 1001326,sugar cookies with chocolate icing
 1001327,trader joes sunflower seeds package
-1001328,walmart ground beef package
 1001329,raw diced potatoes with skin
 1001331,scotts porage oats package
 1001332,birds eye veggie package
 1001334,white cheez-it
-1001335,raw red fish fillet
-1001336,raw red trout fillet
-1001337,raw rainbow trout fillet
+1001335,raw red fish filet
+1001336,raw red trout filet
+1001337,raw rainbow trout filet
 1001338,raw bream
 1001339,raw carp
 1001340,raw catfish
@@ -1258,7 +1256,7 @@
 1001836,grandmas chocolate chip cookie package
 1001837,kroger cottage cheese
 1001854,raw salmon steak
-1001855,raw cod fillet
+1001855,raw cod filet
 1001856,raw flatfish
 1001857,raw sardines
 1001858,raw forage fish
@@ -1361,7 +1359,6 @@
 1001968,polly o string cheese
 1001970,daiya cheezy mac
 1001971,equate protein shake box
-1001972,aidells sausage package
 1001974,jacobs cream cracker
 1001975,can of kale
 1001976,packaged fruit cups
@@ -1370,7 +1367,6 @@
 1001981,great value strawberry banana blend package
 1001982,glucerna shake bottle
 1001983,heinz salad dressing
-1001984,salmon with seasoning
 1001986,western sour cream
 1001987,breakstones cottage cheese
 1001988,lucerne sour cream
@@ -1426,7 +1422,6 @@
 1002050,no name black beans
 1002051,starbucks nespresso pods package
 1002052,generic orange juice bottle
-1002055,no evil foods sausage package
 1002056,organifi green juice powder
 1002057,tejava tea bottle
 1002058,southern grove pumpkin seeds package
@@ -1707,7 +1702,7 @@
 1002405,heinz tomato juice
 1002406,heinz tomato ketchup pouch
 1002407,packaged cocoa powder
-1002408,packaged bacon
+1002408,packaged bacon and turkey bacon
 1002409,koita boxed milk
 1002410,so nice almond carton
 1002411,so delicious coconut milk
@@ -1728,7 +1723,7 @@
 1002431,peanut butter sandwich cookies
 1002432,everything bagel seasoning package
 1002433,cheese bun
-1002434,raw marinated red fish fillet
+1002434,raw marinated red fish filet
 1002435,great value bread crumbs
 1002436,bodyarmor bottle
 1002437,top ramen instant noodle pack
@@ -1929,7 +1924,6 @@
 1002675,martha white strawberry cheesecake muffin mix
 1002676,martha white blueberry muffin mix
 1002695,fruco ketchup
-1002696,john morrell bacon
 1002697,packaged bread crumbs
 1002698,progresso bread crumbs
 1002700,don olio cooking spray
@@ -2035,7 +2029,7 @@
 1002828,365 organic whole tomatoes
 1002829,del monte cut green beans
 1002831,stewed tomatoes
-1002832,bcaa amino acid supplement
+1002832,amino acid supplement
 1002833,powdered peanut butter
 1002834,latti yogurt drink
 1002835,365 tortilla chips package
@@ -2331,7 +2325,7 @@
 1003519,sancocho
 1003520,soup with corn cob
 1003521,corn cob soup
-1003522,roasted beef and pork sausages
+1003522,roasted beef pork and chicken sausages
 1003523,roasted dimmy jean sausage
 1003524,raw oxford sausage
 1003525,raw chipolata
@@ -2442,7 +2436,6 @@
 1004012,packaged crimini mushrooms
 1004020,packaged ham
 1004021,packaged canadian bacon
-1004022,packaged turkey bacon
 1004023,packaged white fish filet
 1004024,packaged salmon
 1004025,packaged muffins
@@ -2463,6 +2456,79 @@
 1004087,coffee tin
 1004088,coffee pod box
 1004089,keurig coffee pods
+1004112,cooked green pasta
+1004113,broccoli pasta
+1004114,spaghetti verde
+1004115,spinach pasta
+1004116,edamame pasta
+1004122,mixed meat and veggie casserole
+1004142,bread with spread and jam
+1004143,bread with peanut butter
+1004147,bread with almond butter
+1004148,bread with pistachio butter
+1004149,hot dog with relish
+1004150,hot dog with chili
+1004151,hot dog with coleslaw
+1004152,hot dog with sauerkraut
+1004166,vanilla sandwich cookies
+1004167,matcha cupcake
+1004170,lemon cupcake
+1004171,carrot cupcake
+1004172,cookies and cream cupcake
+1004173,peanut butter cupcake
+1004179,steak burrito
+1004180,steak taco
+1004181,club submarine sandwich
+1004184,slice of caprese pizza
+1004191,whole supreme pizza
+1004192,slice of supreme pizza
+1004193,whole sausage pizza
+1004194,slice of sausage pizza
+1004195,chicken jambalaya
+1004196,sausage jambalaya
+1004197,pork jambalaya
+1004198,beef jambalaya
+1004210,stewed figs
+1004212,sliced hot dog sausage
+1004214,sliced breakfast sausage
+1004216,roasted chicken sausage
+1004217,sliced chicken sausage
+1004219,raw fish steak
+1004220,raw swordfish steak
+1004221,raw sea bass filet
+1004222,raw halibut filet
+1004228,prenatal supplement
+1004229,dha supplement
+1004230,melatonin supplement
+1004231,glucosamine supplement
+1004232,royal jelly supplement
+1004233,saw palmetto supplement
+1004234,milk thistle supplement
+1004235,potassium supplement
+1004236,gingko biloba supplement
+1004237,zinc supplement
+1004238,red yeast rice supplement
+1004239,echinacea supplement
+1004240,5-htp supplement
+1004241,soy isoflavones supplement
+1004242,st johns wort supplement
+1004243,valerian root supplement
+1004244,black cohosh supplement
+1004245,dhea supplement
+1004246,evening primrose supplement
+1004247,vitamin a supplement
+1004248,vitamin k supplement
+1004249,selenium supplement
+1004250,vegetable and fruit supplements
+1004253,digestive enzymes supplement
+1004256,raw pollock filet
+1004257,raw trout filet
+1004258,raw mackerel filet
+1004259,raw sablefish filet
+1004260,raw tilapia filet
+1004261,cooked whole trout
+1004262,cooked whole pollock
+1004263,smoked trout
 ALT0001,tempeh
 ALT0005,roasted tempeh
 ALT0006,raw firm tofu
@@ -2685,7 +2751,7 @@ BAK0214,dark baguette
 BAK0215,dark baguette slice
 BAK0216,pumpernickel roll
 BAK0217,oat bran dinner roll
-BAK0218,corn tortillas
+BAK0218,yellow corn tortilla
 BAK0219,flour tortilla
 BAK0220,lemon crinkle cookies
 BAK0221,open face bagel with red jam
@@ -3840,7 +3906,7 @@ DIP2004,cream cheese packaged
 DIP2020,mayonnaise
 DIP2211,pancakes with chocolate spread
 DIP2808,closed nut butter jar
-DIP3008,open nutbutter sandwich
+DIP3008,bread with nutbutter
 DIP3020,packaged dips
 DIP3311,chocolate spread jar
 DIP4411,bread with chocolate spread
@@ -5015,7 +5081,7 @@ PAS0093,whole foods pasta package
 PAS0094,dry ramen noodles
 PAS0095,dry rice noodles
 PAS0096,beef stroganoff
-PAS0097,edamame pasta
+PAS0097,pasta with edamame beans
 PAS0099,spaetzle with onions
 PAS0100,fettuccine pomodoro
 PAS0101,grenadiermarsch
@@ -5591,11 +5657,11 @@ SAU3910,cranberry sauce
 SAU4810,bottled hot sauce
 SAU7611,green sauce
 SAU7711,red salsa
-SEA0001,cooked fish
+SEA0001,cooked fish meat
 SEA0002,raw fish in skin
 SEA0003,caviar
 SEA0004,oysters in shell
-SEA0005,raw fish fillet
+SEA0005,raw fish steak and filet
 SEA0006,cooked salmon plain
 SEA0007,molluscs in shell
 SEA0008,whole boiled crab
@@ -5610,18 +5676,18 @@ SEA0016,fish sticks
 SEA0017,canned tuna
 SEA0018,scallops in shell
 SEA0019,fish in carrot tomato sauce
-SEA0020,herring fillet
-SEA0021,fish with sauce
+SEA0020,raw herring filet
+SEA0021,cooked fish with sauce
 SEA0022,ceviche
-SEA0023,fried snapper
-SEA0025,cooked white fish fillet
+SEA0023,whole fried snapper
+SEA0025,cooked white fish filet
 SEA0026,blue mussels
 SEA0027,blue mussels without shell
 SEA0028,molluscs out of shell
 SEA0029,raw scallops
 SEA0030,crab sticks
 SEA0031,blue mussels in half shell
-SEA0032,raw white fish fillet
+SEA0032,raw white fish filet
 SEA0033,raw octopus
 SEA0123,crustaceans
 SEA1202,tuna steak
@@ -5984,7 +6050,7 @@ SWE0100,chocolate covered hazelnuts
 SWE0101,sour gummy drops
 SWE0102,unwrapped aero mint
 SWE0103,gummy frogs
-SWE0104,rope gummies
+SWE0104,straw gummies
 SWE0105,character fruit snacks
 SWE0106,licorice allsorts
 SWE0107,gourmet fruit slices
