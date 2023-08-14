@@ -1,6 +1,6 @@
 # Passio PassioNutritionAISDK 
 
-## Version  2.3.5
+## Version  2.3.7
 ```Swift
 import AVFoundation
 import Accelerate
@@ -9,6 +9,7 @@ import CoreML
 import CoreMedia
 import CoreMotion
 import Foundation
+import MLCompute
 import Metal
 import MetalPerformanceShaders
 import SQLite3
@@ -117,7 +118,7 @@ public protocol DetectedCandidate {
     var croppedImage: UIImage? { get }
 
     /// Scanned AmountEstimate
-    var amountEstimate: PassioNutritionAISDK.AmountEstimate? { get }
+    var amountEstimate: (PassioNutritionAISDK.AmountEstimate)? { get }
 }
 
 public struct EnsembleArchitecture : Codable {
@@ -225,7 +226,14 @@ public protocol FoodCandidates {
     /// The packaged food candidates if available
     var packagedFoodCandidates: [PassioNutritionAISDK.PackagedFoodCandidate]? { get }
 
+    /// Use stabililty larger than one, only relevant when using Volume. 
     var deviceStability: Double? { get }
+}
+
+/// The FoodCandidates protocol returns all four potential candidates. If FoodDetectionConfiguration is not set only visual candidates will be returned.
+public protocol FoodCandidatesWithText : PassioNutritionAISDK.FoodCandidates {
+
+    var observasions: [VNRecognizedTextObservation]? { get }
 }
 
 /// FoodDetectionConfiguration is need to configure the food detection
@@ -262,7 +270,12 @@ public protocol FoodRecognitionDelegate : AnyObject {
     /// - Parameters:
     ///   - candidates: Food candidates
     ///   - image: Image used for detection
-    func recognitionResults(candidates: PassioNutritionAISDK.FoodCandidates?, image: UIImage?, nutritionFacts: PassioNutritionAISDK.PassioNutritionFacts?)
+    func recognitionResults(candidates: (PassioNutritionAISDK.FoodCandidates)?, image: UIImage?, nutritionFacts: PassioNutritionAISDK.PassioNutritionFacts?)
+}
+
+public protocol FoodRecognitionWithTextObservations : AnyObject {
+
+    func recognitionResults(candidates: (PassioNutritionAISDK.FoodCandidates)?, image: UIImage?, nutritionFacts: PassioNutritionAISDK.PassioNutritionFacts?, observasions: [VNRecognizedTextObservation])
 }
 
 public enum IconSize : String {
@@ -358,57 +371,6 @@ public struct LabelMetaData : Codable {
     ///
     /// - Parameter decoder: The decoder to read data from.
     public init(from decoder: Decoder) throws
-}
-
-public enum MealTime {
-
-    case breakfast
-
-    case lunch
-
-    case dinner
-
-    case snack
-
-    /// Returns a Boolean value indicating whether two values are equal.
-    ///
-    /// Equality is the inverse of inequality. For any values `a` and `b`,
-    /// `a == b` implies that `a != b` is `false`.
-    ///
-    /// - Parameters:
-    ///   - lhs: A value to compare.
-    ///   - rhs: Another value to compare.
-    public static func == (a: PassioNutritionAISDK.MealTime, b: PassioNutritionAISDK.MealTime) -> Bool
-
-    /// Hashes the essential components of this value by feeding them into the
-    /// given hasher.
-    ///
-    /// Implement this method to conform to the `Hashable` protocol. The
-    /// components used for hashing must be the same as the components compared
-    /// in your type's `==` operator implementation. Call `hasher.combine(_:)`
-    /// with each of these components.
-    ///
-    /// - Important: Never call `finalize()` on `hasher`. Doing so may become a
-    ///   compile-time error in the future.
-    ///
-    /// - Parameter hasher: The hasher to use when combining the components
-    ///   of this instance.
-    public func hash(into hasher: inout Hasher)
-
-    /// The hash value.
-    ///
-    /// Hash values are not guaranteed to be equal across different executions of
-    /// your program. Do not save hash values to use during a future execution.
-    ///
-    /// - Important: `hashValue` is deprecated as a `Hashable` requirement. To
-    ///   conform to `Hashable`, implement the `hash(into:)` requirement instead.
-    public var hashValue: Int { get }
-}
-
-extension MealTime : Equatable {
-}
-
-extension MealTime : Hashable {
 }
 
 public struct MeasurementIU {
@@ -529,8 +491,10 @@ public struct PassioAlternative : Codable, Equatable, Hashable {
     /// in your type's `==` operator implementation. Call `hasher.combine(_:)`
     /// with each of these components.
     ///
-    /// - Important: Never call `finalize()` on `hasher`. Doing so may become a
-    ///   compile-time error in the future.
+    /// - Important: In your implementation of `hash(into:)`,
+    ///   don't call `finalize()` on the `hasher` instance provided,
+    ///   or replace it with a different instance.
+    ///   Doing so may become a compile-time error in the future.
     ///
     /// - Parameter hasher: The hasher to use when combining the components
     ///   of this instance.
@@ -554,6 +518,7 @@ public struct PassioAlternative : Codable, Equatable, Hashable {
     ///
     /// - Important: `hashValue` is deprecated as a `Hashable` requirement. To
     ///   conform to `Hashable`, implement the `hash(into:)` requirement instead.
+    ///   The compiler provides an implementation for `hashValue` for you.
     public var hashValue: Int { get }
 
     /// Creates a new instance by decoding from the given decoder.
@@ -583,6 +548,8 @@ public struct PassioConfiguration : Equatable {
     /// If you set allowInternetConnection = false without working with Passio the SDK will not work. The SDK will not connect to the internet for key validations, barcode data and packaged food data.
     public var allowInternetConnection: Bool
 
+    public var reactNativeBridged: Bool
+
     public init(key: String)
 
     /// Returns a Boolean value indicating whether two values are equal.
@@ -602,6 +569,8 @@ public struct PassioFoodItemData : Equatable, Codable {
     public var passioID: PassioNutritionAISDK.PassioID { get }
 
     public var name: String { get }
+
+    public var tags: [String] { get }
 
     public var selectedQuantity: Double { get }
 
@@ -699,7 +668,7 @@ public struct PassioFoodItemData : Equatable, Codable {
 
     public mutating func setServingUnitKeepWeight(unitName: String) -> Bool
 
-    public init(upcProduct: PassioNutritionAISDK.UPCProduct) throws
+    public init(upcProduct: PassioNutritionAISDK.UPCProduct)
 
     /// Returns a Boolean value indicating whether two values are equal.
     ///
@@ -733,7 +702,7 @@ public struct PassioFoodItemData : Equatable, Codable {
 
 public enum PassioFoodItemDataError : LocalizedError {
 
-    case noUnitMassInServingSizes
+    case noValidPortion
 
     /// A localized message describing what error occurred.
     public var errorDescription: String? { get }
@@ -756,8 +725,10 @@ public enum PassioFoodItemDataError : LocalizedError {
     /// in your type's `==` operator implementation. Call `hasher.combine(_:)`
     /// with each of these components.
     ///
-    /// - Important: Never call `finalize()` on `hasher`. Doing so may become a
-    ///   compile-time error in the future.
+    /// - Important: In your implementation of `hash(into:)`,
+    ///   don't call `finalize()` on the `hasher` instance provided,
+    ///   or replace it with a different instance.
+    ///   Doing so may become a compile-time error in the future.
     ///
     /// - Parameter hasher: The hasher to use when combining the components
     ///   of this instance.
@@ -770,6 +741,7 @@ public enum PassioFoodItemDataError : LocalizedError {
     ///
     /// - Important: `hashValue` is deprecated as a `Hashable` requirement. To
     ///   conform to `Hashable`, implement the `hash(into:)` requirement instead.
+    ///   The compiler provides an implementation for `hashValue` for you.
     public var hashValue: Int { get }
 }
 
@@ -780,6 +752,12 @@ extension PassioFoodItemDataError : Hashable {
 }
 
 public struct PassioFoodOrigin : Codable, Equatable {
+
+    public let id: String
+
+    public let source: String
+
+    public var licenseCopy: String?
 
     /// Returns a Boolean value indicating whether two values are equal.
     ///
@@ -867,13 +845,32 @@ public struct PassioFoodRecipe : Equatable, Codable {
 /// PassioID (typealias String) is used throughout the SDK, food and other objects are identified by PassioID. All attributes (names, nutrition etc..) are referred by PassioID.
 public typealias PassioID = String
 
-public struct PassioIDAndName {
+public struct PassioIDAndName : Codable {
 
     public let passioID: PassioNutritionAISDK.PassioID
 
     public let name: String
 
     public init(passioID: PassioNutritionAISDK.PassioID, name: String)
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: Encoder) throws
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    public init(from decoder: Decoder) throws
 }
 
 /// PassioIDAttributes contains all the attributes for a PassioID.
@@ -1053,7 +1050,7 @@ public struct PassioMetadataService {
 }
 
 /// PassioMode will report the mode the SDK is currently in.
-public enum PassioMode {
+public enum PassioMode : Codable {
 
     case notReady
 
@@ -1083,12 +1080,25 @@ public enum PassioMode {
     /// in your type's `==` operator implementation. Call `hasher.combine(_:)`
     /// with each of these components.
     ///
-    /// - Important: Never call `finalize()` on `hasher`. Doing so may become a
-    ///   compile-time error in the future.
+    /// - Important: In your implementation of `hash(into:)`,
+    ///   don't call `finalize()` on the `hasher` instance provided,
+    ///   or replace it with a different instance.
+    ///   Doing so may become a compile-time error in the future.
     ///
     /// - Parameter hasher: The hasher to use when combining the components
     ///   of this instance.
     public func hash(into hasher: inout Hasher)
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: Encoder) throws
 
     /// The hash value.
     ///
@@ -1097,7 +1107,16 @@ public enum PassioMode {
     ///
     /// - Important: `hashValue` is deprecated as a `Hashable` requirement. To
     ///   conform to `Hashable`, implement the `hash(into:)` requirement instead.
+    ///   The compiler provides an implementation for `hashValue` for you.
     public var hashValue: Int { get }
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    public init(from decoder: Decoder) throws
 }
 
 extension PassioMode : Equatable {
@@ -1106,7 +1125,7 @@ extension PassioMode : Equatable {
 extension PassioMode : Hashable {
 }
 
-/// Passio SDK - Copyright © 2022 Passio Inc. All rights reserved.
+/// Passio SDK - Copyright © 2023 Passio Inc. All rights reserved.
 public class PassioNutritionAI {
 
     final public let filesVersion: Int
@@ -1116,13 +1135,14 @@ public class PassioNutritionAI {
     /// Shared Instance
     public class var shared: PassioNutritionAISDK.PassioNutritionAI { get }
 
+    /// The SDK will request Compressed file the default is set to "true" (faster download/slower processing). If set to "false" the SDK will request none-compressed files (slower download/faster processing.
     public var requestCompressedFiles: Bool
 
     /// Get the PassioStatus directly or implement the PassioStatusDelegate for updates.
     public var status: PassioNutritionAISDK.PassioStatus { get }
 
     /// Delegate to track PassioStatus changes. You will get the same status via the configure function.
-    weak public var statusDelegate: PassioNutritionAISDK.PassioStatusDelegate?
+    weak public var statusDelegate: (PassioNutritionAISDK.PassioStatusDelegate)?
 
     /// Available frames per seconds. The default set for two (2) fps.
     public enum FramesPerSecond : Int32 {
@@ -1179,39 +1199,52 @@ public class PassioNutritionAI {
         public var rawValue: Int32 { get }
     }
 
-    @available(iOS 13.0, *)
+    /// Call this API to configure the SDK
+    /// - Parameters:
+    ///   - PassioConfiguration: Your desired configuration, must include your developer key
+    ///   - completion: Receive back the status of the SDK
     public func configure(passioConfiguration: PassioNutritionAISDK.PassioConfiguration, completion: @escaping (PassioNutritionAISDK.PassioStatus) -> Void)
 
     /// Shut down the Passio SDK and release all resources
     public func shutDownPassioSDK()
 
-    @available(iOS 13.0, *)
+    /// Core functionality of the PassioSDK is to detect food via pointing the camera at food
+    /// - Parameters:
+    ///   - detectionConfig: FoodDetectionConfiguration() object with the configuration
+    ///   - foodRecognitionDelegate: add self to implement the FoodRecognitionDelegate
+    ///   - completion: Bool success or failure of the startFoodDetection
     public func startFoodDetection(detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), foodRecognitionDelegate: PassioNutritionAISDK.FoodRecognitionDelegate, completion: @escaping (Bool) -> Void)
 
     /// Stop Food Detection to remove camera completely use public func removeVideoLayer()
     public func stopFoodDetection()
 
-    ///
+    /// Detect food in a static image/photo
     /// - Parameters:
-    ///   - image:
-    ///   - detectionConfig: Detection configuration
-    ///   - completion: Array of detection [FoodCandidates]
-    @available(iOS 13.0, *)
-    public func detectFoodIn(image: UIImage, detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), slicingRects: [CGRect]? = nil, completion: @escaping (PassioNutritionAISDK.FoodCandidates?) -> Void)
+    ///   - image: Image for detection
+    ///   - detectionConfig: FoodDetectionConfiguration
+    ///   - slicingRects: Optional ability to divide the image to slices or regions.
+    ///   - completion: optional FoodCandidates
+    public func detectFoodIn(image: UIImage, detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), slicingRects: [CGRect]? = nil, completion: @escaping ((PassioNutritionAISDK.FoodCandidates)?) -> Void)
 
-    @available(iOS 13.0, *)
+    /// Detect barcodes "BarcodeCandidate" in an image
+    /// - Parameter image: Image for the detection
+    /// - Parameter completion: Receives back Array of "BarcodeCandidate" for that image
     public func detectBarcodesIn(image: UIImage, completion: @escaping ([PassioNutritionAISDK.BarcodeCandidate]) -> Void)
 
-    @available(iOS 13.0, *)
+    /// List all food enabled for weight estimations
+    /// - Returns: List of PassioIDs
     public func listFoodEnabledForAmountEstimation() -> [PassioNutritionAISDK.PassioID]
 
-    @available(iOS 13.0, *)
+    /// use getPreviewLayer if you don't plan to rotate the PreviewLayer.
+    /// - Returns: AVCaptureVideoPreviewLayer
     public func getPreviewLayer() -> AVCaptureVideoPreviewLayer?
 
-    @available(iOS 13.0, *)
+    /// use getPreviewLayerWithGravity if you plan to rotate the PreviewLayer.
+    /// - Returns: AVCaptureVideoPreviewLayer
     public func getPreviewLayerWithGravity(sessionPreset: AVCaptureSession.Preset = .hd1920x1080, volumeDetectionMode: PassioNutritionAISDK.VolumeDetectionMode = .none, videoGravity: AVLayerVideoGravity = .resizeAspectFill) -> AVCaptureVideoPreviewLayer?
 
-    @available(iOS 13.0, *)
+    /// use getPreviewLayer if you don't plan to rotate the PreviewLayer.
+    /// - Returns: AVCaptureVideoPreviewLayer
     public func getPreviewLayerForFrontCamera() -> AVCaptureVideoPreviewLayer?
 
     /// Don't call this function if you need to use the Passio layer again. Only call this function to set the PassioSDK Preview layer to nil
@@ -1238,35 +1271,86 @@ public class PassioNutritionAI {
     /// Clean all records
     public func cleanAllPersonalization()
 
-    @available(iOS 13.0, *)
+    /// Lookup PassioIDAttributes from PassioID
+    /// - Parameter passioID: PassioID
+    /// - Returns: PassioIDAttributes
     public func lookupPassioIDAttributesFor(passioID: PassioNutritionAISDK.PassioID) -> PassioNutritionAISDK.PassioIDAttributes?
 
-    @available(iOS 13.0, *)
+    /// Lookup Name For PassioID
+    /// - Parameter passioID: PassioID
+    /// - Returns: Name : String?
     public func lookupNameFor(passioID: PassioNutritionAISDK.PassioID) -> String?
 
-    @available(iOS 13.0, *)
+    /// Search for food will return a list of potential food items ordered and optimized for user selection.
+    /// - Parameters:
+    ///   - byText: User typed in text
+    ///   - completion: All potential PassioIDAndName.
     public func searchForFood(byText: String, completion: @escaping ([PassioNutritionAISDK.PassioIDAndName]) -> Void)
 
-    @available(iOS 13.0, *)
+    /// Fetch from Passio web-service the PassioIDAttributes for a barcode by its number
+    /// - Parameter barcode: Barcode number
+    /// - Parameter completion: Receive a closure with optional PassioIDAttributes
     public func fetchPassioIDAttributesFor(barcode: PassioNutritionAISDK.Barcode, completion: @escaping ((PassioNutritionAISDK.PassioIDAttributes?) -> Void))
 
-    @available(iOS 13.0, *)
+    /// Lookup for an icon for a PassioID. You will receive an icon and a bool, The boolean is true if the icons is food icon or false if it's a placeholder icon. If you get false you can use the asycronous funcion to "fetchIconFor" the icons from the web.
+    /// - Parameters:
+    ///   - passioID: PassioID
+    ///   - size: IconSize (.px90, .px180 or .px360) where .px90 is the default
+    ///   - entityType: PassioEntityType to return the right placeholder.
+    /// - Returns: UIImage and a bool, The boolean is true if the icons is food icon or false if it's a placeholder icon. If you get false you can use the asycronous funcion to "fetchIconFor" the icons from the web.
+    @available(*, deprecated, message: "This function is deprecated. Use the 'lookupIconsFor' instead. The word Icon was modified to Icons (plural)")
     public func lookupIconFor(passioID: PassioNutritionAISDK.PassioID, size: PassioNutritionAISDK.IconSize = IconSize.px90, entityType: PassioNutritionAISDK.PassioIDEntityType = .item) -> (UIImage, Bool)
 
-    @available(iOS 13.0, *)
+    /// This function replaces 'lookupIconFor'. You will receive the placeHolderIcon and an optional icon.  If the icons is nil you can use the asycronous funcion to "fetchIconFor" the icons from the web.
+    /// - Parameters:
+    ///   - passioID: PassioID
+    ///   - size: IconSize (.px90, .px180 or .px360) where .px90 is the default
+    ///   - entityType: PassioEntityType to return the right placeholder.
+    /// - Returns: UIImage and a UIImage?  You will receive the placeHolderIcon and an optional icon.  If the icons is nil you can use the asycronous funcion to "fetchIconFor" the icons from the web.
+    public func lookupIconsFor(passioID: PassioNutritionAISDK.PassioID, size: PassioNutritionAISDK.IconSize = IconSize.px90, entityType: PassioNutritionAISDK.PassioIDEntityType = .item) -> (placeHolderIcon: UIImage, icon: UIImage?)
+
+    /// Fetch icons from the web.
+    /// - Parameters:
+    ///   - passioID: PassioID
+    ///   - size: IconSize (.px90, .px180 or .px360) where .px90 is the default
+    ///   - entityType: PassioEntityType to return the right placeholder.
+    ///   - completion: Optional Icon.
     public func fetchIconFor(passioID: PassioNutritionAISDK.PassioID, size: PassioNutritionAISDK.IconSize = IconSize.px90, completion: @escaping (UIImage?) -> Void)
 
-    @available(iOS 13.0, *)
+    /// Get the icon URL
+    /// - Parameters:
+    ///   - passioID: passioID
+    ///   - size: IconSize (.px90, .px180 or .px360) where .px90 is the default
+    /// - Returns: Optional URL
+    public func iconURLFor(passioID: PassioNutritionAISDK.PassioID, size: PassioNutritionAISDK.IconSize = IconSize.px90) -> URL?
+
+    /// Fetch from Passio web-service the PassioIDAttributes for a packagedFoodCode by its number
+    /// - Parameters:
+    ///   - packagedFoodCode: packagedFoodCode
+    ///   - completion: Receive a closure with optional PassioIDAttributes
     public func fetchPassioIDAttributesFor(packagedFoodCode: PassioNutritionAISDK.PackagedFoodCode, completion: @escaping ((PassioNutritionAISDK.PassioIDAttributes?) -> Void))
 
-    @available(iOS 13.0, *)
+    /// Beta API/Function
+    /// - Parameters:
+    ///   - passioID: passioID
+    ///   - completion: tag as a list of strings.
+    public func fetchTagsFor(passioID: PassioNutritionAISDK.PassioID, completion: @escaping ([String]?) -> Void)
+
+    /// lookupAllDescendantsFor PassioID
+    /// - Parameter passioID: PassioID
+    /// - Returns: PassioID Array of all Descendants
     public func lookupAllDescendantsFor(passioID: PassioNutritionAISDK.PassioID) -> [PassioNutritionAISDK.PassioID]
 
-    @available(iOS 13.0, *)
+    /// Return a sorted list of available Volume Detections mode.
+    /// Recommended mode is .auto
     public var availableVolumeDetectionModes: [PassioNutritionAISDK.VolumeDetectionMode] { get }
 
-    @available(iOS 13.0, *)
+    /// Return the best Volume detection Mode for this iPhone
     public var bestVolumeDetectionMode: PassioNutritionAISDK.VolumeDetectionMode { get }
+
+    /// Beta feature: Passio recommends not to change this value. The default is .cpuAndGPU
+    @available(iOS 15.0, *)
+    public func setMLComputeUnits(units: MLComputeUnits)
 }
 
 extension PassioNutritionAI : PassioNutritionAISDK.PassioStatusDelegate {
@@ -1280,6 +1364,17 @@ extension PassioNutritionAI : PassioNutritionAISDK.PassioStatusDelegate {
     public func passioStatusChanged(status: PassioNutritionAISDK.PassioStatus)
 
     public func passioProcessing(filesLeft: Int)
+}
+
+extension PassioNutritionAI {
+
+    /// Detect food in a static image/photo
+    /// - Parameters:
+    ///   - image: Image for detection
+    ///   - detectionConfig: FoodDetectionConfiguration
+    ///   - slicingRects: Optional ability to divide the image to slices or regions.
+    ///   - completion: optional FoodCandidates
+    public func detectFoodWithText(image: UIImage, detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), completion: @escaping ((PassioNutritionAISDK.FoodCandidatesWithText)?) -> Void)
 }
 
 extension PassioNutritionAI.FramesPerSecond : Equatable {
@@ -1410,7 +1505,7 @@ extension PassioNutritionFacts.ServingSizeUnit : RawRepresentable {
 }
 
 /// PassioSDKError will return the error with errorDescription if the configuration has failed. 
-public enum PassioSDKError : LocalizedError {
+public enum PassioSDKError : LocalizedError, Codable {
 
     case canNotRunOnSimulator
 
@@ -1449,12 +1544,25 @@ public enum PassioSDKError : LocalizedError {
     /// in your type's `==` operator implementation. Call `hasher.combine(_:)`
     /// with each of these components.
     ///
-    /// - Important: Never call `finalize()` on `hasher`. Doing so may become a
-    ///   compile-time error in the future.
+    /// - Important: In your implementation of `hash(into:)`,
+    ///   don't call `finalize()` on the `hasher` instance provided,
+    ///   or replace it with a different instance.
+    ///   Doing so may become a compile-time error in the future.
     ///
     /// - Parameter hasher: The hasher to use when combining the components
     ///   of this instance.
     public func hash(into hasher: inout Hasher)
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: Encoder) throws
 
     /// The hash value.
     ///
@@ -1463,7 +1571,16 @@ public enum PassioSDKError : LocalizedError {
     ///
     /// - Important: `hashValue` is deprecated as a `Hashable` requirement. To
     ///   conform to `Hashable`, implement the `hash(into:)` requirement instead.
+    ///   The compiler provides an implementation for `hashValue` for you.
     public var hashValue: Int { get }
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    public init(from decoder: Decoder) throws
 }
 
 extension PassioSDKError : Equatable {
@@ -1499,8 +1616,10 @@ public struct PassioServingSize : Codable, Equatable, Hashable {
     /// in your type's `==` operator implementation. Call `hasher.combine(_:)`
     /// with each of these components.
     ///
-    /// - Important: Never call `finalize()` on `hasher`. Doing so may become a
-    ///   compile-time error in the future.
+    /// - Important: In your implementation of `hash(into:)`,
+    ///   don't call `finalize()` on the `hasher` instance provided,
+    ///   or replace it with a different instance.
+    ///   Doing so may become a compile-time error in the future.
     ///
     /// - Parameter hasher: The hasher to use when combining the components
     ///   of this instance.
@@ -1524,6 +1643,7 @@ public struct PassioServingSize : Codable, Equatable, Hashable {
     ///
     /// - Important: `hashValue` is deprecated as a `Hashable` requirement. To
     ///   conform to `Hashable`, implement the `hash(into:)` requirement instead.
+    ///   The compiler provides an implementation for `hashValue` for you.
     public var hashValue: Int { get }
 
     /// Creates a new instance by decoding from the given decoder.
@@ -1575,7 +1695,7 @@ public struct PassioServingUnit : Equatable, Codable {
 }
 
 /// PassioStatus is returned at the end of the configuration of the SDK.
-public struct PassioStatus {
+public struct PassioStatus : Codable {
 
     /// The mode had several values . isReadyForDetection is full success
     public var mode: PassioNutritionAISDK.PassioMode { get }
@@ -1591,6 +1711,25 @@ public struct PassioStatus {
 
     /// The version of the latest models that are now used by the SDK.
     public var activeModels: Int? { get }
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: Encoder) throws
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    public init(from decoder: Decoder) throws
 }
 
 /// Implement the protocol to receive status updates
@@ -1691,6 +1830,8 @@ public struct UPCProduct : Codable {
     public let qualityScore: String?
 
     public let licenseCopy: String?
+
+    public let tags: [String]?
 
     /// Component of UPC Product decoding struct
     public struct NutrientUPC : Codable {
@@ -1887,7 +2028,7 @@ public struct UPCProduct : Codable {
 }
 
 /// VolumeDetectionMode for detection volume.
-public enum VolumeDetectionMode : String {
+public enum VolumeDetectionMode : String, CaseIterable {
 
     /// Using best technology available in this order dualWideCamera, dualCamera or none if the device is not capable of detection volume.
     case auto
@@ -1915,6 +2056,9 @@ public enum VolumeDetectionMode : String {
     /// - Parameter rawValue: The raw value to use for the new instance.
     public init?(rawValue: String)
 
+    /// A type that can represent a collection of all values of this type.
+    public typealias AllCases = [PassioNutritionAISDK.VolumeDetectionMode]
+
     /// The raw type that can be used to represent all values of the conforming
     /// type.
     ///
@@ -1922,6 +2066,9 @@ public enum VolumeDetectionMode : String {
     /// value of the `RawValue` type, but there may be values of the `RawValue`
     /// type that don't have a corresponding value of the conforming type.
     public typealias RawValue = String
+
+    /// A collection of all values of this type.
+    public static var allCases: [PassioNutritionAISDK.VolumeDetectionMode] { get }
 
     /// The corresponding value of the raw type.
     ///
@@ -1952,19 +2099,7 @@ extension VolumeDetectionMode : RawRepresentable {
 
 extension UIImageView {
 
-    @available(iOS 13.0, *)
     @MainActor public func loadPassioIconBy(passioID: PassioNutritionAISDK.PassioID, entityType: PassioNutritionAISDK.PassioIDEntityType, size: PassioNutritionAISDK.IconSize = .px90, completion: @escaping (PassioNutritionAISDK.PassioID, UIImage) -> Void)
-}
-
-extension simd_float4x4 : ContiguousBytes {
-
-    /// Calls the given closure with the contents of underlying storage.
-    ///
-    /// - note: Calling `withUnsafeBytes` multiple times does not guarantee that
-    ///         the same buffer pointer will be passed in every time.
-    /// - warning: The buffer argument to the body should not be stored or used
-    ///            outside of the lifetime of the call to the closure.
-    public func withUnsafeBytes<R>(_ body: (UnsafeRawBufferPointer) throws -> R) rethrows -> R
 }
 
 infix operator .+ : DefaultPrecedence

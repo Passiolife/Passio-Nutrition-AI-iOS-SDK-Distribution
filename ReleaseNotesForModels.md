@@ -1,5 +1,45 @@
 # Passio SDK  Release Notes for Models
 
+## V2.3.7
+
+* Number of food items recognized via HNN: 4108
+* Nutrition database version: passio_nutrition.4109.0.301
+* Number of products recognized via OCR: 25410
+
+### New included HNN foods
+```
+cooked green pasta
+lemon cupcake
+mixed meat and veggie casserole
+packaged ground meat
+packaged sausages
+salmon caesar salad
+sliced sausages
+```
+
+### Excluded HNN foods
+```
+amaebi shrimp sashimi
+beef casserole
+bread with caramel spread
+breakfast casserole
+chicken casserole
+fried chicken gizzards
+fried snapper
+great value sausage package
+herring fillet
+hot dog with melted cheese
+kroger ground beef package
+lavender cupcake
+mexican casserole
+packaged turkey bacon
+raw cod fillet
+raw crucian
+walmart ground beef package
+whole pizza caprese
+```
+
+
 ## V2.3.5
 
 Same models as 2.3.3

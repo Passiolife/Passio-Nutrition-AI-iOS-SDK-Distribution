@@ -1,4 +1,62 @@
-# Passio SDK V2.X  Release Notes
+# Passio SDK Release Notes
+
+## V2.3.7
+### Improvement and enhancements
+
+* New API **iconURLFor** get the icon URL and download the icons directly. 
+
+```swift  
+    /// Get the icon URL
+    /// - Parameters:
+    ///   - passioID: passioID
+    ///   - size: IconSize (.px90, .px180 or .px360) where .px90 is the default
+    /// - Returns: Optional URL
+    public func iconURLFor(passioID: PassioNutritionAISDK.PassioID, size: PassioNutritionAISDK.IconSize = IconSize.px90) -> URL?
+```
+
+The function 'lookupIconFor' was deprecated. Use 'lookupIconsFor' instead.
+
+```swift
+/// This function replaces 'lookupIconFor'. You will receive the placeHolderIcon and an optional icon.  If the icon is nil you can use the asynchronous function to "fetchIconFor" the icons from the web.
+    /// - Parameters:
+    ///   - passioID: PassioID
+    ///   - size: IconSize (.px90, .px180 or .px360) where .px90 is the default
+    ///   - entityType: PassioEntityType to return the right placeholder.
+    /// - Returns: UIImage and a UIImage?  You will receive the placeHolderIcon and an optional icon.  If the icons is nil you can use the asynchronous function to "fetchIconFor" the icons from the web.
+    public func lookupIconsFor(passioID: PassioID,
+                              size: IconSize = IconSize.px90,
+                               entityType: PassioIDEntityType = .item) -> (placeHolderIcon: UIImage, icon: UIImage?) { // true = final icon.
+        PassioCoreSDK.shared.lookupIconsFor(passioID: passioID,
+                                           size: size,
+                                           entityType: entityType)
+    }
+
+``````
+
+#### tags   
+
+1) For barcodes and packagedFoods PassioIDAttributes fetch calls there is new tags (optional) property.
+```swift 
+/// PassioIDAttributes contains all the attributes for a PassioID.
+public struct PassioIDAttributes : Equatable, Codable {
+
+    public let tags: [String]?
+```
+
+2) To find tags for local passioIDs there is a new API call.
+
+    **Fetch tags** for PassioID, were tags is a list of strings
+
+```swift
+   /// Beta API/Function
+    /// - Parameters:
+    ///   - passioID: passioID
+    ///   - completion: tag as a list of strings.
+    public func fetchTagsFor(passioID: PassioID, completion: @escaping ([String]?) -> Void)
+```
+
+
+
 
 ## V2.3.5
 ### Improvement and enhancements

@@ -6,6 +6,8 @@
 
 Welcome to Passio Nutrition-AI iOS SDK!
 
+Feel free to watch the video we posted with the integration directions: https://www.youtube.com/watch?v=mZZAgJ2gWpc&t=192s
+
 When integrated into your app the SDK provides you with food recognition and nutrition assistant technology. The SDK creates a video preview layer and outputs foods recognized by our computer vision technology in the video feed of your live camera along with nutrition data related to the recognized foods.
 
 As the developer, you have complete control of when to turn on/off the SDK and to configure the outputs which includes: 
