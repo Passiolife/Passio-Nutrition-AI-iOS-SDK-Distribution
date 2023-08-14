@@ -85,7 +85,7 @@ extension PassioQuickStartViewController: FoodRecognitionDelegate {
             detectedCandidates.forEach {
                 if let pidAtt = self.passioSDK.lookupPassioIDAttributesFor(passioID: $0.passioID) {
                     message += pidAtt.name + "\n"
-                    print("Food name =\(pidAtt.name)")
+                    print("Food name is: \(pidAtt.name)")
                 }
             }
             DispatchQueue.main.async {
@@ -108,7 +108,7 @@ extension PassioQuickStartViewController: FoodRecognitionDelegate {
 extension PassioQuickStartViewController: PassioStatusDelegate {
 
     func passioStatusChanged(status: PassioStatus) {
-        print("passioRunning = \(passioRunning)")
+        //print("passioRunning = \(passioRunning)")
         if status.mode == .isReadyForDetection, !passioRunning {
             DispatchQueue.main.async {
                 self.startFoodDetection()

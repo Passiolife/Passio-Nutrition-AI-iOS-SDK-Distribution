@@ -190,7 +190,7 @@ class VideoCameraPhotosViewController: UIViewController {
                 }
             }
 
-            candidates?.observasions?.forEach {
+            candidates?.observations?.forEach {
                 let topCandidate = $0.topCandidates(1)
                 if  let candidate = topCandidate.first {
                     let text = candidate.string
