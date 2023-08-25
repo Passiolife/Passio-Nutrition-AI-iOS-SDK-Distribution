@@ -12,8 +12,8 @@
 		9E3A2CB62548A01A0095777D /* PassioQuickStartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3A2CB52548A01A0095777D /* PassioQuickStartViewController.swift */; };
 		9E3A2CBB2548A01A0095777D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E3A2CBA2548A01A0095777D /* Assets.xcassets */; };
 		9E3A2CBE2548A01B0095777D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E3A2CBC2548A01B0095777D /* LaunchScreen.storyboard */; };
+		9E5A88EC2A8E776400253AFC /* PassioNutritionAISDK in Frameworks */ = {isa = PBXBuildFile; productRef = 9E5A88EB2A8E776400253AFC /* PassioNutritionAISDK */; };
 		9E5C282C2847C8BA00A10B1E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E3A2CB72548A01A0095777D /* Main.storyboard */; };
-		9EDABBA02A0ADC7600997AF9 /* PassioNutritionAISDK in Frameworks */ = {isa = PBXBuildFile; productRef = 9EDABB9F2A0ADC7600997AF9 /* PassioNutritionAISDK */; };
 		9EDABBA72A0AE0DA00997AF9 /* PassioSDKKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EDABBA62A0AE0DA00997AF9 /* PassioSDKKey.swift */; };
 /* End PBXBuildFile section */
 
@@ -47,7 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9EDABBA02A0ADC7600997AF9 /* PassioNutritionAISDK in Frameworks */,
+				9E5A88EC2A8E776400253AFC /* PassioNutritionAISDK in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,7 +103,7 @@
 			);
 			name = PassioSDKQuickStart;
 			packageProductDependencies = (
-				9EDABB9F2A0ADC7600997AF9 /* PassioNutritionAISDK */,
+				9E5A88EB2A8E776400253AFC /* PassioNutritionAISDK */,
 			);
 			productName = PassioSDKQuickStart;
 			productReference = 9E3A2CAE2548A01A0095777D /* AI-Nutritions SDK.app */;
@@ -133,7 +133,7 @@
 			);
 			mainGroup = 9E3A2CA52548A01A0095777D;
 			packageReferences = (
-				9EDABB9E2A0ADC7600997AF9 /* XCRemoteSwiftPackageReference "Passio-Nutrition-AI-iOS-SDK-Distribution" */,
+				9E5A88EA2A8E776400253AFC /* XCRemoteSwiftPackageReference "Passio-Nutrition-AI-iOS-SDK-Distribution" */,
 			);
 			productRefGroup = 9E3A2CAF2548A01A0095777D /* Products */;
 			projectDirPath = "";
@@ -393,20 +393,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		9EDABB9E2A0ADC7600997AF9 /* XCRemoteSwiftPackageReference "Passio-Nutrition-AI-iOS-SDK-Distribution" */ = {
+		9E5A88EA2A8E776400253AFC /* XCRemoteSwiftPackageReference "Passio-Nutrition-AI-iOS-SDK-Distribution" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Passiolife/Passio-Nutrition-AI-iOS-SDK-Distribution";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		9EDABB9F2A0ADC7600997AF9 /* PassioNutritionAISDK */ = {
+		9E5A88EB2A8E776400253AFC /* PassioNutritionAISDK */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 9EDABB9E2A0ADC7600997AF9 /* XCRemoteSwiftPackageReference "Passio-Nutrition-AI-iOS-SDK-Distribution" */;
+			package = 9E5A88EA2A8E776400253AFC /* XCRemoteSwiftPackageReference "Passio-Nutrition-AI-iOS-SDK-Distribution" */;
 			productName = PassioNutritionAISDK;
 		};
 /* End XCSwiftPackageProductDependency section */

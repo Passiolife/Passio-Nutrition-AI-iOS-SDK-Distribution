@@ -1,5 +1,24 @@
 # Passio SDK Release Notes
 
+## V2.3.8
+
+### Minor Improvement and enhancements
+
+The spelling of 
+```swift
+var observasions: [VNRecognizedTextObservation]? { get }
+```
+was corrected to 
+```swift
+var observations: [VNRecognizedTextObservation]? { get }
+``````
+
+tags was set optional
+
+```swift
+public var tags: [String]? { get }
+```
+
 ## V2.3.7
 ### Improvement and enhancements
 

@@ -1,6 +1,6 @@
 # Passio PassioNutritionAISDK 
 
-## Version  2.3.7
+## Version  2.3.8
 ```Swift
 import AVFoundation
 import Accelerate
@@ -226,14 +226,14 @@ public protocol FoodCandidates {
     /// The packaged food candidates if available
     var packagedFoodCandidates: [PassioNutritionAISDK.PackagedFoodCandidate]? { get }
 
-    /// Use stabililty larger than one, only relevant when using Volume. 
+    /// Use stability larger than one, only relevant when using Volume. 
     var deviceStability: Double? { get }
 }
 
 /// The FoodCandidates protocol returns all four potential candidates. If FoodDetectionConfiguration is not set only visual candidates will be returned.
 public protocol FoodCandidatesWithText : PassioNutritionAISDK.FoodCandidates {
 
-    var observasions: [VNRecognizedTextObservation]? { get }
+    var observations: [VNRecognizedTextObservation]? { get }
 }
 
 /// FoodDetectionConfiguration is need to configure the food detection
@@ -254,7 +254,7 @@ public struct FoodDetectionConfiguration {
     /// Detect and decipher the Nutrition Facts label
     public var detectNutritionFacts: Bool
 
-    /// Change this if you would like to control the resolution of the image you get back in the delegate. Changing this value will not change the visula recognition results.
+    /// Change this if you would like to control the resolution of the image you get back in the delegate. Changing this value will not change the visual recognition results.
     public var sessionPreset: AVCaptureSession.Preset
 
     /// The frequency of sending images for the recognitions models. The default is set to two pre seconds. Increasing this value will require more resources from the device.
@@ -275,7 +275,7 @@ public protocol FoodRecognitionDelegate : AnyObject {
 
 public protocol FoodRecognitionWithTextObservations : AnyObject {
 
-    func recognitionResults(candidates: (PassioNutritionAISDK.FoodCandidates)?, image: UIImage?, nutritionFacts: PassioNutritionAISDK.PassioNutritionFacts?, observasions: [VNRecognizedTextObservation])
+    func recognitionResults(candidates: (PassioNutritionAISDK.FoodCandidates)?, image: UIImage?, nutritionFacts: PassioNutritionAISDK.PassioNutritionFacts?, observations: [VNRecognizedTextObservation])
 }
 
 public enum IconSize : String {
@@ -570,7 +570,7 @@ public struct PassioFoodItemData : Equatable, Codable {
 
     public var name: String { get }
 
-    public var tags: [String]? { get }
+    public var tags: [String] { get }
 
     public var selectedQuantity: Double { get }
 
@@ -1292,21 +1292,21 @@ public class PassioNutritionAI {
     /// - Parameter completion: Receive a closure with optional PassioIDAttributes
     public func fetchPassioIDAttributesFor(barcode: PassioNutritionAISDK.Barcode, completion: @escaping ((PassioNutritionAISDK.PassioIDAttributes?) -> Void))
 
-    /// Lookup for an icon for a PassioID. You will receive an icon and a bool, The boolean is true if the icons is food icon or false if it's a placeholder icon. If you get false you can use the asycronous funcion to "fetchIconFor" the icons from the web.
+    /// Lookup for an icon for a PassioID. You will receive an icon and a bool, The boolean is true if the icons is food icon or false if it's a placeholder icon. If you get false you can use the asynchronous function to "fetchIconFor" the icons from the web.
     /// - Parameters:
     ///   - passioID: PassioID
     ///   - size: IconSize (.px90, .px180 or .px360) where .px90 is the default
     ///   - entityType: PassioEntityType to return the right placeholder.
-    /// - Returns: UIImage and a bool, The boolean is true if the icons is food icon or false if it's a placeholder icon. If you get false you can use the asycronous funcion to "fetchIconFor" the icons from the web.
+    /// - Returns: UIImage and a bool, The boolean is true if the icons is food icon or false if it's a placeholder icon. If you get false you can use the asynchronous function to "fetchIconFor" the icons from the web.
     @available(*, deprecated, message: "This function is deprecated. Use the 'lookupIconsFor' instead. The word Icon was modified to Icons (plural)")
     public func lookupIconFor(passioID: PassioNutritionAISDK.PassioID, size: PassioNutritionAISDK.IconSize = IconSize.px90, entityType: PassioNutritionAISDK.PassioIDEntityType = .item) -> (UIImage, Bool)
 
-    /// This function replaces 'lookupIconFor'. You will receive the placeHolderIcon and an optional icon.  If the icons is nil you can use the asycronous funcion to "fetchIconFor" the icons from the web.
+    /// This function replaces 'lookupIconFor'. You will receive the placeHolderIcon and an optional icon.  If the icons is nil you can use the asynchronous function to "fetchIconFor" the icons from the web.
     /// - Parameters:
     ///   - passioID: PassioID
     ///   - size: IconSize (.px90, .px180 or .px360) where .px90 is the default
     ///   - entityType: PassioEntityType to return the right placeholder.
-    /// - Returns: UIImage and a UIImage?  You will receive the placeHolderIcon and an optional icon.  If the icons is nil you can use the asycronous funcion to "fetchIconFor" the icons from the web.
+    /// - Returns: UIImage and a UIImage?  You will receive the placeHolderIcon and an optional icon.  If the icons is nil you can use the asynchronous function to "fetchIconFor" the icons from the web.
     public func lookupIconsFor(passioID: PassioNutritionAISDK.PassioID, size: PassioNutritionAISDK.IconSize = IconSize.px90, entityType: PassioNutritionAISDK.PassioIDEntityType = .item) -> (placeHolderIcon: UIImage, icon: UIImage?)
 
     /// Fetch icons from the web.

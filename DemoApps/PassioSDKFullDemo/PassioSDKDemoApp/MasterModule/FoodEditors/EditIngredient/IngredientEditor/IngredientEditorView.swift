@@ -560,7 +560,8 @@ extension IngredientEditorView: UICollectionViewDataSource, UICollectionViewDele
             let alternative = alt[index]
             name = alternative.name
             let passioID = alternative.passioID
-            (image, _) =  passioSDK.lookupIconFor(passioID: passioID)
+            let (placeHolder, finalImage) =  passioSDK.lookupIconsFor(passioID: passioID)
+            image = finalImage ?? placeHolder
         }
         return (name, image)
     }
