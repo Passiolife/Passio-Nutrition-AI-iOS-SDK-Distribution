@@ -1,6 +1,6 @@
 # Passio PassioNutritionAISDK 
 
-## Version  2.3.8
+## Version  2.3.9
 ```Swift
 import AVFoundation
 import Accelerate
@@ -9,7 +9,6 @@ import CoreML
 import CoreMedia
 import CoreMotion
 import Foundation
-import MLCompute
 import Metal
 import MetalPerformanceShaders
 import SQLite3
@@ -90,6 +89,67 @@ public protocol BarcodeDetectionDelegate : AnyObject {
     /// Called when a barcode is detected.
     /// - Parameter barcodes: Array of BarcodeCandidate
     func barcodeResult(barcodes: [PassioNutritionAISDK.BarcodeCandidate])
+}
+
+public enum Bridge : String {
+
+    case none
+
+    case flutter
+
+    case reactNative
+
+    /// Creates a new instance with the specified raw value.
+    ///
+    /// If there is no value of the type that corresponds with the specified raw
+    /// value, this initializer returns `nil`. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     print(PaperSize(rawValue: "Legal"))
+    ///     // Prints "Optional("PaperSize.Legal")"
+    ///
+    ///     print(PaperSize(rawValue: "Tabloid"))
+    ///     // Prints "nil"
+    ///
+    /// - Parameter rawValue: The raw value to use for the new instance.
+    public init?(rawValue: String)
+
+    /// The raw type that can be used to represent all values of the conforming
+    /// type.
+    ///
+    /// Every distinct value of the conforming type has a corresponding unique
+    /// value of the `RawValue` type, but there may be values of the `RawValue`
+    /// type that don't have a corresponding value of the conforming type.
+    public typealias RawValue = String
+
+    /// The corresponding value of the raw type.
+    ///
+    /// A new instance initialized with `rawValue` will be equivalent to this
+    /// instance. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     let selectedSize = PaperSize.Letter
+    ///     print(selectedSize.rawValue)
+    ///     // Prints "Letter"
+    ///
+    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
+    ///     // Prints "true"
+    public var rawValue: String { get }
+}
+
+extension Bridge : Equatable {
+}
+
+extension Bridge : Hashable {
+}
+
+extension Bridge : RawRepresentable {
 }
 
 /// The ClassificationCandidate protocol returns the classification candidate result delegate.
@@ -548,7 +608,8 @@ public struct PassioConfiguration : Equatable {
     /// If you set allowInternetConnection = false without working with Passio the SDK will not work. The SDK will not connect to the internet for key validations, barcode data and packaged food data.
     public var allowInternetConnection: Bool
 
-    public var reactNativeBridged: Bool
+    /// If you are bridging the SDK via ReactNative or Flutter, please set accordingly.
+    public var bridge: PassioNutritionAISDK.Bridge
 
     public init(key: String)
 
@@ -570,7 +631,7 @@ public struct PassioFoodItemData : Equatable, Codable {
 
     public var name: String { get }
 
-    public var tags: [String] { get }
+    public var tags: [String]? { get }
 
     public var selectedQuantity: Double { get }
 
@@ -589,6 +650,10 @@ public struct PassioFoodItemData : Equatable, Codable {
     public var foodOrigins: [PassioNutritionAISDK.PassioFoodOrigin]? { get }
 
     public var isOpenFood: Bool { get }
+
+    public var confusionAlternatives: [PassioNutritionAISDK.PassioID]? { get }
+
+    public var invisibleIngredients: [PassioNutritionAISDK.PassioID]? { get }
 
     public var computedWeight: Measurement<UnitMass> { get }
 
@@ -893,6 +958,10 @@ public struct PassioIDAttributes : Equatable, Codable {
     public var recipe: PassioNutritionAISDK.PassioFoodRecipe? { get }
 
     public var isOpenFood: Bool { get }
+
+    public var confusionAlternatives: [PassioNutritionAISDK.PassioID]? { get }
+
+    public var invisibleIngredients: [PassioNutritionAISDK.PassioID]? { get }
 
     public init(passioID: PassioNutritionAISDK.PassioID, name: String, foodItemDataForDefault: PassioNutritionAISDK.PassioFoodItemData?, entityType: PassioNutritionAISDK.PassioIDEntityType = .barcode)
 

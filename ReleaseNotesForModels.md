@@ -1,5 +1,8 @@
 # Passio SDK  Release Notes for Models
 
+# V2.3.9
+* Alcohol was added as nutrients for several alcoholic beverages. 
+
 ## V2.3.7
 
 * Number of food items recognized via HNN: 4108
