@@ -1,5 +1,14 @@
 # Passio SDK Release Notes
 
+## V2.3.9
+
+Added to the PassioIDAttributes and PassioFoodItemData.
+```swift
+    public var confusionAlternatives: [PassioNutritionAISDK.PassioID]? { get }
+
+    public var invisibleIngredients: [PassioNutritionAISDK.PassioID]? { get }
+```
+
 ## V2.3.8
 
 ### Minor Improvement and enhancements

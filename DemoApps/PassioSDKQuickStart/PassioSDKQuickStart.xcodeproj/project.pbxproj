@@ -326,7 +326,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.3.7;
+				MARKETING_VERSION = 2.3.9;
 				PRODUCT_BUNDLE_IDENTIFIER = zcom.passio.PassioSDKQuickStart;
 				PRODUCT_NAME = "AI-Nutritions SDK";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -357,7 +357,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.3.7;
+				MARKETING_VERSION = 2.3.9;
 				PRODUCT_BUNDLE_IDENTIFIER = zcom.passio.PassioSDKQuickStart;
 				PRODUCT_NAME = "AI-Nutritions SDK";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
