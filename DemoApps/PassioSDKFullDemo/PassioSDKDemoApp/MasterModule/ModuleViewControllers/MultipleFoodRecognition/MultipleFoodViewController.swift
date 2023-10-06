@@ -88,10 +88,10 @@ class MultipleFoodViewController: RotationViewController {
                 DispatchQueue.main.async {
                     self.view.bringSubviewToFront(self.buttonDismiss)
                 }
-                
+
             }
         }
-        
+
     }
 
     override func stopDetection() {

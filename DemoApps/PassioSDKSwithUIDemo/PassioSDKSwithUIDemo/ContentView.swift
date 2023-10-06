@@ -68,7 +68,7 @@ struct ContentView: View {
         guard let passioID = passioID else {
             return nil
         }
-        let (placeHolder,niceImage) = passioSDK.lookupIconsFor(passioID: passioID)
+        let (placeHolder, niceImage) = passioSDK.lookupIconsFor(passioID: passioID)
         return Image(uiImage: niceImage ?? placeHolder)
     }
 

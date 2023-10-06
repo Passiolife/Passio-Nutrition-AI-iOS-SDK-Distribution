@@ -113,7 +113,7 @@ public struct FoodRecord: Codable, Equatable {
             return false
         }
         selectedUnit = unit
-        selectedQuantity = quantity
+        selectedQuantity = quantity != 0 ? quantity : 0.001
         computeQuantityForIngredients()
         return true
     }

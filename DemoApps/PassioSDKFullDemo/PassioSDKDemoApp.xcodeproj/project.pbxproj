@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -1306,7 +1306,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.3.9;
+				MARKETING_VERSION = 2.3.11;
 				PRODUCT_BUNDLE_IDENTIFIER = ai.passio.PassioObjects;
 				PRODUCT_NAME = "AI-Nutritions SDK";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1335,7 +1335,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.3.9;
+				MARKETING_VERSION = 2.3.11;
 				PRODUCT_BUNDLE_IDENTIFIER = ai.passio.PassioObjects;
 				PRODUCT_NAME = "AI-Nutritions SDK";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

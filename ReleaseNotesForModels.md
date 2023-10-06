@@ -1,6 +1,10 @@
 # Passio SDK  Release Notes for Models
 
-# V2.3.9
+## V2.3.11
+
+Same models as 2.3.9
+
+## V2.3.9
 * Alcohol was added as nutrients for several alcoholic beverages. 
 
 ## V2.3.7

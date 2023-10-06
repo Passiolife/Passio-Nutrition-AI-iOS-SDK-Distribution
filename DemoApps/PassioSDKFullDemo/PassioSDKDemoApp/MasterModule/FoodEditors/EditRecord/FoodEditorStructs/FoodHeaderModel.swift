@@ -30,7 +30,7 @@ struct FoodHeaderModel {
 
         let displayUnit = "g".localized
 
-        print("unitName = \(unitName)")
+       // print("unitName = \(unitName)")
         let weightText = unitName == "g" ? "" : "(" + weight + " " + displayUnit + ") "
         labelServing = textAmount + " " + unitName + " " + weightText
         calories = String(foodRecord.totalCalories.roundDigits(afterDecimal: 1))

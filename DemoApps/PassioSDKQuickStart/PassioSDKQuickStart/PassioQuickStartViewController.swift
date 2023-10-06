@@ -10,14 +10,14 @@ import AVFoundation
 import PassioNutritionAISDK
 
 class PassioQuickStartViewController: UIViewController {
-    
+
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var labelForPassioIDs: UILabel!
-    
+
     let passioSDK = PassioNutritionAI.shared
     var videoLayer: AVCaptureVideoPreviewLayer?
     var passioRunning = false
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         let passioConfig = PassioConfiguration(key: passioSDKKey)
@@ -39,7 +39,7 @@ class PassioQuickStartViewController: UIViewController {
             }
         }
     }
-    
+
     func startFoodDetection() {
         setupPreviewLayer()
         guard passioSDK.status.mode == .isReadyForDetection,
@@ -48,11 +48,11 @@ class PassioQuickStartViewController: UIViewController {
         DispatchQueue.global(qos: .userInitiated).async {
             self.passioSDK.startFoodDetection(foodRecognitionDelegate: self) { (ready) in
                 if !ready { print("SDK was not configured correctly") }
-                
+
             }
         }
     }
-    
+
     func setupPreviewLayer() {
         guard videoLayer == nil else { return }
         if let videoLayer = passioSDK.getPreviewLayer() {
@@ -61,24 +61,24 @@ class PassioQuickStartViewController: UIViewController {
             view.layer.insertSublayer(videoLayer, at: 0)
         }
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         passioSDK.stopFoodDetection()
         videoLayer?.removeFromSuperlayer()
         videoLayer = nil
     }
-    
+
 }
 
 extension PassioQuickStartViewController: FoodRecognitionDelegate {
-    
+
     func recognitionResults(candidates: FoodCandidates?,
                             image: UIImage?,
                             nutritionFacts: PassioNutritionFacts?) {
-        
+
         // print("candidates.count = \(candidates?.detectedCandidates.count)" )
-        
+
         if let detectedCandidates = candidates?.detectedCandidates, !detectedCandidates.isEmpty {
             var message = "\n"
             detectedCandidates.forEach {
@@ -97,7 +97,7 @@ extension PassioQuickStartViewController: FoodRecognitionDelegate {
             }
         }
     }
-    
+
     func stillScanning() {
         activityIndicator.startAnimating()
         labelForPassioIDs.text = "Scanning for food"
@@ -105,34 +105,34 @@ extension PassioQuickStartViewController: FoodRecognitionDelegate {
 }
 
 extension PassioQuickStartViewController: PassioStatusDelegate {
-    
+
     func passioStatusChanged(status: PassioStatus) {
-        //print("passioRunning = \(passioRunning)")
+        // print("passioRunning = \(passioRunning)")
         if status.mode == .isReadyForDetection, !passioRunning {
             DispatchQueue.main.async {
                 self.startFoodDetection()
             }
         }
     }
-    
+
     func passioProcessing(filesLeft: Int) {
         DispatchQueue.main.async {
             self.labelForPassioIDs.text = "Files left to Process \(filesLeft)"
         }
     }
-    
+
     func completedDownloadingAllFiles(filesLocalURLs: [FileLocalURL]) {
         DispatchQueue.main.async {
             self.labelForPassioIDs.text = "Completed downloading all files"
         }
     }
-    
+
     func completedDownloadingFile(fileLocalURL: FileLocalURL, filesLeft: Int) {
         DispatchQueue.main.async {
             self.labelForPassioIDs.text = "Files left to download \(filesLeft)"
         }
     }
-    
+
     func downloadingError(message: String) {
         print("downloadError   ---- =\(message)")
         DispatchQueue.main.async {
@@ -140,5 +140,5 @@ extension PassioQuickStartViewController: PassioStatusDelegate {
             self.activityIndicator.stopAnimating()
         }
     }
-    
+
 }
