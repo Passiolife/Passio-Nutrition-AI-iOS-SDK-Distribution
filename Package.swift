@@ -3,7 +3,6 @@
 
 import PackageDescription
 
-
 let package = Package(
     name: "PassioNutritionAISDK",
     platforms: [.iOS(.v13)
@@ -15,7 +14,7 @@ let package = Package(
     ],
     targets: [
         .binaryTarget(name: "PassioNutritionAISDK",
-                      url: "https://github.com/Passiolife/Passio-Nutrition-AI-iOS-SDK-Distribution/raw/2.3.9/PassioNutritionAISDK.xcframework.zip",
-                      checksum: "785e32955e405de37d436bdf5155fe85637f1c864055eaca03ae3c06a08ac765")
+                      url: "https://github.com/Passiolife/Passio-Nutrition-AI-iOS-SDK-Distribution/raw/2.3.11/PassioNutritionAISDK.xcframework.zip",
+                      checksum: "43c7367738b07183411aaa9b5e8a37a531adc0803c5fe64adf44e20a07c39b18")
     ]
 )

@@ -9,4 +9,3 @@
 import Foundation
  #error("To obtain a key please sign up at https://www.passio.ai/nutrition-ai.  Delete this line before building.")
  let passioSDKKey = "YourPassioSDKKey"
-

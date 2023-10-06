@@ -99,7 +99,7 @@ class VideoCameraPhotosViewController: UIViewController {
                 }
             }
         }
-        
+
     }
 
     func stopFoodDetection() {

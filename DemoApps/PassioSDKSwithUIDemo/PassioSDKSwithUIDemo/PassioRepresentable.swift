@@ -15,10 +15,6 @@ struct FoodRecognitionResults {
     let downloadingMessage: String?
 }
 
-// class PassioResults: ObservableObject {
-//    @Published var foodRecognitionResults: FoodRecognitionResults?
-// }
-
 class PassioResults: ObservableObject {
     var objectWillChange = PassthroughSubject<Void, Never>()
     var foodRecognitionResults: FoodRecognitionResults? {
@@ -37,7 +33,6 @@ struct PassioRepresentable: UIViewControllerRepresentable {
     class Coordinator: FoodRecognitionDelegate, PassioStatusDelegate {
 
         let passioResults: PassioResults
-
         var message: String? {
             didSet {
                     passioResults.foodRecognitionResults = FoodRecognitionResults(candidates: nil,

@@ -148,7 +148,7 @@ class FoodRecognitionViewController: RotationViewController {
                 }
             }
         }
-        
+
     }
 
     override func stopDetection() {

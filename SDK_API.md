@@ -1,6 +1,6 @@
 # Passio PassioNutritionAISDK 
 
-## Version  2.3.9
+## Version  2.3.11
 ```Swift
 import AVFoundation
 import Accelerate
@@ -8,15 +8,19 @@ import CommonCrypto
 import CoreML
 import CoreMedia
 import CoreMotion
+import DeveloperToolsSupport
 import Foundation
+import MLCompute
 import Metal
 import MetalPerformanceShaders
 import SQLite3
+import SwiftUI
 import UIKit
 import VideoToolbox
 import Vision
 import _Concurrency
 import _StringProcessing
+import _SwiftConcurrencyShims
 import simd
 
 /// Returning all information of Amount estimation and directions how to move the device for better estimation
@@ -1466,6 +1470,8 @@ public class PassioNutritionFacts {
 
         case ml
 
+        case mg
+
         /// Creates a new instance with the specified raw value.
         ///
         /// If there is no value of the type that corresponds with the specified raw
@@ -1520,9 +1526,23 @@ public class PassioNutritionFacts {
 
     final public let titleTotalFat: String
 
+    final public let titleSaturatedFat: String
+
+    final public let titleTransFat: String
+
+    final public let titleCholesterol: String
+
+    final public let titleSodium: String
+
     final public let titleTotalCarbs: String
 
     final public let titleProtein: String
+
+    final public let titleDietaryFiber: String
+
+    final public let titleTotalSugars: String
+
+    final public let titleSugarAlcohol: String
 
     public var servingSizeQuantity: Double
 
@@ -1536,9 +1556,23 @@ public class PassioNutritionFacts {
 
     public var fat: Double?
 
+    public var saturatedFat: Double?
+
+    public var transFat: Double?
+
+    public var cholesterol: Double?
+
+    public var sodium: Double?
+
     public var carbs: Double?
 
     public var protein: Double?
+
+    public var dietaryFiber: Double?
+
+    public var sugars: Double?
+
+    public var sugarAlcohol: Double?
 
     public var isManuallyEdited: Bool
 
@@ -1548,9 +1582,23 @@ public class PassioNutritionFacts {
 
     public var fatText: String { get }
 
+    public var saturatedFatText: String { get }
+
+    public var transFatText: String { get }
+
+    public var cholesterolText: String { get }
+
+    public var sodiumText: String { get }
+
     public var carbsText: String { get }
 
     public var proteinText: String { get }
+
+    public var dietaryFiberText: String { get }
+
+    public var sugarsText: String { get }
+
+    public var sugarAlcoholText: String { get }
 
     public var isCompleted: Bool { get }
 
@@ -2174,6 +2222,7 @@ extension UIImageView {
 infix operator .+ : DefaultPrecedence
 
 infix operator ./ : DefaultPrecedence
+
 
 
 ```

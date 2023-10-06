@@ -1,5 +1,23 @@
 # Passio SDK Release Notes
 
+## V2.3.11
+
+### Minor Improvement and enhancements 
+* This version has significant improvement in Object(Food) Detection. This upgrade is recommended for all previous versions. 
+
+* PassioNutritionFacts was enhance to read Canadian Nutrition Facts Labels and to additionally read the following nutrients.  
+
+```swift
+    public var saturatedFat: Double?
+    public var transFat: Double?
+    public var cholesterol: Double?
+    public var sodium: Double?
+    public var dietaryFiber: Double?
+    public var sugars: Double?
+    public var sugarAlcohol: Double?
+```
+
+
 ## V2.3.9
 
 Added to the PassioIDAttributes and PassioFoodItemData.
