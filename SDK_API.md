@@ -1,6 +1,6 @@
 # Passio PassioNutritionAISDK 
 
-## Version  2.3.11
+## Version  2.3.13
 ```Swift
 import AVFoundation
 import Accelerate
@@ -529,13 +529,13 @@ public typealias PackagedFoodCode = String
 /// PassioAlternative is an alternative to a food from the Database
 public struct PassioAlternative : Codable, Equatable, Hashable {
 
-    public let passioID: PassioNutritionAISDK.PassioID
+    public var passioID: PassioNutritionAISDK.PassioID
 
-    public var name: String { get }
+    public var name: String
 
-    public let quantity: Double?
+    public var quantity: Double?
 
-    public let unitName: String?
+    public var unitName: String?
 
     /// Returns a Boolean value indicating whether two values are equal.
     ///
@@ -633,7 +633,7 @@ public struct PassioFoodItemData : Equatable, Codable {
 
     public var passioID: PassioNutritionAISDK.PassioID { get }
 
-    public var name: String { get }
+    public var name: String
 
     public var tags: [String]? { get }
 
@@ -1208,6 +1208,8 @@ public class PassioNutritionAI {
     /// Shared Instance
     public class var shared: PassioNutritionAISDK.PassioNutritionAI { get }
 
+    public func requestLangauge(sdkLanguage: PassioNutritionAISDK.SDKLanguage, completion: @escaping (PassioNutritionAISDK.SDKLanguage?) -> Void)
+
     /// The SDK will request Compressed file the default is set to "true" (faster download/slower processing). If set to "false" the SDK will request none-compressed files (slower download/faster processing.
     public var requestCompressedFiles: Bool
 
@@ -1307,6 +1309,8 @@ public class PassioNutritionAI {
     /// List all food enabled for weight estimations
     /// - Returns: List of PassioIDs
     public func listFoodEnabledForAmountEstimation() -> [PassioNutritionAISDK.PassioID]
+
+    public func isWeightEstimateAvailableFor(passioID: PassioNutritionAISDK.PassioID) -> Bool
 
     /// use getPreviewLayer if you don't plan to rotate the PreviewLayer.
     /// - Returns: AVCaptureVideoPreviewLayer
@@ -1544,6 +1548,8 @@ public class PassioNutritionFacts {
 
     final public let titleSugarAlcohol: String
 
+    final public let titleIngredients: String
+
     public var servingSizeQuantity: Double
 
     public var servingSizeUnitName: String?
@@ -1573,6 +1579,8 @@ public class PassioNutritionFacts {
     public var sugars: Double?
 
     public var sugarAlcohol: Double?
+
+    public var ingredients: String?
 
     public var isManuallyEdited: Bool
 
@@ -1905,6 +1913,67 @@ public struct PersonalizedAlternative : Codable, Equatable {
     public init(from decoder: Decoder) throws
 }
 
+public enum SDKLanguage : String {
+
+    case en
+
+    case de
+
+    case auto
+
+    /// Creates a new instance with the specified raw value.
+    ///
+    /// If there is no value of the type that corresponds with the specified raw
+    /// value, this initializer returns `nil`. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     print(PaperSize(rawValue: "Legal"))
+    ///     // Prints "Optional("PaperSize.Legal")"
+    ///
+    ///     print(PaperSize(rawValue: "Tabloid"))
+    ///     // Prints "nil"
+    ///
+    /// - Parameter rawValue: The raw value to use for the new instance.
+    public init?(rawValue: String)
+
+    /// The raw type that can be used to represent all values of the conforming
+    /// type.
+    ///
+    /// Every distinct value of the conforming type has a corresponding unique
+    /// value of the `RawValue` type, but there may be values of the `RawValue`
+    /// type that don't have a corresponding value of the conforming type.
+    public typealias RawValue = String
+
+    /// The corresponding value of the raw type.
+    ///
+    /// A new instance initialized with `rawValue` will be equivalent to this
+    /// instance. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     let selectedSize = PaperSize.Letter
+    ///     print(selectedSize.rawValue)
+    ///     // Prints "Letter"
+    ///
+    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
+    ///     // Prints "true"
+    public var rawValue: String { get }
+}
+
+extension SDKLanguage : Equatable {
+}
+
+extension SDKLanguage : Hashable {
+}
+
+extension SDKLanguage : RawRepresentable {
+}
+
 public struct SynonymLang : Codable {
 
     public let synonym: String?
@@ -2222,7 +2291,6 @@ extension UIImageView {
 infix operator .+ : DefaultPrecedence
 
 infix operator ./ : DefaultPrecedence
-
 
 
 ```

@@ -1,5 +1,26 @@
 # Passio SDK  Release Notes for Models
 
+## V2.3.13
+
+* Number of food items recognized via HNN: 4106
+* Nutrition database version: passio_nutrition.4107.0.301
+* Number of products recognized via OCR: 27646
+
+### New included HNN foods
+```
+black krim heirloom tomatoes
+cooked japanese sweet potato
+```
+
+### Excluded HNN foods
+```
+clam chowder
+gazpacho
+tuna casserole
+white pureed soups
+```
+
+
 ## V2.3.11
 
 Same models as 2.3.9

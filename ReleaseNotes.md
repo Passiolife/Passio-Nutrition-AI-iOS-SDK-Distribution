@@ -1,5 +1,41 @@
 # Passio SDK Release Notes
 
+## V2.3.13
+
+* Requesting SDK Language
+```swift 
+public func requestLanguage(sdkLanguage: PassioNutritionAISDK.SDKLanguage, 
+                              completion: @escaping (PassioNutritionAISDK.SDKLanguage?) -> Void)
+```
+
+* Available languages
+```swift 
+public enum SDKLanguage : String {
+    case en, de, auto
+}
+```
+
+### Models
+
+* Number of food items recognized via HNN: 4106
+* Nutrition database version: passio_nutrition.4107.0.301
+* Number of products recognized via OCR: 27646
+
+### New included HNN foods
+```
+black krim heirloom tomatoes
+cooked japanese sweet potato
+```
+
+### Excluded HNN foods
+```
+clam chowder
+gazpacho
+tuna casserole
+white pureed soups
+```
+
+
 ## V2.3.11
 
 ### Minor Improvement and enhancements 
