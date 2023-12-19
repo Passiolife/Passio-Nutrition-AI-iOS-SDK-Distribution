@@ -1,6 +1,6 @@
 # Passio PassioNutritionAISDK 
 
-## Version  2.3.13
+## Version  2.3.15
 ```Swift
 import AVFoundation
 import Accelerate
@@ -1198,6 +1198,37 @@ extension PassioMode : Equatable {
 extension PassioMode : Hashable {
 }
 
+/// PassioNutrient for nutrients data
+public struct PassioNutrient : Codable {
+
+    public let name: String
+
+    public let amount: Double
+
+    public let unit: String
+
+    public let inflammatoryEffectScore: Double
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: Encoder) throws
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    public init(from decoder: Decoder) throws
+}
+
 /// Passio SDK - Copyright © 2023 Passio Inc. All rights reserved.
 public class PassioNutritionAI {
 
@@ -1207,8 +1238,6 @@ public class PassioNutritionAI {
 
     /// Shared Instance
     public class var shared: PassioNutritionAISDK.PassioNutritionAI { get }
-
-    public func requestLangauge(sdkLanguage: PassioNutritionAISDK.SDKLanguage, completion: @escaping (PassioNutritionAISDK.SDKLanguage?) -> Void)
 
     /// The SDK will request Compressed file the default is set to "true" (faster download/slower processing). If set to "false" the SDK will request none-compressed files (slower download/faster processing.
     public var requestCompressedFiles: Bool
@@ -1412,6 +1441,12 @@ public class PassioNutritionAI {
     ///   - passioID: passioID
     ///   - completion: tag as a list of strings.
     public func fetchTagsFor(passioID: PassioNutritionAISDK.PassioID, completion: @escaping ([String]?) -> Void)
+
+    /// Returns Nutrients
+    /// - Parameters:
+    ///   - passioID: passioID
+    ///   - completion: PassioNutrient as a list of Nutrients.
+    public func fetchNutrientsFor(passioID: PassioNutritionAISDK.PassioID, completion: @escaping ([PassioNutritionAISDK.PassioNutrient]?) -> Void)
 
     /// lookupAllDescendantsFor PassioID
     /// - Parameter passioID: PassioID
@@ -2291,7 +2326,6 @@ extension UIImageView {
 infix operator .+ : DefaultPrecedence
 
 infix operator ./ : DefaultPrecedence
-
 
 ```
 <sup>Copyright 2023 Passio Inc</sup>

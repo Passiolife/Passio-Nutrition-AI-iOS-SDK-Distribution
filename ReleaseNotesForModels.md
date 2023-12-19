@@ -1,5 +1,24 @@
 # Passio SDK  Release Notes for Models
 
+## V2.3.15
+
+* Number of food items recognized via HNN: 4104
+* Nutrition database version: passio_nutrition.4105.0.301
+* Number of products recognized via OCR: 27756
+
+### New included HNN foods
+```
+corn chowder
+```
+
+### Excluded HNN foods
+```
+coconut sandwich cookies
+mollete
+strawberry cream cheese bagel
+```
+
+
 ## V2.3.13
 
 * Number of food items recognized via HNN: 4106
