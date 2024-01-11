@@ -38,11 +38,13 @@ In order to use the PassioSDK your app needs to meet the following minimal requi
 * The SDK will only run on iOS 13 or newer.
 * Passio SDK can only be used on a device and will not run on a simulator
 * The SDK requires access to iPhone's camera
-* Weight/Volume estimation will run only on iPhones with Dual Wide Camera (not on DualCamera). 
-    * iPhone 11 Pro & Pro Max
-    * iPhone 12 mini, Pro & pro Max
-    * iPhone 13 Pro & Pro Max
-    * iPhone 14, Pro, Pro Max & Plus
+* Weight/Volume estimation will run only on iPhones with Dual Ultra Wide Camera. 
+    * iPhone 11, 11 Pro & Pro Max
+    * iPhone 12 mini, 12, 12 Pro & pro Max
+    * iPhone 13 mini, 13, 13 Pro & Pro Max
+    * iPhone 14, 14 Plus, 14 Pro & Pro Max
+    * iPhone 15, 15 Plus, 15 Pro & Pro Max
+
 
 ## Getting the ml models to the device
 
