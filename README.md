@@ -22,13 +22,13 @@ As the developer, you have complete control of when to turn on/off the SDK and t
 By default the SDK does not record/store any photos or videos. Instead, as the end user hovers over a food item with his/her camera phone, the SDK recognizes and identifies food items in real time. This hovering action is only transitory/temporary while the end user is pointing the camera at a particular item and is not recorded or stored within the SDK. As a developer, you can configure the SDK to capture images or videos and store them in your app.
 
 
->[!IMPORTANT]
->
-> 1. Passio Nutrition-AI SDK added data from Open Food Facts (https://en.openfoodfacts.org/). Each food that contains data from Open Food Facts will be marked by public var isOpenFood: Bool.. In case you choose to set ```isOpenFood = true``` you agree to abide > by the terms of the Open Food Facts license agreement (https://opendatacommons.org/licenses/odbl/1-0) and their terms of use (https://world.openfoodfacts.org/terms-of-use) and you will have to add to the UI the following license copy:
->
-> _"This record contains information from Open Food Facts (https://en.openfoodfacts.org), which is made available here under the Open Database License (https://opendatacommons.org/licenses/odbl/1-0)"_
-> 
-> 2. To use the SDK sign up at https://www.passio.ai/nutrition-ai. The SDK WILL NOT WORK without a valid SDK key.
+## BEFORE YOU CONTINUE:
+
+1. Passio Nutrition-AI SDK added data from Open Food Facts (https://en.openfoodfacts.org/). Each food that contains data from Open Food Facts will be marked by public var isOpenFood: Bool.. In case you choose to set ```isOpenFood = true``` you agree to abide by the terms of the Open Food Facts license agreement (https://opendatacommons.org/licenses/odbl/1-0) and their terms of use (https://world.openfoodfacts.org/terms-of-use) and you will have to add to the UI the following license copy:
+
+"This record contains information from Open Food Facts (https://en.openfoodfacts.org), which is made available here under the Open Database License (https://opendatacommons.org/licenses/odbl/1-0)"
+
+2. To use the SDK sign up at https://www.passio.ai/nutrition-ai. The SDK WILL NOT WORK without a valid SDK key.
 
 
 ## Minimum Requirements
@@ -38,13 +38,11 @@ In order to use the PassioSDK your app needs to meet the following minimal requi
 * The SDK will only run on iOS 13 or newer.
 * Passio SDK can only be used on a device and will not run on a simulator
 * The SDK requires access to iPhone's camera
-* Weight/Volume estimation will run only on iPhones with Dual Ultra Wide Camera. 
-    * iPhone 11, 11 Pro & Pro Max
-    * iPhone 12 mini, 12, 12 Pro & pro Max
-    * iPhone 13 mini, 13, 13 Pro & Pro Max
-    * iPhone 14, 14 Plus, 14 Pro & Pro Max
-    * iPhone 15, 15 Plus, 15 Pro & Pro Max
-
+* Weight/Volume estimation will run only on iPhones with Dual Wide Camera (not on DualCamera). 
+    * iPhone 11 Pro & Pro Max
+    * iPhone 12 mini, Pro & pro Max
+    * iPhone 13 Pro & Pro Max
+    * iPhone 14, Pro, Pro Max & Plus
 
 ## Getting the ml models to the device
 
