@@ -1,37 +1,7 @@
 # Passio SDK Release Notes
 
 ## V2.3.15
-
-### Deprecated APIs
-
-* Removed support for language packs, they will be available in version 3.0.0. Removed ```enableLanguagePack``` from the ```PassioConfiguration``` object, and the ```setSDKLanguage```.
-
-### Added APIs 
-
-* Fetch a list of nutrients for a 100 grams of a specific food item
-
-```swift
-/// Returns fetchNutrientsFor
-/// - Parameters:
-///   - passioID: passioID
-///   - completion: tag as a list of strings.
-public func fetchNutrientsFor(passioID: PassioID, completion: @escaping([PassioNutrient]?) -> Void) {
-    coreSDK.coreSDKFetchNutrientsFor(passioID: passioID) { nutrients in
-        completion(nutrients)
-    }
-}
-```
-```swift
-
-/// PassioNutrient for nutrients data
-public struct PassioNutrient: Codable {
-    public let name: String
-    public let amount: Double
-    public let unit: String
-    public let inflammatoryEffectScore: Double
-}
-```
-
+* Removed Language support
 
 ### Models
 * Number of food items recognized via HNN: 4104
