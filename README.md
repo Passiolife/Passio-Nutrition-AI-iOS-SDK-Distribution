@@ -225,8 +225,8 @@ override func viewWillAppear(_ animated: Bool) {
 9) Implement the delegate `FoodRecognitionDelegate` to Fetch nutritional data:
 
 Depending on the type of recognized candidate, nutritional data is fetched using these two methods:
-1) For visual candidates: fetchFoodItemFor(passioID:)
-2) For barcode and packaged food: fetchFoodItemFor(productCode:)
+1) For visual candidates: `fetchFoodItemFor(passioID:)`
+2) For barcode and packaged food: `fetchFoodItemFor(productCode:)`
 
 - Both of these functions have a callback that returns the nutritional data as PassioFoodItem object, null if no data is found or the network is unavailable.
 
@@ -275,18 +275,14 @@ let referenceNutrients: PassioNutrients
 let metadata: PassioFoodMetadata
 ```
 - Each ingredient has it's own nutritional data and serving size.
-- Nutrients like calories, carbs, protein and other can be found in the PassioNutrients object, but there are three helper functions to easily fetch the nutrients for the appropriate use case
-- fun nutrients(weight: UnitMass): PassioNutrients will return nutrients for a given UnitMass
-- fun nutrientsSelectedSize(): PassioNutrients will return nutrients for the currently selected unit and quantity in the amount object
-- fun nutrientsReference(): PassioNutrients will return nutrients for the reference weight of 100 grams
 
 3. **PassioNutrients**
 - Nutrients like calories, carbs, protein and other can be found in this Data model object.
 There are three helper functions to easily fetch the nutrients for the appropriate use case
 
-1) func nutrients(weight: Measurement<UnitMass>) -> PassioNutrients {} will return nutrients for a given UnitMass
-2) func nutrientsSelectedSize() -> PassioNutrients {} will return nutrients for the currently selected unit and quantity in the amount object
-3) func nutrientsReference() -> PassioNutrients {} will return nutrients for the reference weight of 100 grams
+1) `func nutrients(weight: Measurement<UnitMass>) -> PassioNutrients {}` will return nutrients for a given UnitMass
+2) `func nutrientsSelectedSize() -> PassioNutrients {}` will return nutrients for the currently selected unit and quantity in the amount object
+3) `func nutrientsReference() -> PassioNutrients {}` will return nutrients for the reference weight of 100 grams
 
 ## To see all the capabilities of the SDK run the PassioSDKFullDemo
 
