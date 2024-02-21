@@ -1,5 +1,10 @@
 # Passio SDK Release Notes
 
+## V3.0.0
+* Removed APIs starting with name lookUpFor
+* Added new Data models PassioFoodItem, PassioNutrients, PassioIngredient, etc. to get the nutritional data of food item
+* Added new Advance search API searchForFood which returns the search results and alternatives of searched term.
+
 ## V2.3.15
 * Removed Language support
 
