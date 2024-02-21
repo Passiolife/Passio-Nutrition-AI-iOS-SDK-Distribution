@@ -1,6 +1,6 @@
 # Passio PassioNutritionAISDK 
 
-## Version 3.0.1
+## Version  2.3.15
 ```Swift
 import AVFoundation
 import Accelerate
@@ -10,6 +10,7 @@ import CoreMedia
 import CoreMotion
 import DeveloperToolsSupport
 import Foundation
+import MLCompute
 import Metal
 import MetalPerformanceShaders
 import SQLite3
@@ -1441,10 +1442,10 @@ public class PassioNutritionAI {
     ///   - completion: tag as a list of strings.
     public func fetchTagsFor(passioID: PassioNutritionAISDK.PassioID, completion: @escaping ([String]?) -> Void)
 
-    /// Returns fetchNutrientsFor
+    /// Returns Nutrients
     /// - Parameters:
     ///   - passioID: passioID
-    ///   - completion: tag as a list of strings.
+    ///   - completion: PassioNutrient as a list of Nutrients.
     public func fetchNutrientsFor(passioID: PassioNutritionAISDK.PassioID, completion: @escaping ([PassioNutritionAISDK.PassioNutrient]?) -> Void)
 
     /// lookupAllDescendantsFor PassioID
