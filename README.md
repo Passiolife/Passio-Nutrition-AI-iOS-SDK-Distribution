@@ -284,6 +284,7 @@ There are three helper functions to easily fetch the nutrients for the appropria
 2) `func nutrientsSelectedSize() -> PassioNutrients {}` will return nutrients for the currently selected unit and quantity in the amount object
 3) `func nutrientsReference() -> PassioNutrients {}` will return nutrients for the reference weight of 100 grams
 
+
 ## To see all the capabilities of the SDK run the PassioSDKFullDemo
 
 Start by adding your key to the PassioExternalConnector class
