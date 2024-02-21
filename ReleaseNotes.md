@@ -1,5 +1,15 @@
 # Passio SDK Release Notes
 
+## V3.0.1
+* Added alternatives in HNN Candidate to display while scanning the food 
+* Added new Filters Kalman filter, Weiner filter, Smooth Bayes filter to detect top 3 candidate of scanned food item
+* Updated PassioFoodItem data model
+
+## V3.0.0
+* Removed APIs starting with name lookUpFor
+* Added new Data models PassioFoodItem, PassioNutrients, PassioIngredient, etc. to get the nutritional data of food item
+* Added new Advance search API searchForFood which returns the search results and alternatives of searched term.
+
 ## V2.3.15
 * Removed Language support
 
