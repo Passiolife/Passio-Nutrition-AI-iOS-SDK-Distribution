@@ -248,15 +248,15 @@ This is top level object that holds all of the nutritional information such as n
 ```swift
 let id: String
 let scannedId: PassioID
-let shortName: String
-let verboseName: String
+let name: String
+let details: String
 let iconId: String
 let licenseCopy: String
 let amount: PassioFoodAmount
 let ingredients: [PassioIngredient]
 
-var name: String {
-   shortName == "" ? verboseName : shortName
+var foodItemName: String {
+name == "" ? details : name
 }
 ```
 
