@@ -46,7 +46,7 @@ public struct PassioSearchResult {
     public var nutrition: PassioNutritionAISDK.PassioSearchNutritionPreview { get }
 }
 
-public structPassioSearchNutritionPreview {
+public struct PassioSearchNutritionPreview : Codable {
 
     public var calories: Int
 
