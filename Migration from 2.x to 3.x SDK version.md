@@ -369,4 +369,4 @@ func foodDataToIngredient(foodItemData: PassioFoodItemData) -> PassioIngredient 
 }
 ```
 
-<sup>Copyright 2024 Passio Inc</sup>
+Copyright 2024 Passio Inc
