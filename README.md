@@ -222,67 +222,25 @@ override func viewWillAppear(_ animated: Bool) {
     }
   ```
 
-9) Implement the delegate `FoodRecognitionDelegate` to Fetch nutritional data:
+9) Implement the delegate `FoodRecognitionDelegate`:
 
-Depending on the type of recognized candidate, nutritional data is fetched using these two methods:
-1) For visual candidates: `fetchFoodItemFor(passioID:)`
-2) For barcode and packaged food: `fetchFoodItemFor(productCode:)`
+  ```swift
+extension PassioQuickStartViewController: FoodRecognitionDelegate {
 
-- Both of these functions have a callback that returns the nutritional data as PassioFoodItem object, null if no data is found or the network is unavailable.
+    func recognitionResults(candidates: FoodCandidates?,
+                            image: UIImage?) {
+        if let detectedCandidates = candidates?.detectedCandidates {
+           detectedCandidates.forEach {
+                if let pidAtt = self.passioSDK.lookupPassioIDAttributesFor(passioID: $0.passioID) {
+                    print("Food name =\(pidAtt.name)")
+                }
+            }
+        }
+    }
 
-10) Implement this search API to get the search text Results and Alternatives of searched term:
-
-```swift
-func searchForFood(byText: String,
-                  completion: @escaping (SearchResponse?) -> Void) {}
-```
-
-- PassioSearchResult holds information such as foodName, brandName, iconID and nutritionPreview
-- The search options provide a list of alternate search terms related to the given term. For example if the search term is "apple", a list of searchOptions would include items such as "red apple", "green apple", "apple juice"...
-The function fetchSearchResult is used to retrieve nutritional data for a given PassioSearchResult. Same as in the camera recognition results, the return object is PassioFoodItem.
-
-## To fetch the data of food item we have new Data models
-
-1. **PassioFoodItem**
-This is top level object that holds all of the nutritional information such as nutrient data, serving sizes, data origins and more.
-```swift
-let id: String
-let scannedId: PassioID
-let name: String
-let details: String
-let iconId: String
-let licenseCopy: String
-let amount: PassioFoodAmount
-let ingredients: [PassioIngredient]
-
-var foodItemName: String {
-name == "" ? details : name
 }
 ```
 
-- Details contain information such as food brand or food category for general food items
-- PassioFoodAmount can be used to get a list of associated serving units and predefined serving sizes. It's also used to control the currently selected quantity and unit
-- The nutritional data will be stored in the PassioIngredient object.
-
-2. **PassioIngredient**
-This PassioIngredient model returns the ingredients of foodItem with below properties:
-```swift
-let id: String
-let name: String
-let iconId: String
-let amount: PassioFoodAmount
-let referenceNutrients: PassioNutrients
-let metadata: PassioFoodMetadata
-```
-- Each ingredient has it's own nutritional data and serving size.
-
-3. **PassioNutrients**
-- Nutrients like calories, carbs, protein and other can be found in this Data model object.
-There are three helper functions to easily fetch the nutrients for the appropriate use case
-
-1) `func nutrients(weight: Measurement<UnitMass>) -> PassioNutrients {}` will return nutrients for a given UnitMass
-2) `func nutrientsSelectedSize() -> PassioNutrients {}` will return nutrients for the currently selected unit and quantity in the amount object
-3) `func nutrientsReference() -> PassioNutrients {}` will return nutrients for the reference weight of 100 grams
 
 ## To see all the capabilities of the SDK run the PassioSDKFullDemo
 
