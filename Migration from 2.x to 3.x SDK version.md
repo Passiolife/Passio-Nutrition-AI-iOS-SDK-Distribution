@@ -14,8 +14,8 @@
 
 * ```searchForFood``` now returns ```SearchResponse```. In ```SearchResponse``` you will get array of [PassioSearchResult] and array of [String] which is search options. The ```PassioSearchResult``` represent a specific food item associated with the search term
 
-```Swift
-public struct PassioSearchResult : Codable {
+```swift
+public struct PassioSearchResult {
 
     public let type: String
 
@@ -46,7 +46,7 @@ public struct PassioSearchResult : Codable {
     public var nutrition: PassioNutritionAISDK.PassioSearchNutritionPreview { get }
 }
 
-public structPassioSearchNutritionPreview : Codable {
+public structPassioSearchNutritionPreview {
 
     public var calories: Int
 
@@ -64,8 +64,8 @@ public structPassioSearchNutritionPreview : Codable {
 
 ************PassioIDAttributes************ as a top level representation of a food item has been replaced with ```PassioFoodItem```. **PassioFoodItemData** and **PassioFoodRecipe** have also been deprecated.
 
-```Swift
-public struct PassioFoodItem : Codable {
+```swift
+public struct PassioFoodItem {
 
     public let id: String
 
@@ -95,7 +95,7 @@ public struct PassioFoodItem : Codable {
 
 }
 
-public struct PassioIngredient : Codable {
+public struct PassioIngredient {
 
     public let id: String
 
@@ -117,7 +117,7 @@ public struct PassioIngredient : Codable {
 
 }
 
-public struct PassioFoodAmount : Codable {
+public struct PassioFoodAmount {
 
     public let servingSizes: [PassioNutritionAISDK.PassioServingSize]
 
@@ -135,7 +135,7 @@ public struct PassioFoodAmount : Codable {
 
 }
 
-public struct PassioNutrients : Codable, Equatable {
+public struct PassioNutrients {
 
     public let weight: Measurement<UnitMass>
 
@@ -208,13 +208,12 @@ public struct PassioNutrients : Codable, Equatable {
     public func sugarAlcohol() -> Measurement<UnitMass>?
 
 }
-```
 
+```
 
 * To migrate from the old data structure to the new one this snippet of code will be
 
-
-```Swift
+```swift
 func attrsToFoodItem(attrs: PassioIDAttributes) -> PassioFoodItem {
 
     var ingredients = [PassioIngredient]()
