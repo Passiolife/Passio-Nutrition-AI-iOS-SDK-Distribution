@@ -3263,4 +3263,4 @@ infix operator .+ : DefaultPrecedence
 infix operator ./ : DefaultPrecedence
 
 ```
-<sup>Copyright 2024 Passio Inc</sup>
+Copyright 2024 Passio Inc
