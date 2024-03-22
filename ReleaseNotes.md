@@ -1,5 +1,14 @@
 # Passio SDK Release Notes
 
+## V3.0.2
+* Added dynamic metadata loading in SDK inisialisations.
+* Intigrated API to fetch quick suggestions
+```swift 
+        public func fetchSuggestions(mealTime: MealTime, completion: @escaping ([PassioSearchResult]) -> Void)
+    ```
+* MealTime enum added (Breakfast,lunch,dinner,snacks)
+* Added following micronutrients: Zinc, Selenium, Folic acid, Chromium, Vitamin-K Phylloquinone,Vitamin-K Menaquinone4,Vitamin-K Dihydrophylloquinone
+
 ## V3.0.1
 * Added alternatives in HNN Candidate to display while scanning the food 
 * Added new Filters Kalman filter, Weiner filter, Smooth Bayes filter to detect top 3 candidate of scanned food item
