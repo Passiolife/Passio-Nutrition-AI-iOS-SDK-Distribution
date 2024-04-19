@@ -12,7 +12,7 @@
 * Intigrated API to fetch quick suggestions
 ```swift 
         public func fetchSuggestions(mealTime: MealTime, completion: @escaping ([PassioSearchResult]) -> Void)
-    ```
+```
 * MealTime enum added (Breakfast,lunch,dinner,snacks)
 * Added following micronutrients: Zinc, Selenium, Folic acid, Chromium, Vitamin-K Phylloquinone,Vitamin-K Menaquinone4,Vitamin-K Dihydrophylloquinone
 
