@@ -3,9 +3,15 @@
 * Added Meal Plan API
 ```swift
     public func fetchMealPlans(completion: @escaping ([PassioNutritionAISDK.PassioMealPlan]) -> Void)
-
+```
+```swift
     public func fetchMealPlanForDay(mealPlanLabel: String, day: Int, completion: @escaping ([PassioNutritionAISDK.PassioMealPlanItem]) -> Void)
 ```
+* Added values for carbs protein and fat in the PassioSearchNutritionPreview data class.
+* MealTime was renamed to PassioMealTime.
+* Refactored APIs
+    * PassioSearchResult was renamed to PassioFoodDataInfo, fetchFoodItemForSearchResult was renamed to fetchFoodItemForDataInfo.
+    * fetchFoodItemForSuggestion was removed. Instead fetchFoodItemForDataInfo is used.
 
 ## V3.0.2
 * Added dynamic metadata loading in SDK inisialisations.
