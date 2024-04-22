@@ -671,71 +671,6 @@ public struct LabelName : Codable {
     public init(from decoder: Decoder) throws
 }
 
-public enum MealTime : String, Codable {
-
-    case breakfast
-
-    case lunch
-
-    case dinner
-
-    case snack
-
-    public static func currentMealTime() -> PassioNutritionAISDK.MealTime
-
-    /// Creates a new instance with the specified raw value.
-    ///
-    /// If there is no value of the type that corresponds with the specified raw
-    /// value, this initializer returns `nil`. For example:
-    ///
-    ///     enum PaperSize: String {
-    ///         case A4, A5, Letter, Legal
-    ///     }
-    ///
-    ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
-    ///
-    ///     print(PaperSize(rawValue: "Tabloid"))
-    ///     // Prints "nil"
-    ///
-    /// - Parameter rawValue: The raw value to use for the new instance.
-    public init?(rawValue: String)
-
-    /// The raw type that can be used to represent all values of the conforming
-    /// type.
-    ///
-    /// Every distinct value of the conforming type has a corresponding unique
-    /// value of the `RawValue` type, but there may be values of the `RawValue`
-    /// type that don't have a corresponding value of the conforming type.
-    public typealias RawValue = String
-
-    /// The corresponding value of the raw type.
-    ///
-    /// A new instance initialized with `rawValue` will be equivalent to this
-    /// instance. For example:
-    ///
-    ///     enum PaperSize: String {
-    ///         case A4, A5, Letter, Legal
-    ///     }
-    ///
-    ///     let selectedSize = PaperSize.Letter
-    ///     print(selectedSize.rawValue)
-    ///     // Prints "Letter"
-    ///
-    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
-    ///     // Prints "true"
-    public var rawValue: String { get }
-}
-
-extension MealTime : Equatable {
-}
-
-extension MealTime : Hashable {
-}
-
-extension MealTime : RawRepresentable {
-}
-
 public struct MeasurementIU {
 
     public var value: Double
@@ -1025,6 +960,31 @@ public struct PassioFoodAmount : Codable {
     ///
     /// - Parameter decoder: The decoder to read data from.
     public init(from decoder: Decoder) throws
+}
+
+public struct PassioFoodDataInfo {
+
+    public let brandName: String
+
+    public let foodName: String
+
+    public let iconID: PassioNutritionAISDK.PassioID
+
+    public let labelId: String
+
+    public let resultId: String
+
+    public let score: Double
+
+    public let scoredName: String
+
+    public let type: String
+
+    public let nutritionPreview: PassioNutritionAISDK.PassioSearchNutritionPreview?
+
+    public let isShortName: Bool
+
+    public init(foodName: String, brandName: String, iconID: PassioNutritionAISDK.PassioID, score: Double, scoredName: String, labelId: String, type: String, resultId: String, nutritionPreview: PassioNutritionAISDK.PassioSearchNutritionPreview?, isShortName: Bool)
 }
 
 public struct PassioFoodItem : Codable {
@@ -1642,9 +1602,74 @@ public struct PassioMealPlanItem {
 
     public var dayTitle: String?
 
-    public var mealTime: PassioNutritionAISDK.MealTime?
+    public var mealTime: PassioNutritionAISDK.PassioMealTime?
 
-    public var meal: PassioNutritionAISDK.PassioSearchResult?
+    public var meal: PassioNutritionAISDK.PassioFoodDataInfo?
+}
+
+public enum PassioMealTime : String, Codable {
+
+    case breakfast
+
+    case lunch
+
+    case dinner
+
+    case snack
+
+    public static func currentMealTime() -> PassioNutritionAISDK.PassioMealTime
+
+    /// Creates a new instance with the specified raw value.
+    ///
+    /// If there is no value of the type that corresponds with the specified raw
+    /// value, this initializer returns `nil`. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     print(PaperSize(rawValue: "Legal"))
+    ///     // Prints "Optional("PaperSize.Legal")"
+    ///
+    ///     print(PaperSize(rawValue: "Tabloid"))
+    ///     // Prints "nil"
+    ///
+    /// - Parameter rawValue: The raw value to use for the new instance.
+    public init?(rawValue: String)
+
+    /// The raw type that can be used to represent all values of the conforming
+    /// type.
+    ///
+    /// Every distinct value of the conforming type has a corresponding unique
+    /// value of the `RawValue` type, but there may be values of the `RawValue`
+    /// type that don't have a corresponding value of the conforming type.
+    public typealias RawValue = String
+
+    /// The corresponding value of the raw type.
+    ///
+    /// A new instance initialized with `rawValue` will be equivalent to this
+    /// instance. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     let selectedSize = PaperSize.Letter
+    ///     print(selectedSize.rawValue)
+    ///     // Prints "Letter"
+    ///
+    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
+    ///     // Prints "true"
+    public var rawValue: String { get }
+}
+
+extension PassioMealTime : Equatable {
+}
+
+extension PassioMealTime : Hashable {
+}
+
+extension PassioMealTime : RawRepresentable {
 }
 
 public struct PassioMetadata : Codable {
@@ -2053,21 +2078,13 @@ public class PassioNutritionAI {
     ///   - type: type of selected searched result
     ///   - resultId: resultId of selected searched result
     ///   - completion: PassioAlternateSearchNames, which containts list of search results
-    public func fetchSearchResult(searchResult: PassioNutritionAISDK.PassioSearchResult, completion: @escaping (PassioNutritionAISDK.PassioFoodItem?) -> Void)
+    public func fetchFoodItemFor(foodItem: PassioNutritionAISDK.PassioFoodDataInfo, completion: @escaping (PassioNutritionAISDK.PassioFoodItem?) -> Void)
 
     /// Get suggestions for peticular meal time.
     /// - Parameters:
     ///   - mealTime: meal time (.breakfast,.lunch,.dinner,.snack)
     ///   - completion: [PassioSearchResult]
-    public func fetchSuggestions(mealTime: PassioNutritionAISDK.MealTime, completion: @escaping ([PassioNutritionAISDK.PassioSearchResult]) -> Void)
-
-    /// fetch search result will return a list of searched text results
-    /// - Parameters:
-    ///   - labelId: labelId of selected searched result
-    ///   - type: type of selected searched result
-    ///   - resultId: resultId of selected searched result
-    ///   - completion: PassioAlternateSearchNames, which containts list of search results
-    public func fetchFoodItemForSuggestion(suggestion: PassioNutritionAISDK.PassioSearchResult, completion: @escaping (PassioNutritionAISDK.PassioFoodItem?) -> Void)
+    public func fetchSuggestions(mealTime: PassioNutritionAISDK.PassioMealTime, completion: @escaping ([PassioNutritionAISDK.PassioFoodDataInfo]) -> Void)
 
     /// Get list of all meal plans.
     /// - Parameters:
@@ -2414,31 +2431,6 @@ public struct PassioSearchNutritionPreview : Codable {
     ///
     /// - Parameter decoder: The decoder to read data from.
     public init(from decoder: Decoder) throws
-}
-
-public struct PassioSearchResult {
-
-    public let brandName: String
-
-    public let foodName: String
-
-    public let iconID: PassioNutritionAISDK.PassioID
-
-    public let labelId: String
-
-    public let resultId: String
-
-    public let score: Double
-
-    public let scoredName: String
-
-    public let type: String
-
-    public let nutritionPreview: PassioNutritionAISDK.PassioSearchNutritionPreview?
-
-    public let isShortName: Bool
-
-    public init(foodName: String, brandName: String, iconID: PassioNutritionAISDK.PassioID, score: Double, scoredName: String, labelId: String, type: String, resultId: String, nutritionPreview: PassioNutritionAISDK.PassioSearchNutritionPreview?, isShortName: Bool)
 }
 
 /// PassioServingSize for food Item Data
@@ -3044,7 +3036,7 @@ public struct SearchResponse {
 
     public let alternateNames: [String]
 
-    public let results: [PassioNutritionAISDK.PassioSearchResult]
+    public let results: [PassioNutritionAISDK.PassioFoodDataInfo]
 }
 
 public struct SynonymLang : Codable {
@@ -3397,6 +3389,5 @@ extension UIImageView {
 infix operator .+ : DefaultPrecedence
 
 infix operator ./ : DefaultPrecedence
-
 
 ```
