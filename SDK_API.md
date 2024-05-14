@@ -1,6 +1,6 @@
-# Passio PassioNutritionAISDK 
+# Passio PassioNutritionAISDK
 
-## Version 3.0.2
+## Version 3.0.3
 ``` Swift
 import AVFoundation
 import Accelerate
@@ -62,7 +62,7 @@ public struct ArchitectureStructure : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// Creates a new instance by decoding from the given decoder.
     ///
@@ -70,7 +70,7 @@ public struct ArchitectureStructure : Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 }
 
 /// Barcode (typealias String) is the string representation of the barcode id
@@ -91,7 +91,7 @@ public protocol BarcodeDetectionDelegate : AnyObject {
 
     /// Called when a barcode is detected.
     /// - Parameter barcodes: Array of BarcodeCandidate
-    func barcodeResult(barcodes: [PassioNutritionAISDK.BarcodeCandidate])
+    func barcodeResult(barcodes: [any PassioNutritionAISDK.BarcodeCandidate])
 }
 
 public struct Branded : Codable {
@@ -108,7 +108,7 @@ public struct Branded : Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 
     /// Encodes this value into the given encoder.
     ///
@@ -119,7 +119,7 @@ public struct Branded : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 }
 
 public enum Bridge : String {
@@ -183,6 +183,74 @@ extension Bridge : Hashable {
 extension Bridge : RawRepresentable {
 }
 
+public enum CapturingDeviceType : CaseIterable {
+
+    case builtInWideAngleCamera
+
+    case builtInTelephotoCamera
+
+    case builtInUltraWideCamera
+
+    case builtInDualCamera
+
+    case builtInDualWideCamera
+
+    case builtInTripleCamera
+
+    public static func supportedDeviceTypes() -> [PassioNutritionAISDK.CapturingDeviceType]
+
+    public static func defaultCapturing() -> PassioNutritionAISDK.CapturingDeviceType
+
+    /// Returns a Boolean value indicating whether two values are equal.
+    ///
+    /// Equality is the inverse of inequality. For any values `a` and `b`,
+    /// `a == b` implies that `a != b` is `false`.
+    ///
+    /// - Parameters:
+    ///   - lhs: A value to compare.
+    ///   - rhs: Another value to compare.
+    public static func == (a: PassioNutritionAISDK.CapturingDeviceType, b: PassioNutritionAISDK.CapturingDeviceType) -> Bool
+
+    /// Hashes the essential components of this value by feeding them into the
+    /// given hasher.
+    ///
+    /// Implement this method to conform to the `Hashable` protocol. The
+    /// components used for hashing must be the same as the components compared
+    /// in your type's `==` operator implementation. Call `hasher.combine(_:)`
+    /// with each of these components.
+    ///
+    /// - Important: In your implementation of `hash(into:)`,
+    ///   don't call `finalize()` on the `hasher` instance provided,
+    ///   or replace it with a different instance.
+    ///   Doing so may become a compile-time error in the future.
+    ///
+    /// - Parameter hasher: The hasher to use when combining the components
+    ///   of this instance.
+    public func hash(into hasher: inout Hasher)
+
+    /// A type that can represent a collection of all values of this type.
+    public typealias AllCases = [PassioNutritionAISDK.CapturingDeviceType]
+
+    /// A collection of all values of this type.
+    public static var allCases: [PassioNutritionAISDK.CapturingDeviceType] { get }
+
+    /// The hash value.
+    ///
+    /// Hash values are not guaranteed to be equal across different executions of
+    /// your program. Do not save hash values to use during a future execution.
+    ///
+    /// - Important: `hashValue` is deprecated as a `Hashable` requirement. To
+    ///   conform to `Hashable`, implement the `hash(into:)` requirement instead.
+    ///   The compiler provides an implementation for `hashValue` for you.
+    public var hashValue: Int { get }
+}
+
+extension CapturingDeviceType : Equatable {
+}
+
+extension CapturingDeviceType : Hashable {
+}
+
 public struct Child : Codable {
 
     public let labelname: String?
@@ -198,7 +266,7 @@ public struct Child : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// Creates a new instance by decoding from the given decoder.
     ///
@@ -206,7 +274,7 @@ public struct Child : Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 }
 
 /// The ClassificationCandidate protocol returns the classification candidate result delegate.
@@ -220,7 +288,10 @@ public protocol ClassificationCandidate {
     /// Confidence (0.0 to 1.0) of the associated PassioID recognized by the MLModel
     var confidence: Double { get }
 
-    var alternatives: [PassioNutritionAISDK.DetectedCandidate] { get }
+    var alternatives: [any PassioNutritionAISDK.DetectedCandidate] { get }
+
+    /// Mapping ID is mapped ID for personalisation
+    var mappingID: PassioNutritionAISDK.PassioID { get set }
 }
 
 /// The visual food candidates
@@ -241,9 +312,11 @@ public protocol DetectedCandidate {
     var croppedImage: UIImage? { get }
 
     /// Scanned AmountEstimate
-    var amountEstimate: (PassioNutritionAISDK.AmountEstimate)? { get }
+    var amountEstimate: (any PassioNutritionAISDK.AmountEstimate)? { get }
 
-    var alternatives: [PassioNutritionAISDK.DetectedCandidate] { get }
+    var alternatives: [any PassioNutritionAISDK.DetectedCandidate] { get }
+
+    var mappingID: PassioNutritionAISDK.PassioID { get set }
 }
 
 public struct EnsembleArchitecture : Codable {
@@ -261,7 +334,7 @@ public struct EnsembleArchitecture : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// Creates a new instance by decoding from the given decoder.
     ///
@@ -269,7 +342,7 @@ public struct EnsembleArchitecture : Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 }
 
 public enum EstimationQuality : String {
@@ -343,13 +416,13 @@ public typealias FileName = String
 public protocol FoodCandidates {
 
     /// The visual candidates returned from the recognition
-    var detectedCandidates: [PassioNutritionAISDK.DetectedCandidate] { get }
+    var detectedCandidates: [any PassioNutritionAISDK.DetectedCandidate] { get }
 
     /// The Barcode candidates if available
-    var barcodeCandidates: [PassioNutritionAISDK.BarcodeCandidate]? { get }
+    var barcodeCandidates: [any PassioNutritionAISDK.BarcodeCandidate]? { get }
 
     /// The packaged food candidates if available
-    var packagedFoodCandidates: [PassioNutritionAISDK.PackagedFoodCandidate]? { get }
+    var packagedFoodCandidates: [any PassioNutritionAISDK.PackagedFoodCandidate]? { get }
 
     /// Use stability larger than one, only relevant when using Volume. 
     var deviceStability: Double? { get }
@@ -395,12 +468,12 @@ public protocol FoodRecognitionDelegate : AnyObject {
     /// - Parameters:
     ///   - candidates: Food candidates
     ///   - image: Image used for detection
-    func recognitionResults(candidates: (PassioNutritionAISDK.FoodCandidates)?, image: UIImage?, nutritionFacts: PassioNutritionAISDK.PassioNutritionFacts?)
+    func recognitionResults(candidates: (any PassioNutritionAISDK.FoodCandidates)?, image: UIImage?, nutritionFacts: PassioNutritionAISDK.PassioNutritionFacts?)
 }
 
 public protocol FoodRecognitionWithTextObservations : AnyObject {
 
-    func recognitionResults(candidates: (PassioNutritionAISDK.FoodCandidates)?, image: UIImage?, nutritionFacts: PassioNutritionAISDK.PassioNutritionFacts?, observations: [VNRecognizedTextObservation])
+    func recognitionResults(candidates: (any PassioNutritionAISDK.FoodCandidates)?, image: UIImage?, nutritionFacts: PassioNutritionAISDK.PassioNutritionFacts?, observations: [VNRecognizedTextObservation])
 }
 
 public enum IconSize : String {
@@ -484,7 +557,7 @@ public struct InflammatoryEffectData : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// Creates a new instance by decoding from the given decoder.
     ///
@@ -492,51 +565,7 @@ public struct InflammatoryEffectData : Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
-}
-
-public struct Ingredient : Codable {
-
-    public let id: String?
-
-    public let name: String?
-
-    public let iconId: String?
-
-    public let nutrients: [PassioNutritionAISDK.UPCProduct.NutrientUPC]?
-
-    public let portions: [PassioNutritionAISDK.Portion]?
-
-    public let branded: PassioNutritionAISDK.Branded?
-
-    public let origin: [PassioNutritionAISDK.Origin]?
-
-    public let licenseCopy: String?
-
-    public let qualityScore: String?
-
-    public let timestamp: String?
-
-    public let tags: [String]?
-
-    /// Creates a new instance by decoding from the given decoder.
-    ///
-    /// This initializer throws an error if reading from the decoder fails, or
-    /// if the data read is corrupted or otherwise invalid.
-    ///
-    /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
-
-    /// Encodes this value into the given encoder.
-    ///
-    /// If the value fails to encode anything, `encoder` will encode an empty
-    /// keyed container in its place.
-    ///
-    /// This function throws an error if any values are invalid for the given
-    /// encoder's format.
-    ///
-    /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public init(from decoder: any Decoder) throws
 }
 
 public struct LabelMetaData : Codable {
@@ -562,7 +591,7 @@ public struct LabelMetaData : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// Creates a new instance by decoding from the given decoder.
     ///
@@ -570,7 +599,7 @@ public struct LabelMetaData : Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 }
 
 public struct LabelName : Codable {
@@ -592,7 +621,7 @@ public struct LabelName : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// Creates a new instance by decoding from the given decoder.
     ///
@@ -600,72 +629,7 @@ public struct LabelName : Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
-}
-
-public enum MealTime : String {
-
-    case breakfast
-
-    case lunch
-
-    case dinner
-
-    case snack
-
-    public static func currentMealTime() -> PassioNutritionAISDK.MealTime
-
-    /// Creates a new instance with the specified raw value.
-    ///
-    /// If there is no value of the type that corresponds with the specified raw
-    /// value, this initializer returns `nil`. For example:
-    ///
-    ///     enum PaperSize: String {
-    ///         case A4, A5, Letter, Legal
-    ///     }
-    ///
-    ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
-    ///
-    ///     print(PaperSize(rawValue: "Tabloid"))
-    ///     // Prints "nil"
-    ///
-    /// - Parameter rawValue: The raw value to use for the new instance.
-    public init?(rawValue: String)
-
-    /// The raw type that can be used to represent all values of the conforming
-    /// type.
-    ///
-    /// Every distinct value of the conforming type has a corresponding unique
-    /// value of the `RawValue` type, but there may be values of the `RawValue`
-    /// type that don't have a corresponding value of the conforming type.
-    public typealias RawValue = String
-
-    /// The corresponding value of the raw type.
-    ///
-    /// A new instance initialized with `rawValue` will be equivalent to this
-    /// instance. For example:
-    ///
-    ///     enum PaperSize: String {
-    ///         case A4, A5, Letter, Legal
-    ///     }
-    ///
-    ///     let selectedSize = PaperSize.Letter
-    ///     print(selectedSize.rawValue)
-    ///     // Prints "Letter"
-    ///
-    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
-    ///     // Prints "true"
-    public var rawValue: String { get }
-}
-
-extension MealTime : Equatable {
-}
-
-extension MealTime : Hashable {
-}
-
-extension MealTime : RawRepresentable {
+    public init(from decoder: any Decoder) throws
 }
 
 public struct MeasurementIU {
@@ -746,13 +710,19 @@ public struct NutritionPreviewResult : Codable {
 
     public let calories: Double?
 
+    public let carbs: Double?
+
+    public let fat: Double?
+
+    public let protein: Double?
+
     /// Creates a new instance by decoding from the given decoder.
     ///
     /// This initializer throws an error if reading from the decoder fails, or
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 
     /// Encodes this value into the given encoder.
     ///
@@ -763,7 +733,7 @@ public struct NutritionPreviewResult : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 }
 
 /// The ObjectDetectionCandidate protocol returns the object detection result
@@ -789,7 +759,7 @@ public struct Origin : Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 
     /// Encodes this value into the given encoder.
     ///
@@ -800,7 +770,7 @@ public struct Origin : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 }
 
 public protocol PackagedFoodCandidate {
@@ -860,7 +830,7 @@ public struct PassioAlternative : Codable, Equatable, Hashable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// The hash value.
     ///
@@ -878,7 +848,7 @@ public struct PassioAlternative : Codable, Equatable, Hashable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 }
 
 /// PassioConfiguration is needed configure the SDK with the following options:
@@ -925,6 +895,8 @@ public struct PassioFoodAmount : Codable {
 
     public let selectedQuantity: Double
 
+    public static let SERVING_UNIT_NAME: String
+
     public init(servingSizes: [PassioNutritionAISDK.PassioServingSize], servingUnits: [PassioNutritionAISDK.PassioServingUnit])
 
     public func weight() -> Measurement<UnitMass>
@@ -940,7 +912,7 @@ public struct PassioFoodAmount : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// Creates a new instance by decoding from the given decoder.
     ///
@@ -948,7 +920,51 @@ public struct PassioFoodAmount : Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
+}
+
+public struct PassioFoodDataInfo : Codable {
+
+    public let brandName: String
+
+    public let foodName: String
+
+    public let iconID: PassioNutritionAISDK.PassioID
+
+    public let labelId: String
+
+    public let resultId: String
+
+    public let score: Double
+
+    public let scoredName: String
+
+    public let type: String
+
+    public let nutritionPreview: PassioNutritionAISDK.PassioSearchNutritionPreview?
+
+    public let isShortName: Bool
+
+    public init(foodName: String, brandName: String, iconID: PassioNutritionAISDK.PassioID, score: Double, scoredName: String, labelId: String, type: String, resultId: String, nutritionPreview: PassioNutritionAISDK.PassioSearchNutritionPreview?, isShortName: Bool)
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: any Encoder) throws
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    public init(from decoder: any Decoder) throws
 }
 
 public struct PassioFoodItem : Codable {
@@ -969,6 +985,8 @@ public struct PassioFoodItem : Codable {
 
     public let ingredients: [PassioNutritionAISDK.PassioIngredient]
 
+    public let refCode: String?
+
     public var foodItemName: String { get }
 
     public func nutrients(weight: Measurement<UnitMass>) -> PassioNutritionAISDK.PassioNutrients
@@ -988,7 +1006,7 @@ public struct PassioFoodItem : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// Creates a new instance by decoding from the given decoder.
     ///
@@ -996,7 +1014,7 @@ public struct PassioFoodItem : Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 }
 
 /// PassioFoodItemData contains all the information for a Food Item Data.
@@ -1129,7 +1147,7 @@ public struct PassioFoodItemData : Equatable, Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// Creates a new instance by decoding from the given decoder.
     ///
@@ -1137,7 +1155,7 @@ public struct PassioFoodItemData : Equatable, Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 }
 
 public enum PassioFoodItemDataError : LocalizedError {
@@ -1212,7 +1230,7 @@ public struct PassioFoodMetadata : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// Creates a new instance by decoding from the given decoder.
     ///
@@ -1220,7 +1238,7 @@ public struct PassioFoodMetadata : Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 }
 
 public struct PassioFoodOrigin : Codable, Equatable {
@@ -1250,7 +1268,7 @@ public struct PassioFoodOrigin : Codable, Equatable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// Creates a new instance by decoding from the given decoder.
     ///
@@ -1258,7 +1276,7 @@ public struct PassioFoodOrigin : Codable, Equatable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 }
 
 /// PassioFoodRecipe contains the list of ingredient and their amounts 
@@ -1303,7 +1321,7 @@ public struct PassioFoodRecipe : Equatable, Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// Creates a new instance by decoding from the given decoder.
     ///
@@ -1311,7 +1329,7 @@ public struct PassioFoodRecipe : Equatable, Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 }
 
 /// PassioID (typealias String) is used throughout the SDK, food and other objects are identified by PassioID. All attributes (names, nutrition etc..) are referred by PassioID.
@@ -1334,7 +1352,7 @@ public struct PassioIDAndName : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// Creates a new instance by decoding from the given decoder.
     ///
@@ -1342,7 +1360,7 @@ public struct PassioIDAndName : Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 }
 
 /// PassioIDAttributes contains all the attributes for a PassioID.
@@ -1391,7 +1409,7 @@ public struct PassioIDAttributes : Equatable, Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// Creates a new instance by decoding from the given decoder.
     ///
@@ -1399,7 +1417,7 @@ public struct PassioIDAttributes : Equatable, Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 }
 
 /// PassioIDEntityType is The entity Type of the PassioID Attributes.
@@ -1492,7 +1510,9 @@ public struct PassioIngredient : Codable {
 
     public let metadata: PassioNutritionAISDK.PassioFoodMetadata
 
-    public init(id: String, name: String, iconId: String, amount: PassioNutritionAISDK.PassioFoodAmount, referenceNutrients: PassioNutritionAISDK.PassioNutrients, metadata: PassioNutritionAISDK.PassioFoodMetadata)
+    public let refCode: String?
+
+    public init(id: String, name: String, iconId: String, amount: PassioNutritionAISDK.PassioFoodAmount, referenceNutrients: PassioNutritionAISDK.PassioNutrients, metadata: PassioNutritionAISDK.PassioFoodMetadata, refCode: String?)
 
     public func nutrients(weight: Measurement<UnitMass>) -> PassioNutritionAISDK.PassioNutrients
 
@@ -1507,7 +1527,7 @@ public struct PassioIngredient : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// Creates a new instance by decoding from the given decoder.
     ///
@@ -1515,7 +1535,125 @@ public struct PassioIngredient : Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
+}
+
+public struct PassioMealPlan : Codable, Equatable {
+
+    public var mealPlanLabel: String?
+
+    public var mealPlanTitle: String?
+
+    public var carbsTarget: Int? { get }
+
+    public var proteinTarget: Int? { get }
+
+    public var fatTarget: Int? { get }
+
+    /// Returns a Boolean value indicating whether two values are equal.
+    ///
+    /// Equality is the inverse of inequality. For any values `a` and `b`,
+    /// `a == b` implies that `a != b` is `false`.
+    ///
+    /// - Parameters:
+    ///   - lhs: A value to compare.
+    ///   - rhs: Another value to compare.
+    public static func == (a: PassioNutritionAISDK.PassioMealPlan, b: PassioNutritionAISDK.PassioMealPlan) -> Bool
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: any Encoder) throws
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    public init(from decoder: any Decoder) throws
+}
+
+public struct PassioMealPlanItem {
+
+    public var dayNumber: Int?
+
+    public var dayTitle: String?
+
+    public var mealTime: PassioNutritionAISDK.PassioMealTime?
+
+    public var meal: PassioNutritionAISDK.PassioFoodDataInfo?
+}
+
+public enum PassioMealTime : String, Codable {
+
+    case breakfast
+
+    case lunch
+
+    case dinner
+
+    case snack
+
+    public static func currentMealTime() -> PassioNutritionAISDK.PassioMealTime
+
+    /// Creates a new instance with the specified raw value.
+    ///
+    /// If there is no value of the type that corresponds with the specified raw
+    /// value, this initializer returns `nil`. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     print(PaperSize(rawValue: "Legal"))
+    ///     // Prints "Optional("PaperSize.Legal")"
+    ///
+    ///     print(PaperSize(rawValue: "Tabloid"))
+    ///     // Prints "nil"
+    ///
+    /// - Parameter rawValue: The raw value to use for the new instance.
+    public init?(rawValue: String)
+
+    /// The raw type that can be used to represent all values of the conforming
+    /// type.
+    ///
+    /// Every distinct value of the conforming type has a corresponding unique
+    /// value of the `RawValue` type, but there may be values of the `RawValue`
+    /// type that don't have a corresponding value of the conforming type.
+    public typealias RawValue = String
+
+    /// The corresponding value of the raw type.
+    ///
+    /// A new instance initialized with `rawValue` will be equivalent to this
+    /// instance. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     let selectedSize = PaperSize.Letter
+    ///     print(selectedSize.rawValue)
+    ///     // Prints "Letter"
+    ///
+    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
+    ///     // Prints "true"
+    public var rawValue: String { get }
+}
+
+extension PassioMealTime : Equatable {
+}
+
+extension PassioMealTime : Hashable {
+}
+
+extension PassioMealTime : RawRepresentable {
 }
 
 public struct PassioMetadata : Codable {
@@ -1533,7 +1671,7 @@ public struct PassioMetadata : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// Creates a new instance by decoding from the given decoder.
     ///
@@ -1541,7 +1679,7 @@ public struct PassioMetadata : Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 }
 
 public class PassioMetadataService {
@@ -1608,7 +1746,7 @@ public enum PassioMode : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// The hash value.
     ///
@@ -1626,7 +1764,7 @@ public enum PassioMode : Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 }
 
 extension PassioMode : Equatable {
@@ -1740,7 +1878,7 @@ public struct PassioNutrients : Codable, Equatable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// Creates a new instance by decoding from the given decoder.
     ///
@@ -1748,10 +1886,10 @@ public struct PassioNutrients : Codable, Equatable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 }
 
-/// Passio SDK - Copyright © 2023 Passio Inc. All rights reserved.
+/// Passio SDK - Copyright © 2024 Passio Inc. All rights reserved.
 public class PassioNutritionAI {
 
     final public let filesVersion: Int
@@ -1768,7 +1906,7 @@ public class PassioNutritionAI {
     public var status: PassioNutritionAISDK.PassioStatus { get }
 
     /// Delegate to track PassioStatus changes. You will get the same status via the configure function.
-    weak public var statusDelegate: (PassioNutritionAISDK.PassioStatusDelegate)?
+    weak public var statusDelegate: (any PassioNutritionAISDK.PassioStatusDelegate)?
 
     /// Available frames per seconds. The default set for two (2) fps.
     public enum FramesPerSecond : Int32 {
@@ -1839,7 +1977,7 @@ public class PassioNutritionAI {
     ///   - detectionConfig: FoodDetectionConfiguration() object with the configuration
     ///   - foodRecognitionDelegate: add self to implement the FoodRecognitionDelegate
     ///   - completion: Bool success or failure of the startFoodDetection
-    public func startFoodDetection(detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), foodRecognitionDelegate: PassioNutritionAISDK.FoodRecognitionDelegate, completion: @escaping (Bool) -> Void)
+    public func startFoodDetection(detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), foodRecognitionDelegate: any PassioNutritionAISDK.FoodRecognitionDelegate, capturingDeviceType: PassioNutritionAISDK.CapturingDeviceType = .defaultCapturing(), completion: @escaping (Bool) -> Void)
 
     /// Stop Food Detection to remove camera completely use public func removeVideoLayer()
     public func stopFoodDetection()
@@ -1850,12 +1988,12 @@ public class PassioNutritionAI {
     ///   - detectionConfig: FoodDetectionConfiguration
     ///   - slicingRects: Optional ability to divide the image to slices or regions.
     ///   - completion: optional FoodCandidates
-    public func detectFoodIn(image: UIImage, detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), slicingRects: [CGRect]? = nil, completion: @escaping ((PassioNutritionAISDK.FoodCandidates)?) -> Void)
+    public func detectFoodIn(image: UIImage, detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), slicingRects: [CGRect]? = nil, completion: @escaping ((any PassioNutritionAISDK.FoodCandidates)?) -> Void)
 
     /// Detect barcodes "BarcodeCandidate" in an image
     /// - Parameter image: Image for the detection
     /// - Parameter completion: Receives back Array of "BarcodeCandidate" for that image
-    public func detectBarcodesIn(image: UIImage, completion: @escaping ([PassioNutritionAISDK.BarcodeCandidate]) -> Void)
+    public func detectBarcodesIn(image: UIImage, completion: @escaping ([any PassioNutritionAISDK.BarcodeCandidate]) -> Void)
 
     /// List all food enabled for weight estimations
     /// - Returns: List of PassioIDs
@@ -1869,7 +2007,7 @@ public class PassioNutritionAI {
 
     /// use getPreviewLayerWithGravity if you plan to rotate the PreviewLayer.
     /// - Returns: AVCaptureVideoPreviewLayer
-    public func getPreviewLayerWithGravity(sessionPreset: AVCaptureSession.Preset = .hd1920x1080, volumeDetectionMode: PassioNutritionAISDK.VolumeDetectionMode = .none, videoGravity: AVLayerVideoGravity = .resizeAspectFill) -> AVCaptureVideoPreviewLayer?
+    public func getPreviewLayerWithGravity(sessionPreset: AVCaptureSession.Preset = .hd1920x1080, volumeDetectionMode: PassioNutritionAISDK.VolumeDetectionMode = .none, videoGravity: AVLayerVideoGravity = .resizeAspectFill, capturingDeviceType: PassioNutritionAISDK.CapturingDeviceType = .defaultCapturing()) -> AVCaptureVideoPreviewLayer?
 
     /// use getPreviewLayer if you don't plan to rotate the PreviewLayer.
     /// - Returns: AVCaptureVideoPreviewLayer
@@ -1893,12 +2031,7 @@ public class PassioNutritionAI {
 
     /// Use this call to add personalizedAlternative to a Passio ID
     /// - Parameter personalizedAlternative:
-    public func addToPersonalization(personalizedAlternative: PassioNutritionAISDK.PersonalizedAlternative)
-
-    /// Lookup Personalized Alternative For PassioID
-    /// - Parameter passioID: PassioID
-    /// - Returns: PersonalizedAlternative
-    public func lookupPersonalizedAlternativeFor(passioID: PassioNutritionAISDK.PassioID) -> PassioNutritionAISDK.PersonalizedAlternative?
+    public func addToPersonalization(visualCadidate: any PassioNutritionAISDK.DetectedCandidate, alternative: any PassioNutritionAISDK.DetectedCandidate)
 
     /// Clean records for one PassioID
     /// - Parameter passioID: PassioID
@@ -1912,6 +2045,11 @@ public class PassioNutritionAI {
     /// - Returns: PassioFoodItem
     public func fetchFoodItemFor(passioID: PassioNutritionAISDK.PassioID, completion: @escaping (PassioNutritionAISDK.PassioFoodItem?) -> Void)
 
+    /// Lookup fetchFoodItem from RefCode
+    /// - Parameter RefCode: String
+    /// - Returns: PassioFoodItem
+    public func fetchFoodItemFor(refCode: String, completion: @escaping (PassioNutritionAISDK.PassioFoodItem?) -> Void)
+
     /// Advanced search for food will return a list of alternate search and search result
     /// - Parameters:
     ///   - byText: User typed in text
@@ -1924,21 +2062,25 @@ public class PassioNutritionAI {
     ///   - type: type of selected searched result
     ///   - resultId: resultId of selected searched result
     ///   - completion: PassioAlternateSearchNames, which containts list of search results
-    public func fetchSearchResult(searchResult: PassioNutritionAISDK.PassioSearchResult, completion: @escaping (PassioNutritionAISDK.PassioFoodItem?) -> Void)
+    public func fetchFoodItemFor(foodItem: PassioNutritionAISDK.PassioFoodDataInfo, completion: @escaping (PassioNutritionAISDK.PassioFoodItem?) -> Void)
 
     /// Get suggestions for peticular meal time.
     /// - Parameters:
     ///   - mealTime: meal time (.breakfast,.lunch,.dinner,.snack)
-    ///   - completion: [PassioSearchResult]
-    public func fetchSuggestions(mealTime: PassioNutritionAISDK.MealTime, completion: @escaping ([PassioNutritionAISDK.PassioSearchResult]) -> Void)
+    ///   - completion: [PassioFoodDataInfo]
+    public func fetchSuggestions(mealTime: PassioNutritionAISDK.PassioMealTime, completion: @escaping ([PassioNutritionAISDK.PassioFoodDataInfo]) -> Void)
 
-    /// fetch search result will return a list of searched text results
+    /// Get list of all meal plans.
     /// - Parameters:
-    ///   - labelId: labelId of selected searched result
-    ///   - type: type of selected searched result
-    ///   - resultId: resultId of selected searched result
-    ///   - completion: PassioAlternateSearchNames, which containts list of search results
-    public func fetchFoodItemForSuggestion(suggestion: PassioNutritionAISDK.PassioSearchResult, completion: @escaping (PassioNutritionAISDK.PassioFoodItem?) -> Void)
+    ///   - completion: [PassioMealPlan]
+    public func fetchMealPlans(completion: @escaping ([PassioNutritionAISDK.PassioMealPlan]) -> Void)
+
+    /// fetch meal plan for the day
+    /// - Parameters:
+    ///   - mealPlanLabel: type of mealPlan
+    ///   - day: for which day meal plan is needed
+    ///   - completion: [PassioMealPlanItem]
+    public func fetchMealPlanForDay(mealPlanLabel: String, day: Int, completion: @escaping ([PassioNutritionAISDK.PassioMealPlanItem]) -> Void)
 
     /// Fetch from Passio web-service the PassioFoodItem for a productCode
     /// - Parameter barcode: Product code
@@ -2013,7 +2155,7 @@ extension PassioNutritionAI {
     ///   - detectionConfig: FoodDetectionConfiguration
     ///   - slicingRects: Optional ability to divide the image to slices or regions.
     ///   - completion: optional FoodCandidates
-    public func detectFoodWithText(image: UIImage, detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), completion: @escaping ((PassioNutritionAISDK.FoodCandidatesWithText)?) -> Void)
+    public func detectFoodWithText(image: UIImage, detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), completion: @escaping ((any PassioNutritionAISDK.FoodCandidatesWithText)?) -> Void)
 }
 
 extension PassioNutritionAI.FramesPerSecond : Equatable {
@@ -2222,7 +2364,7 @@ public enum PassioSDKError : LocalizedError, Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// Creates a new instance by decoding from the given decoder.
     ///
@@ -2230,80 +2372,30 @@ public enum PassioSDKError : LocalizedError, Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 }
 
 public struct PassioSearchNutritionPreview : Codable {
 
     public var calories: Int
 
+    public let carbs: Double
+
+    public let fat: Double
+
+    public let protein: Double
+
     public var servingUnit: String
 
     public var servingQuantity: Double
 
-    public var servingWeight: String
+    public var weightUnit: String
 
-    public var name: String
+    public var weightQuantity: Double
 
     public init(result: PassioNutritionAISDK.NutritionPreviewResult)
 
-    /// Encodes this value into the given encoder.
-    ///
-    /// If the value fails to encode anything, `encoder` will encode an empty
-    /// keyed container in its place.
-    ///
-    /// This function throws an error if any values are invalid for the given
-    /// encoder's format.
-    ///
-    /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
-
-    /// Creates a new instance by decoding from the given decoder.
-    ///
-    /// This initializer throws an error if reading from the decoder fails, or
-    /// if the data read is corrupted or otherwise invalid.
-    ///
-    /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
-}
-
-public struct PassioSearchResult : Codable {
-
-    public let type: String
-
-    public let displayName: String
-
-    public let shortName: String
-
-    public let score: Double
-
-    public let brandName: String
-
-    public let iconId: PassioNutritionAISDK.PassioID
-
-    public let labelId: String
-
-    public let synonymId: String
-
-    public let scoredName: String
-
-    public let recipeId: String
-
-    public let referenceId: String
-
-    public let resultId: String
-
-    public var nutritionPreview: PassioNutritionAISDK.PassioSearchNutritionPreview? { get }
-
-    public init(type: String, displayName: String, shortName: String, score: Double, brandName: String, iconId: String, labelId: String, synonymId: String, scoredName: String, recipeId: String, redrenceId: String, resultId: String)
-
-    /// Creates a new instance by decoding from the given decoder.
-    ///
-    /// This initializer throws an error if reading from the decoder fails, or
-    /// if the data read is corrupted or otherwise invalid.
-    ///
-    /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(calories: Int, carbs: Double, fat: Double, protein: Double, servingUnit: String, servingQuantity: Double, weightUnit: String, weightQuantity: Double)
 
     /// Encodes this value into the given encoder.
     ///
@@ -2314,7 +2406,15 @@ public struct PassioSearchResult : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    public init(from decoder: any Decoder) throws
 }
 
 /// PassioServingSize for food Item Data
@@ -2362,7 +2462,7 @@ public struct PassioServingSize : Codable, Equatable, Hashable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// The hash value.
     ///
@@ -2380,7 +2480,7 @@ public struct PassioServingSize : Codable, Equatable, Hashable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 }
 
 /// PassioServingUnit for food Item Data
@@ -2411,7 +2511,7 @@ public struct PassioServingUnit : Equatable, Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// Creates a new instance by decoding from the given decoder.
     ///
@@ -2419,7 +2519,7 @@ public struct PassioServingUnit : Equatable, Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 }
 
 /// PassioStatus is returned at the end of the configuration of the SDK.
@@ -2449,7 +2549,7 @@ public struct PassioStatus : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// Creates a new instance by decoding from the given decoder.
     ///
@@ -2457,7 +2557,7 @@ public struct PassioStatus : Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 }
 
 /// Implement the protocol to receive status updates
@@ -2472,48 +2572,6 @@ public protocol PassioStatusDelegate : AnyObject {
     func completedDownloadingFile(fileLocalURL: PassioNutritionAISDK.FileLocalURL, filesLeft: Int)
 
     func downloadingError(message: String)
-}
-
-public struct PersonalizedAlternative : Codable, Equatable {
-
-    public let visualPassioID: PassioNutritionAISDK.PassioID
-
-    public let nutritionalPassioID: PassioNutritionAISDK.PassioID
-
-    public var servingUnit: String?
-
-    public var servingSize: Double?
-
-    public init(visualPassioID: PassioNutritionAISDK.PassioID, nutritionalPassioID: PassioNutritionAISDK.PassioID, servingUnit: String?, servingSize: Double?)
-
-    /// Returns a Boolean value indicating whether two values are equal.
-    ///
-    /// Equality is the inverse of inequality. For any values `a` and `b`,
-    /// `a == b` implies that `a != b` is `false`.
-    ///
-    /// - Parameters:
-    ///   - lhs: A value to compare.
-    ///   - rhs: Another value to compare.
-    public static func == (a: PassioNutritionAISDK.PersonalizedAlternative, b: PassioNutritionAISDK.PersonalizedAlternative) -> Bool
-
-    /// Encodes this value into the given encoder.
-    ///
-    /// If the value fails to encode anything, `encoder` will encode an empty
-    /// keyed container in its place.
-    ///
-    /// This function throws an error if any values are invalid for the given
-    /// encoder's format.
-    ///
-    /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
-
-    /// Creates a new instance by decoding from the given decoder.
-    ///
-    /// This initializer throws an error if reading from the decoder fails, or
-    /// if the data read is corrupted or otherwise invalid.
-    ///
-    /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
 }
 
 public struct Portion : Codable {
@@ -2532,7 +2590,7 @@ public struct Portion : Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 
     /// Encodes this value into the given encoder.
     ///
@@ -2543,7 +2601,7 @@ public struct Portion : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 }
 
 public struct ResponseAlternative : Codable {
@@ -2560,7 +2618,7 @@ public struct ResponseAlternative : Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 
     /// Encodes this value into the given encoder.
     ///
@@ -2571,7 +2629,7 @@ public struct ResponseAlternative : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 }
 
 /// PassioAlternateSearchNames contains alternate search names with search related data
@@ -2587,7 +2645,7 @@ public struct ResponseFood : Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 
     /// Encodes this value into the given encoder.
     ///
@@ -2598,7 +2656,7 @@ public struct ResponseFood : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 }
 
 public struct ResponseFoodItem : Codable {
@@ -2619,13 +2677,15 @@ public struct ResponseFoodItem : Codable {
 
     public let ingredients: [PassioNutritionAISDK.ResponseIngredient]
 
+    public let refCode: String?
+
     /// Creates a new instance by decoding from the given decoder.
     ///
     /// This initializer throws an error if reading from the decoder fails, or
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 
     /// Encodes this value into the given encoder.
     ///
@@ -2636,7 +2696,7 @@ public struct ResponseFoodItem : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 }
 
 public struct ResponseIngredient : Codable {
@@ -2661,13 +2721,15 @@ public struct ResponseIngredient : Codable {
 
     public let tags: [String]?
 
+    public let refCode: String?
+
     /// Creates a new instance by decoding from the given decoder.
     ///
     /// This initializer throws an error if reading from the decoder fails, or
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 
     public struct NutrientUPC : Codable {
 
@@ -2683,7 +2745,7 @@ public struct ResponseIngredient : Codable {
         /// if the data read is corrupted or otherwise invalid.
         ///
         /// - Parameter decoder: The decoder to read data from.
-        public init(from decoder: Decoder) throws
+        public init(from decoder: any Decoder) throws
 
         /// Encodes this value into the given encoder.
         ///
@@ -2694,7 +2756,7 @@ public struct ResponseIngredient : Codable {
         /// encoder's format.
         ///
         /// - Parameter encoder: The encoder to write data to.
-        public func encode(to encoder: Encoder) throws
+        public func encode(to encoder: any Encoder) throws
     }
 
     /// Component of ResponseIngredient decoding struct
@@ -2712,7 +2774,7 @@ public struct ResponseIngredient : Codable {
         /// if the data read is corrupted or otherwise invalid.
         ///
         /// - Parameter decoder: The decoder to read data from.
-        public init(from decoder: Decoder) throws
+        public init(from decoder: any Decoder) throws
 
         /// Encodes this value into the given encoder.
         ///
@@ -2723,7 +2785,7 @@ public struct ResponseIngredient : Codable {
         /// encoder's format.
         ///
         /// - Parameter encoder: The encoder to write data to.
-        public func encode(to encoder: Encoder) throws
+        public func encode(to encoder: any Encoder) throws
     }
 
     /// Component of ResponseIngredient decoding struct
@@ -2743,7 +2805,7 @@ public struct ResponseIngredient : Codable {
         /// if the data read is corrupted or otherwise invalid.
         ///
         /// - Parameter decoder: The decoder to read data from.
-        public init(from decoder: Decoder) throws
+        public init(from decoder: any Decoder) throws
 
         /// Encodes this value into the given encoder.
         ///
@@ -2754,7 +2816,7 @@ public struct ResponseIngredient : Codable {
         /// encoder's format.
         ///
         /// - Parameter encoder: The encoder to write data to.
-        public func encode(to encoder: Encoder) throws
+        public func encode(to encoder: any Encoder) throws
     }
 
     /// Component of ResponseIngredient decoding struct
@@ -2770,7 +2832,7 @@ public struct ResponseIngredient : Codable {
         /// if the data read is corrupted or otherwise invalid.
         ///
         /// - Parameter decoder: The decoder to read data from.
-        public init(from decoder: Decoder) throws
+        public init(from decoder: any Decoder) throws
 
         /// Encodes this value into the given encoder.
         ///
@@ -2781,7 +2843,7 @@ public struct ResponseIngredient : Codable {
         /// encoder's format.
         ///
         /// - Parameter encoder: The encoder to write data to.
-        public func encode(to encoder: Encoder) throws
+        public func encode(to encoder: any Encoder) throws
     }
 
     /// Component of ResponseIngredient decoding struct
@@ -2801,7 +2863,7 @@ public struct ResponseIngredient : Codable {
         /// if the data read is corrupted or otherwise invalid.
         ///
         /// - Parameter decoder: The decoder to read data from.
-        public init(from decoder: Decoder) throws
+        public init(from decoder: any Decoder) throws
 
         /// Encodes this value into the given encoder.
         ///
@@ -2812,7 +2874,7 @@ public struct ResponseIngredient : Codable {
         /// encoder's format.
         ///
         /// - Parameter encoder: The encoder to write data to.
-        public func encode(to encoder: Encoder) throws
+        public func encode(to encoder: any Encoder) throws
     }
 
     /// Component of ResponseIngredient decoding struct
@@ -2828,7 +2890,7 @@ public struct ResponseIngredient : Codable {
         /// if the data read is corrupted or otherwise invalid.
         ///
         /// - Parameter decoder: The decoder to read data from.
-        public init(from decoder: Decoder) throws
+        public init(from decoder: any Decoder) throws
 
         /// Encodes this value into the given encoder.
         ///
@@ -2839,7 +2901,7 @@ public struct ResponseIngredient : Codable {
         /// encoder's format.
         ///
         /// - Parameter encoder: The encoder to write data to.
-        public func encode(to encoder: Encoder) throws
+        public func encode(to encoder: any Encoder) throws
     }
 
     /// Encodes this value into the given encoder.
@@ -2851,7 +2913,7 @@ public struct ResponseIngredient : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 }
 
 public enum SDKLanguage : String {
@@ -2916,30 +2978,11 @@ extension SDKLanguage : RawRepresentable {
 }
 
 /// PassioAlternateSearchNames contains alternate search names with search related data
-public struct SearchResponse : Codable {
+public struct SearchResponse {
 
     public let alternateNames: [String]
 
-    public let results: [PassioNutritionAISDK.PassioSearchResult]
-
-    /// Creates a new instance by decoding from the given decoder.
-    ///
-    /// This initializer throws an error if reading from the decoder fails, or
-    /// if the data read is corrupted or otherwise invalid.
-    ///
-    /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
-
-    /// Encodes this value into the given encoder.
-    ///
-    /// If the value fails to encode anything, `encoder` will encode an empty
-    /// keyed container in its place.
-    ///
-    /// This function throws an error if any values are invalid for the given
-    /// encoder's format.
-    ///
-    /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public let results: [PassioNutritionAISDK.PassioFoodDataInfo]
 }
 
 public struct SynonymLang : Codable {
@@ -2955,7 +2998,7 @@ public struct SynonymLang : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// Creates a new instance by decoding from the given decoder.
     ///
@@ -2963,7 +3006,7 @@ public struct SynonymLang : Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 }
 
 /// UPC Product decoding struct
@@ -3005,7 +3048,7 @@ public struct UPCProduct : Codable {
         /// encoder's format.
         ///
         /// - Parameter encoder: The encoder to write data to.
-        public func encode(to encoder: Encoder) throws
+        public func encode(to encoder: any Encoder) throws
 
         /// Creates a new instance by decoding from the given decoder.
         ///
@@ -3013,7 +3056,7 @@ public struct UPCProduct : Codable {
         /// if the data read is corrupted or otherwise invalid.
         ///
         /// - Parameter decoder: The decoder to read data from.
-        public init(from decoder: Decoder) throws
+        public init(from decoder: any Decoder) throws
     }
 
     /// Component of UPC Product decoding struct
@@ -3034,7 +3077,7 @@ public struct UPCProduct : Codable {
         /// encoder's format.
         ///
         /// - Parameter encoder: The encoder to write data to.
-        public func encode(to encoder: Encoder) throws
+        public func encode(to encoder: any Encoder) throws
 
         /// Creates a new instance by decoding from the given decoder.
         ///
@@ -3042,7 +3085,7 @@ public struct UPCProduct : Codable {
         /// if the data read is corrupted or otherwise invalid.
         ///
         /// - Parameter decoder: The decoder to read data from.
-        public init(from decoder: Decoder) throws
+        public init(from decoder: any Decoder) throws
     }
 
     /// Component of UPC Product decoding struct
@@ -3065,7 +3108,7 @@ public struct UPCProduct : Codable {
         /// encoder's format.
         ///
         /// - Parameter encoder: The encoder to write data to.
-        public func encode(to encoder: Encoder) throws
+        public func encode(to encoder: any Encoder) throws
 
         /// Creates a new instance by decoding from the given decoder.
         ///
@@ -3073,7 +3116,7 @@ public struct UPCProduct : Codable {
         /// if the data read is corrupted or otherwise invalid.
         ///
         /// - Parameter decoder: The decoder to read data from.
-        public init(from decoder: Decoder) throws
+        public init(from decoder: any Decoder) throws
     }
 
     /// Component of UPC Product decoding struct
@@ -3092,7 +3135,7 @@ public struct UPCProduct : Codable {
         /// encoder's format.
         ///
         /// - Parameter encoder: The encoder to write data to.
-        public func encode(to encoder: Encoder) throws
+        public func encode(to encoder: any Encoder) throws
 
         /// Creates a new instance by decoding from the given decoder.
         ///
@@ -3100,7 +3143,7 @@ public struct UPCProduct : Codable {
         /// if the data read is corrupted or otherwise invalid.
         ///
         /// - Parameter decoder: The decoder to read data from.
-        public init(from decoder: Decoder) throws
+        public init(from decoder: any Decoder) throws
     }
 
     /// Component of UPC Product decoding struct
@@ -3123,7 +3166,7 @@ public struct UPCProduct : Codable {
         /// encoder's format.
         ///
         /// - Parameter encoder: The encoder to write data to.
-        public func encode(to encoder: Encoder) throws
+        public func encode(to encoder: any Encoder) throws
 
         /// Creates a new instance by decoding from the given decoder.
         ///
@@ -3131,7 +3174,7 @@ public struct UPCProduct : Codable {
         /// if the data read is corrupted or otherwise invalid.
         ///
         /// - Parameter decoder: The decoder to read data from.
-        public init(from decoder: Decoder) throws
+        public init(from decoder: any Decoder) throws
     }
 
     /// Component of UPC Product decoding struct
@@ -3150,7 +3193,7 @@ public struct UPCProduct : Codable {
         /// encoder's format.
         ///
         /// - Parameter encoder: The encoder to write data to.
-        public func encode(to encoder: Encoder) throws
+        public func encode(to encoder: any Encoder) throws
 
         /// Creates a new instance by decoding from the given decoder.
         ///
@@ -3158,7 +3201,7 @@ public struct UPCProduct : Codable {
         /// if the data read is corrupted or otherwise invalid.
         ///
         /// - Parameter decoder: The decoder to read data from.
-        public init(from decoder: Decoder) throws
+        public init(from decoder: any Decoder) throws
     }
 
     /// Encodes this value into the given encoder.
@@ -3170,7 +3213,7 @@ public struct UPCProduct : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 
     /// Creates a new instance by decoding from the given decoder.
     ///
@@ -3178,74 +3221,7 @@ public struct UPCProduct : Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
-}
-
-public enum Unit : String, Codable {
-
-    case g
-
-    case iu
-
-    case kJ
-
-    case kcal
-
-    case mg
-
-    case ug
-
-    /// Creates a new instance with the specified raw value.
-    ///
-    /// If there is no value of the type that corresponds with the specified raw
-    /// value, this initializer returns `nil`. For example:
-    ///
-    ///     enum PaperSize: String {
-    ///         case A4, A5, Letter, Legal
-    ///     }
-    ///
-    ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
-    ///
-    ///     print(PaperSize(rawValue: "Tabloid"))
-    ///     // Prints "nil"
-    ///
-    /// - Parameter rawValue: The raw value to use for the new instance.
-    public init?(rawValue: String)
-
-    /// The raw type that can be used to represent all values of the conforming
-    /// type.
-    ///
-    /// Every distinct value of the conforming type has a corresponding unique
-    /// value of the `RawValue` type, but there may be values of the `RawValue`
-    /// type that don't have a corresponding value of the conforming type.
-    public typealias RawValue = String
-
-    /// The corresponding value of the raw type.
-    ///
-    /// A new instance initialized with `rawValue` will be equivalent to this
-    /// instance. For example:
-    ///
-    ///     enum PaperSize: String {
-    ///         case A4, A5, Letter, Legal
-    ///     }
-    ///
-    ///     let selectedSize = PaperSize.Letter
-    ///     print(selectedSize.rawValue)
-    ///     // Prints "Letter"
-    ///
-    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
-    ///     // Prints "true"
-    public var rawValue: String { get }
-}
-
-extension Unit : Equatable {
-}
-
-extension Unit : Hashable {
-}
-
-extension Unit : RawRepresentable {
+    public init(from decoder: any Decoder) throws
 }
 
 /// VolumeDetectionMode for detection volume.
@@ -3257,6 +3233,7 @@ public enum VolumeDetectionMode : String, CaseIterable {
     /// If dualWideCamera is not available the mode will not fall back to dualCamera
     case dualWideCamera
 
+    /// If using dual camera but the food will be zoomed in while scanning
     case none
 
     /// Creates a new instance with the specified raw value.
@@ -3330,7 +3307,7 @@ public struct Weight : Codable {
     /// if the data read is corrupted or otherwise invalid.
     ///
     /// - Parameter decoder: The decoder to read data from.
-    public init(from decoder: Decoder) throws
+    public init(from decoder: any Decoder) throws
 
     /// Encodes this value into the given encoder.
     ///
@@ -3341,7 +3318,7 @@ public struct Weight : Codable {
     /// encoder's format.
     ///
     /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: Encoder) throws
+    public func encode(to encoder: any Encoder) throws
 }
 
 extension Array {
@@ -3359,5 +3336,7 @@ extension UIImageView {
 infix operator .+ : DefaultPrecedence
 
 infix operator ./ : DefaultPrecedence
+
+
 
 ```

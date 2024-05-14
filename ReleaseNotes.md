@@ -1,4 +1,11 @@
 # Passio SDK Release Notes
+## V3.0.3
+* Added Meal Plan API
+```swift
+    public func fetchMealPlans(completion: @escaping ([PassioNutritionAISDK.PassioMealPlan]) -> Void)
+
+    public func fetchMealPlanForDay(mealPlanLabel: String, day: Int, completion: @escaping ([PassioNutritionAISDK.PassioMealPlanItem]) -> Void)
+```
 
 ## V3.0.2
 * Added dynamic metadata loading in SDK inisialisations.
