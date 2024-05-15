@@ -2,31 +2,23 @@
 ## V3.0.3
 * Added Meal Plan API
 ```swift
-public func fetchMealPlans(completion: @escaping ([PassioNutritionAISDK.PassioMealPlan]) -> Void)
+    public func fetchMealPlans(completion: @escaping ([PassioNutritionAISDK.PassioMealPlan]) -> Void)
 ```
 ```swift
-public func fetchMealPlanForDay(mealPlanLabel: String, day: Int, completion: @escaping ([PassioNutritionAISDK.PassioMealPlanItem]) -> Void)
+    public func fetchMealPlanForDay(mealPlanLabel: String, day: Int, completion: @escaping ([PassioNutritionAISDK.PassioMealPlanItem]) -> Void)
 ```
 * Added values for carbs protein and fat in the PassioSearchNutritionPreview data class.
 * MealTime was renamed to PassioMealTime.
 * Refactored APIs
     * PassioSearchResult was renamed to PassioFoodDataInfo, fetchFoodItemForSearchResult was renamed to fetchFoodItemForDataInfo.
     * fetchFoodItemForSuggestion was removed. Instead fetchFoodItemForDataInfo is used.
-    
-* Added RefCode API
-```Swift
-/// Lookup fetchFoodItem from RefCode
-/// - Parameter RefCode: String
-/// - Returns: PassioFoodItem
-public func fetchFoodItemFor(refCode: String, completion: @escaping (PassioFoodItem?) -> Void)
-```
 
 ## V3.0.2
 * Added dynamic metadata loading in SDK inisialisations.
 * Intigrated API to fetch quick suggestions
 ```swift 
         public func fetchSuggestions(mealTime: MealTime, completion: @escaping ([PassioSearchResult]) -> Void)
-    ```
+```
 * MealTime enum added (Breakfast,lunch,dinner,snacks)
 * Added following micronutrients: Zinc, Selenium, Folic acid, Chromium, Vitamin-K Phylloquinone,Vitamin-K Menaquinone4,Vitamin-K Dihydrophylloquinone
 
