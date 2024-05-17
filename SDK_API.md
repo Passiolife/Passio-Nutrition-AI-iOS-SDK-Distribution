@@ -1,7 +1,8 @@
-# Passio PassioNutritionAISDK
+# Passio PassioNutritionAISDK 
 
-## Version 3.0.3
-``` Swift
+## Version 3.1.0
+```Swift
+
 import AVFoundation
 import Accelerate
 import CommonCrypto
@@ -10,6 +11,7 @@ import CoreMedia
 import CoreMotion
 import DeveloperToolsSupport
 import Foundation
+import MLCompute
 import Metal
 import MetalPerformanceShaders
 import SQLite3
@@ -446,11 +448,8 @@ public struct FoodDetectionConfiguration {
     /// Set to true for detecting barcodes
     public var detectBarcodes: Bool
 
-    ///
+    /// Set to true for detecting Packaged Food
     public var detectPackagedFood: Bool
-
-    /// Detect and decipher the Nutrition Facts label
-    public var detectNutritionFacts: Bool
 
     /// Change this if you would like to control the resolution of the image you get back in the delegate. Changing this value will not change the visual recognition results.
     public var sessionPreset: AVCaptureSession.Preset
@@ -458,17 +457,17 @@ public struct FoodDetectionConfiguration {
     /// The frequency of sending images for the recognitions models. The default is set to two pre seconds. Increasing this value will require more resources from the device.
     public var framesPerSecond: PassioNutritionAISDK.PassioNutritionAI.FramesPerSecond
 
-    public init(detectVisual: Bool = true, volumeDetectionMode: PassioNutritionAISDK.VolumeDetectionMode = .none, detectBarcodes: Bool = false, detectPackagedFood: Bool = false, nutritionFacts: Bool = false)
+    public init(detectVisual: Bool = true, volumeDetectionMode: PassioNutritionAISDK.VolumeDetectionMode = .none, detectBarcodes: Bool = false, detectPackagedFood: Bool = false)
 }
 
-/// Implement the FoodRecognitionDelegate protocol to receive delegate methods from the FoodRecognition
+/// Implement the FoodRecognitionDelegate protocol to receive delegate method from the FoodRecognition
 public protocol FoodRecognitionDelegate : AnyObject {
 
     /// Delegate function for food recognition
     /// - Parameters:
     ///   - candidates: Food candidates
     ///   - image: Image used for detection
-    func recognitionResults(candidates: (any PassioNutritionAISDK.FoodCandidates)?, image: UIImage?, nutritionFacts: PassioNutritionAISDK.PassioNutritionFacts?)
+    func recognitionResults(candidates: (any PassioNutritionAISDK.FoodCandidates)?, image: UIImage?)
 }
 
 public protocol FoodRecognitionWithTextObservations : AnyObject {
@@ -704,6 +703,97 @@ extension MoveDirection : Hashable {
 extension MoveDirection : RawRepresentable {
 }
 
+public struct NAMessage : Codable {
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: any Encoder) throws
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    public init(from decoder: any Decoder) throws
+}
+
+public enum NetworkError : Error {
+
+    case decode
+
+    case invalidURL
+
+    case noResponse
+
+    case unauthorized
+
+    case badRequest
+
+    case unexpectedStatusCode
+
+    case serverError
+
+    case custom(String)
+}
+
+/// Passio SDK - Copyright © 2024 Passio Inc. All rights reserved.
+public class NutritionAdvisor {
+
+    /// Shared Instance
+    public class var shared: PassioNutritionAISDK.NutritionAdvisor { get }
+
+    /// Use this method to configure Nutrition Advisor
+    /// - Parameters:
+    ///   - licenceKey: Licence Key for configuration
+    ///   - completion: NutritionAdvisorResult with sucess or error message
+    public func configure(licenceKey: String, completion: @escaping PassioNutritionAISDK.NutritionAdvisorStatus)
+
+    /// Initiate converstion with Nutrition Advisor
+    /// - Parameters:
+    ///   - completion: NutritionAdvisorResult with sucess or error message
+    public func initConversation(completion: @escaping PassioNutritionAISDK.NutritionAdvisorStatus)
+
+    /// Use this method to send message to Nutrition Advisor
+    /// - Parameters:
+    ///   - message: Message you want to send
+    ///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive PassioAdvisorResponse containing food information.
+    public func sendMessage(message: String, completion: @escaping PassioNutritionAISDK.NutritionAdvisorResponse)
+
+    /// Use this method to send image to Nutrition Advisor
+    /// - Parameters:
+    ///   - image: UIImage you want to send
+    ///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive PassioAdvisorResponse containing food information.
+    public func sendImage(image: UIImage, completion: @escaping PassioNutritionAISDK.NutritionAdvisorResponse)
+
+    /// Use this method to fetch ingredients
+    /// - Parameters:
+    ///   - advisorResponse: Pass PassioAdvisorResponse
+    ///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive PassioAdvisorResponse containing food information.
+    public func fetchIngridients(from advisorResponse: PassioNutritionAISDK.PassioAdvisorResponse, completion: @escaping PassioNutritionAISDK.NutritionAdvisorResponse)
+}
+
+public typealias NutritionAdvisorResponse = (Result<PassioNutritionAISDK.PassioAdvisorResponse, PassioNutritionAISDK.NetworkError>) -> Void
+
+public typealias NutritionAdvisorStatus = (Result<Bool, PassioNutritionAISDK.NetworkError>) -> Void
+
+/// Implement the NutritionFactsDelegate protocol to receive delegate method from the Nutrition Facts
+public protocol NutritionFactsDelegate : AnyObject {
+
+    /// Delegate function for nutrition facts
+    /// - Parameters:
+    ///   - nutritionFacts: Nutrition Facts
+    ///   - text: OCR text
+    func recognitionResults(nutritionFacts: PassioNutritionAISDK.PassioNutritionFacts?, text: String?)
+}
+
 public struct NutritionPreviewResult : Codable {
 
     public let portion: PassioNutritionAISDK.Portion?
@@ -782,6 +872,68 @@ public protocol PackagedFoodCandidate {
 
 /// packagedFoodCode (typealias String) is the string representation of the PackagedFoodCode id
 public typealias PackagedFoodCode = String
+
+public struct PassioAdvisorFoodInfo : Codable {
+
+    public let recogniseName: String
+
+    public let portionSize: String
+
+    public let weightGrams: Double
+
+    public let foodDataInfo: PassioNutritionAISDK.PassioFoodDataInfo
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: any Encoder) throws
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    public init(from decoder: any Decoder) throws
+}
+
+public struct PassioAdvisorResponse : Codable {
+
+    public var messageId: String?
+
+    public var markupContent: String?
+
+    public var rawContent: String?
+
+    public var tools: [String]?
+
+    public var extractedIngridients: [PassioNutritionAISDK.PassioAdvisorFoodInfo]?
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: any Encoder) throws
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    public init(from decoder: any Decoder) throws
+}
 
 /// PassioAlternative is an alternative to a food from the Database
 public struct PassioAlternative : Codable, Equatable, Hashable {
@@ -1538,6 +1690,73 @@ public struct PassioIngredient : Codable {
     public init(from decoder: any Decoder) throws
 }
 
+public enum PassioLogAction : String, Codable, CaseIterable {
+
+    case add
+
+    case remove
+
+    case none
+
+    /// Creates a new instance with the specified raw value.
+    ///
+    /// If there is no value of the type that corresponds with the specified raw
+    /// value, this initializer returns `nil`. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     print(PaperSize(rawValue: "Legal"))
+    ///     // Prints "Optional("PaperSize.Legal")"
+    ///
+    ///     print(PaperSize(rawValue: "Tabloid"))
+    ///     // Prints "nil"
+    ///
+    /// - Parameter rawValue: The raw value to use for the new instance.
+    public init?(rawValue: String)
+
+    /// A type that can represent a collection of all values of this type.
+    public typealias AllCases = [PassioNutritionAISDK.PassioLogAction]
+
+    /// The raw type that can be used to represent all values of the conforming
+    /// type.
+    ///
+    /// Every distinct value of the conforming type has a corresponding unique
+    /// value of the `RawValue` type, but there may be values of the `RawValue`
+    /// type that don't have a corresponding value of the conforming type.
+    public typealias RawValue = String
+
+    /// A collection of all values of this type.
+    public static var allCases: [PassioNutritionAISDK.PassioLogAction] { get }
+
+    /// The corresponding value of the raw type.
+    ///
+    /// A new instance initialized with `rawValue` will be equivalent to this
+    /// instance. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     let selectedSize = PaperSize.Letter
+    ///     print(selectedSize.rawValue)
+    ///     // Prints "Letter"
+    ///
+    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
+    ///     // Prints "true"
+    public var rawValue: String { get }
+}
+
+extension PassioLogAction : Equatable {
+}
+
+extension PassioLogAction : Hashable {
+}
+
+extension PassioLogAction : RawRepresentable {
+}
+
 public struct PassioMealPlan : Codable, Equatable {
 
     public var mealPlanLabel: String?
@@ -1972,14 +2191,24 @@ public class PassioNutritionAI {
     /// Shut down the Passio SDK and release all resources
     public func shutDownPassioSDK()
 
-    /// Core functionality of the PassioSDK is to detect food via pointing the camera at food
+    /// Use this function to detect food via pointing the camera at Food, Barcode and Packaged Food
     /// - Parameters:
     ///   - detectionConfig: FoodDetectionConfiguration() object with the configuration
-    ///   - foodRecognitionDelegate: add self to implement the FoodRecognitionDelegate
-    ///   - completion: Bool success or failure of the startFoodDetection
+    ///   - foodRecognitionDelegate: Add self to implement the FoodRecognitionDelegate
+    ///   - completion: success or failure of the startFoodDetection
     public func startFoodDetection(detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), foodRecognitionDelegate: any PassioNutritionAISDK.FoodRecognitionDelegate, capturingDeviceType: PassioNutritionAISDK.CapturingDeviceType = .defaultCapturing(), completion: @escaping (Bool) -> Void)
 
-    /// Stop Food Detection to remove camera completely use public func removeVideoLayer()
+    /// Use this function to detect Nutrition Facts via pointing the camera at Nutrition Facts
+    /// - Parameters:
+    ///   - nutritionfactsDelegate: Add self to implement the NutritionFactsDelegate
+    ///   - completion: success or failure of the startNutritionFactsDetection
+    public func startNutritionFactsDetection(nutritionfactsDelegate: (any PassioNutritionAISDK.NutritionFactsDelegate)?, capturingDeviceType: PassioNutritionAISDK.CapturingDeviceType = .defaultCapturing(), completion: @escaping (Bool) -> Void)
+
+    /// Use this function to stop food detection.
+    ///
+    /// Use this method to remove camera completely
+    ///
+    ///     public func removeVideoLayer()
     public func stopFoodDetection()
 
     /// Detect food in a static image/photo
@@ -2009,7 +2238,7 @@ public class PassioNutritionAI {
     /// - Returns: AVCaptureVideoPreviewLayer
     public func getPreviewLayerWithGravity(sessionPreset: AVCaptureSession.Preset = .hd1920x1080, volumeDetectionMode: PassioNutritionAISDK.VolumeDetectionMode = .none, videoGravity: AVLayerVideoGravity = .resizeAspectFill, capturingDeviceType: PassioNutritionAISDK.CapturingDeviceType = .defaultCapturing()) -> AVCaptureVideoPreviewLayer?
 
-    /// use getPreviewLayer if you don't plan to rotate the PreviewLayer.
+    /// Use getPreviewLayer if you don't plan to rotate the PreviewLayer.
     /// - Returns: AVCaptureVideoPreviewLayer
     public func getPreviewLayerForFrontCamera() -> AVCaptureVideoPreviewLayer?
 
@@ -2056,7 +2285,7 @@ public class PassioNutritionAI {
     ///   - completion: PassioAlternateSearchNames, which containts list of alternate search and its results
     public func searchForFood(byText: String, completion: @escaping (PassioNutritionAISDK.SearchResponse?) -> Void)
 
-    /// fetch search result will return a list of searched text results
+    /// Fetch search result will return a list of searched text results
     /// - Parameters:
     ///   - labelId: labelId of selected searched result
     ///   - type: type of selected searched result
@@ -2064,9 +2293,9 @@ public class PassioNutritionAI {
     ///   - completion: PassioAlternateSearchNames, which containts list of search results
     public func fetchFoodItemFor(foodItem: PassioNutritionAISDK.PassioFoodDataInfo, completion: @escaping (PassioNutritionAISDK.PassioFoodItem?) -> Void)
 
-    /// Get suggestions for peticular meal time.
+    /// Get suggestions for particular meal time.
     /// - Parameters:
-    ///   - mealTime: meal time (.breakfast,.lunch,.dinner,.snack)
+    ///   - mealTime: meal time (.breakfast, .lunch, .dinner, .snack)
     ///   - completion: [PassioFoodDataInfo]
     public func fetchSuggestions(mealTime: PassioNutritionAISDK.PassioMealTime, completion: @escaping ([PassioNutritionAISDK.PassioFoodDataInfo]) -> Void)
 
@@ -2075,7 +2304,7 @@ public class PassioNutritionAI {
     ///   - completion: [PassioMealPlan]
     public func fetchMealPlans(completion: @escaping ([PassioNutritionAISDK.PassioMealPlan]) -> Void)
 
-    /// fetch meal plan for the day
+    /// Fetch meal plan for the day
     /// - Parameters:
     ///   - mealPlanLabel: type of mealPlan
     ///   - day: for which day meal plan is needed
@@ -2084,8 +2313,13 @@ public class PassioNutritionAI {
 
     /// Fetch from Passio web-service the PassioFoodItem for a productCode
     /// - Parameter barcode: Product code
-    /// - Parameter completion: Receive a closure with optional PassioFoodItem
+    /// - Parameter completion: PassioFoodItem?
     public func fetchFoodItemFor(productCode: String, completion: @escaping ((PassioNutritionAISDK.PassioFoodItem?) -> Void))
+
+    /// Fetch PassioFoodItem for a v2 PassioID
+    /// - Parameter passioID: PassioID
+    /// - Parameter completion: Receive a closure with optional PassioFoodItem
+    public func fetchFoodItemLegacy(from passioID: PassioNutritionAISDK.PassioID, completion: @escaping (PassioNutritionAISDK.PassioFoodItem?) -> Void)
 
     /// This function replaces 'lookupIconFor'. You will receive the placeHolderIcon and an optional icon.  If the icons is nil you can use the asynchronous function to "fetchIconFor" the icons from the web.
     /// - Parameters:
@@ -2132,6 +2366,26 @@ public class PassioNutritionAI {
     /// Beta feature: Passio recommends not to change this value. The default is .cpuAndGPU
     @available(iOS 15.0, *)
     public func setMLComputeUnits(units: MLComputeUnits)
+
+    /// Use this method to fetch PassioSpeechRecognitionModel using speech
+    /// - Parameters:
+    ///   - text: Text for recognizing food logging actions
+    ///   - completion: Actions with food data info
+    public func recognizeSpeechRemote(from text: String, completion: @escaping ([PassioNutritionAISDK.PassioSpeechRecognitionModel]) -> Void)
+
+    /// Use this method to fetch PassioAdvisorFoodInfo using Image
+    /// - Parameters:
+    ///   - image: UIImage for recognizing Food
+    ///   - completion: Returns Array of PassioAdvisorFoodInfo if any or empty array if unable to recognize food in image
+    public func recognizeImageRemote(image: UIImage, completion: @escaping ([PassioNutritionAISDK.PassioAdvisorFoodInfo]) -> Void)
+
+    /// Detect food in a static image/photo
+    /// - Parameters:
+    ///   - image: Image for detection
+    ///   - detectionConfig: FoodDetectionConfiguration
+    ///   - slicingRects: Optional ability to divide the image to slices or regions.
+    ///   - completion: optional FoodCandidates
+    public func detectFoodWithText(image: UIImage, detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), completion: @escaping ((any PassioNutritionAISDK.FoodCandidatesWithText)?) -> Void)
 }
 
 extension PassioNutritionAI : PassioNutritionAISDK.PassioStatusDelegate {
@@ -2149,13 +2403,9 @@ extension PassioNutritionAI : PassioNutritionAISDK.PassioStatusDelegate {
 
 extension PassioNutritionAI {
 
-    /// Detect food in a static image/photo
-    /// - Parameters:
-    ///   - image: Image for detection
-    ///   - detectionConfig: FoodDetectionConfiguration
-    ///   - slicingRects: Optional ability to divide the image to slices or regions.
-    ///   - completion: optional FoodCandidates
-    public func detectFoodWithText(image: UIImage, detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), completion: @escaping ((any PassioNutritionAISDK.FoodCandidatesWithText)?) -> Void)
+    public func getSupportedDevice() -> [PassioNutritionAISDK.CapturingDeviceType]
+
+    public func setCapturingDevice(capturingDevice: PassioNutritionAISDK.CapturingDeviceType)
 }
 
 extension PassioNutritionAI.FramesPerSecond : Equatable {
@@ -2179,6 +2429,8 @@ public class PassioNutritionFacts {
         case ml
 
         case mg
+
+        case mcg
 
         /// Creates a new instance with the specified raw value.
         ///
@@ -2254,6 +2506,16 @@ public class PassioNutritionFacts {
 
     final public let titleIngredients: String
 
+    public var titleAddedSugar: String
+
+    public var titleVitaminD: String
+
+    public var titleCalcium: String
+
+    public var titleIron: String
+
+    public var titlePotassium: String
+
     public var servingSizeQuantity: Double
 
     public var servingSizeUnitName: String?
@@ -2286,6 +2548,18 @@ public class PassioNutritionFacts {
 
     public var ingredients: String?
 
+    public var totalSugars: Double?
+
+    public var addedSugar: Double?
+
+    public var vitaminD: Double?
+
+    public var calcium: Double?
+
+    public var iron: Double?
+
+    public var potassium: Double?
+
     public var isManuallyEdited: Bool
 
     public var servingSizeText: String { get }
@@ -2312,6 +2586,18 @@ public class PassioNutritionFacts {
 
     public var sugarAlcoholText: String { get }
 
+    public var totalSugarsText: String { get }
+
+    public var addedSugarText: String { get }
+
+    public var vitaminDText: String { get }
+
+    public var calciumText: String { get }
+
+    public var ironText: String { get }
+
+    public var potassiumText: String { get }
+
     public var isCompleted: Bool { get }
 
     public var description: String { get }
@@ -2321,7 +2607,7 @@ public class PassioNutritionFacts {
 
 extension PassioNutritionFacts {
 
-    public func fromNutritionFacts(foodName: String) -> PassioNutritionAISDK.PassioFoodItem
+    public func fromNutritionFacts(foodName: String, brand: String = "") -> PassioNutritionAISDK.PassioFoodItem
 }
 
 extension PassioNutritionFacts.ServingSizeUnit : Equatable {
@@ -2520,6 +2806,17 @@ public struct PassioServingUnit : Equatable, Codable {
     ///
     /// - Parameter decoder: The decoder to read data from.
     public init(from decoder: any Decoder) throws
+}
+
+public struct PassioSpeechRecognitionModel {
+
+    public let action: PassioNutritionAISDK.PassioLogAction?
+
+    public let meal: PassioNutritionAISDK.PassioMealTime?
+
+    public let date: String!
+
+    public let advisorFoodInfo: PassioNutritionAISDK.PassioAdvisorFoodInfo
 }
 
 /// PassioStatus is returned at the end of the configuration of the SDK.
@@ -3233,7 +3530,7 @@ public enum VolumeDetectionMode : String, CaseIterable {
     /// If dualWideCamera is not available the mode will not fall back to dualCamera
     case dualWideCamera
 
-    /// If using dual camera but the food will be zoomed in while scanning
+    /// No volume detection
     case none
 
     /// Creates a new instance with the specified raw value.
@@ -3336,7 +3633,5 @@ extension UIImageView {
 infix operator .+ : DefaultPrecedence
 
 infix operator ./ : DefaultPrecedence
-
-
 
 ```

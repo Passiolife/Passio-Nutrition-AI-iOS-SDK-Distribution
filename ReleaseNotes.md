@@ -1,24 +1,91 @@
 # Passio SDK Release Notes
-## V3.0.3
-* Added Meal Plan API
+
+## V3.1.0
+* Added Nutrition Advsior API
 ```swift
-public func fetchMealPlans(completion: @escaping ([PassioNutritionAISDK.PassioMealPlan]) -> Void)
+/// Use this method to configure Nutrition Advisor
+/// - Parameters:
+///   - licenceKey: Licence Key for configuration
+///   - completion: NutritionAdvisorResult with sucess or error message
+public func configure(licenceKey: String, completion: @escaping NutritionAdvisorStatus)
+
+/// Initiate converstion with Nutrition Advisor
+/// - Parameters:
+///   - completion: NutritionAdvisorResult with sucess or error message
+public func initConversation(completion: @escaping NutritionAdvisorStatus)
+
+/// Use this method to send message to Nutrition Advisor
+/// - Parameters:
+///   - message: Message you want to send
+///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive PassioAdvisorResponse containing food information.
+
+public func sendMessage(message: String, completion: @escaping NutritionAdvisorResponse)
+/// Use this method to send image to Nutrition Advisor
+/// - Parameters:
+///   - image: UIImage you want to send
+///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive PassioAdvisorResponse containing food information.
+public func sendImage(image: UIImage, completion: @escaping NutritionAdvisorResponse)
+
+/// Use this method to fetch ingredients
+/// - Parameters:
+///   - advisorResponse: Pass PassioAdvisorResponse
+///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive PassioAdvisorResponse containing food information.
+public func fetchIngridients(from advisorResponse: PassioAdvisorResponse, completion: @escaping NutritionAdvisorResponse)
 ```
-```swift
-public func fetchMealPlanForDay(mealPlanLabel: String, day: Int, completion: @escaping ([PassioNutritionAISDK.PassioMealPlanItem]) -> Void)
+
+* Refactored Nutrition Facts API
+```Swift
+/// Use this function to detect Nutrition Facts via pointing the camera at Nutrition Facts
+/// - Parameters:
+///   - nutritionfactsDelegate: Add self to implement the NutritionFactsDelegate
+///   - completion: success or failure of the startNutritionFactsDetection
+func startNutritionFactsDetection(
+    nutritionfactsDelegate: NutritionFactsDelegate?,
+    capturingDeviceType: CapturingDeviceType = .defaultCapturing(),
+    completion: @escaping (Bool) -> Void
+)
 ```
-* Added values for carbs protein and fat in the PassioSearchNutritionPreview data class.
-* MealTime was renamed to PassioMealTime.
-* Refactored APIs
-    * PassioSearchResult was renamed to PassioFoodDataInfo, fetchFoodItemForSearchResult was renamed to fetchFoodItemForDataInfo.
-    * fetchFoodItemForSuggestion was removed. Instead fetchFoodItemForDataInfo is used.
-    
-* Added RefCode API
+
+* Added fetchFoodItemLegacy API
+```Swift
+/// Fetch PassioFoodItem for a v2 PassioID
+/// - Parameter passioID: PassioID
+/// - Parameter completion: Receive a closure with optional PassioFoodItem
+public func fetchFoodItemLegacy(from passioID: PassioID, completion: @escaping (PassioFoodItem?) -> Void)
+```
+
+## V3.0.5
+- Refactored PassioSearchNutritionPreview
+
+```Swift
+public struct PassioSearchNutritionPreview: Codable {
+    public var calories: Int
+    public let carbs: Double
+    public let fat: Double
+    public let protein: Double
+    public var servingUnit: String
+    public var servingQuantity: Double
+    public var weightUnit: String
+    public var weightQuantity: Double
+}
+
+```
+- Added refCode as an attribute to the PassioFoodItem and PassioIngredient classes.
+- Added method to fetch a food item using just the refCode attribute
+
 ```Swift
 /// Lookup fetchFoodItem from RefCode
 /// - Parameter RefCode: String
 /// - Returns: PassioFoodItem
-public func fetchFoodItemFor(refCode: String, completion: @escaping (PassioFoodItem?) -> Void)
+public func fetchFoodItemFor(refCode: String, completion: @escaping (PassioNutritionAISDK.PassioFoodItem?) -> Void)
+```
+
+## V3.0.3
+* Added Meal Plan API
+```swift
+    public func fetchMealPlans(completion: @escaping ([PassioNutritionAISDK.PassioMealPlan]) -> Void)
+
+    public func fetchMealPlanForDay(mealPlanLabel: String, day: Int, completion: @escaping ([PassioNutritionAISDK.PassioMealPlanItem]) -> Void)
 ```
 
 ## V3.0.2

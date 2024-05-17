@@ -1,14 +1,15 @@
 {
+  "originHash" : "35e4a3be346911da82486ca0f532305db6d796b614005f324a79c19029a59d1f",
   "pins" : [
     {
       "identity" : "passio-nutrition-ai-ios-sdk-distribution",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Passiolife/Passio-Nutrition-AI-iOS-SDK-Distribution",
       "state" : {
-        "branch" : "main",
-        "revision" : "5de56625c4756f0b142ba3a3131a37b7bdf8edf1"
+        "revision" : "b2de99c72e1cebc3fdf705db0264ac931b8aed6a",
+        "version" : "3.0.5"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
