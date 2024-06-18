@@ -1,10 +1,138 @@
 # Passio SDK Release Notes
+
+## V3.1.1
+
+### New APIs.
+- Added `fetchHiddenIngredients`, `fetchVisualAlternatives` and `fetchPossibleIngredients` APIs.
+
+```swift  
+    /// Returns hidden ingredients for a given food item
+    /// - Parameters:
+    ///   - foodName: Food name to search for
+    ///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` hidden ingredients found in the searched for food item.
+    public func fetchHiddenIngredients(
+        foodName: String,
+        completion: @escaping NutritionAdvisorIngredientsResponse
+    )
+```
+```swift 
+    /// Returns visual alternatives for a given food item
+    /// - Parameters:
+    ///   - foodName: Food name to search for
+    ///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` visual alternatives for the searched for food item.
+    public func fetchVisualAlternatives(
+        foodName: String,
+        completion: @escaping NutritionAdvisorIngredientsResponse
+    )
+```
+```swift 
+    /// Returns possible ingredients for a given food item
+    /// - Parameters:
+    ///   - foodName: Food name to search for
+    ///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` ingredients showing what might be contained in the given food.
+    public func fetchPossibleIngredients(
+        foodName: String,
+        completion: @escaping NutritionAdvisorIngredientsResponse
+    )
+```
+
+### Updated APIs.
+- Added new `PassioImageResolution` parameter to `recognizeImageRemote` API.
+
+```Swift
+public func recognizeImageRemote(
+    image: UIImage,
+    resolution: PassioImageResolution = .res_512,
+    message: String? = nil,
+    completion: @escaping ([PassioAdvisorFoodInfo]) -> Void
+)
+```
+
+## V3.1.0
+* Added Nutrition Advsior API
+```swift
+/// Use this method to configure Nutrition Advisor
+/// - Parameters:
+///   - licenceKey: Licence Key for configuration
+///   - completion: NutritionAdvisorResult with sucess or error message
+public func configure(licenceKey: String, completion: @escaping NutritionAdvisorStatus)
+
+/// Initiate converstion with Nutrition Advisor
+/// - Parameters:
+///   - completion: NutritionAdvisorResult with sucess or error message
+public func initConversation(completion: @escaping NutritionAdvisorStatus)
+
+/// Use this method to send message to Nutrition Advisor
+/// - Parameters:
+///   - message: Message you want to send
+///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive PassioAdvisorResponse containing food information.
+
+public func sendMessage(message: String, completion: @escaping NutritionAdvisorResponse)
+/// Use this method to send image to Nutrition Advisor
+/// - Parameters:
+///   - image: UIImage you want to send
+///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive PassioAdvisorResponse containing food information.
+public func sendImage(image: UIImage, completion: @escaping NutritionAdvisorResponse)
+
+/// Use this method to fetch ingredients
+/// - Parameters:
+///   - advisorResponse: Pass PassioAdvisorResponse
+///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive PassioAdvisorResponse containing food information.
+public func fetchIngridients(from advisorResponse: PassioAdvisorResponse, completion: @escaping NutritionAdvisorResponse)
+```
+
+* Refactored Nutrition Facts API
+```Swift
+/// Use this function to detect Nutrition Facts via pointing the camera at Nutrition Facts
+/// - Parameters:
+///   - nutritionfactsDelegate: Add self to implement the NutritionFactsDelegate
+///   - completion: success or failure of the startNutritionFactsDetection
+func startNutritionFactsDetection(
+    nutritionfactsDelegate: NutritionFactsDelegate?,
+    capturingDeviceType: CapturingDeviceType = .defaultCapturing(),
+    completion: @escaping (Bool) -> Void
+)
+```
+
+* Added fetchFoodItemLegacy API
+```Swift
+/// Fetch PassioFoodItem for a v2 PassioID
+/// - Parameter passioID: PassioID
+/// - Parameter completion: Receive a closure with optional PassioFoodItem
+public func fetchFoodItemLegacy(from passioID: PassioID, completion: @escaping (PassioFoodItem?) -> Void)
+```
+
+## V3.0.5
+- Refactored PassioSearchNutritionPreview
+
+```Swift
+public struct PassioSearchNutritionPreview: Codable {
+    public var calories: Int
+    public let carbs: Double
+    public let fat: Double
+    public let protein: Double
+    public var servingUnit: String
+    public var servingQuantity: Double
+    public var weightUnit: String
+    public var weightQuantity: Double
+}
+
+```
+- Added refCode as an attribute to the PassioFoodItem and PassioIngredient classes.
+- Added method to fetch a food item using just the refCode attribute
+
+```Swift
+/// Lookup fetchFoodItem from RefCode
+/// - Parameter RefCode: String
+/// - Returns: PassioFoodItem
+public func fetchFoodItemFor(refCode: String, completion: @escaping (PassioNutritionAISDK.PassioFoodItem?) -> Void)
+```
+
 ## V3.0.3
 * Added Meal Plan API
 ```swift
     public func fetchMealPlans(completion: @escaping ([PassioNutritionAISDK.PassioMealPlan]) -> Void)
-```
-```swift
+
     public func fetchMealPlanForDay(mealPlanLabel: String, day: Int, completion: @escaping ([PassioNutritionAISDK.PassioMealPlanItem]) -> Void)
 ```
 * Added values for carbs protein and fat in the PassioSearchNutritionPreview data class.
