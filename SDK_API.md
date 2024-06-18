@@ -1,8 +1,8 @@
-# Passio PassioNutritionAISDK 
+# PassioNutritionAISDK 
 
-## Version 3.1.0
+## Version 3.1.1
+
 ```Swift
-
 import AVFoundation
 import Accelerate
 import CommonCrypto
@@ -199,9 +199,11 @@ public enum CapturingDeviceType : CaseIterable {
 
     case builtInTripleCamera
 
-    public static func supportedDeviceTypes() -> [PassioNutritionAISDK.CapturingDeviceType]
+    public static func supportedDeviceTypes(for position: AVCaptureDevice.Position = .unspecified, preset: AVCaptureSession.Preset = .high) -> [PassioNutritionAISDK.CapturingDeviceType]
 
     public static func defaultCapturing() -> PassioNutritionAISDK.CapturingDeviceType
+
+    public static func getCapturingDeviceForPhotos(for position: AVCaptureDevice.Position = .back, preset: AVCaptureSession.Preset = .photo) -> PassioNutritionAISDK.CapturingDeviceType
 
     /// Returns a Boolean value indicating whether two values are equal.
     ///
@@ -703,7 +705,51 @@ extension MoveDirection : Hashable {
 extension MoveDirection : RawRepresentable {
 }
 
+public struct NAActionResponse : Codable {
+
+    public var messageId: String?
+
+    public var name: String?
+
+    public var data: String?
+
+    public var extractedIngridient: [PassioNutritionAISDK.PassioAdvisorFoodInfo]? { get }
+
+    public init(messageId: String? = nil, name: String? = nil, data: String? = nil)
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: any Encoder) throws
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    public init(from decoder: any Decoder) throws
+}
+
 public struct NAMessage : Codable {
+
+    public var threadId: String
+
+    public var messageId: String
+
+    public var content: String
+
+    public var actionResponse: PassioNutritionAISDK.NAActionResponse?
+
+    public var contentToolHints: [String]?
+
+    public init(threadId: String, messageId: String, content: String, actionResponse: PassioNutritionAISDK.NAActionResponse? = nil, contentToolHints: [String]? = nil)
 
     /// Encodes this value into the given encoder.
     ///
@@ -742,6 +788,10 @@ public enum NetworkError : Error {
     case serverError
 
     case custom(String)
+
+    case adivsorError(type: String, error: String)
+
+    public var errorMessage: String { get }
 }
 
 /// Passio SDK - Copyright © 2024 Passio Inc. All rights reserved.
@@ -779,6 +829,8 @@ public class NutritionAdvisor {
     ///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive PassioAdvisorResponse containing food information.
     public func fetchIngridients(from advisorResponse: PassioNutritionAISDK.PassioAdvisorResponse, completion: @escaping PassioNutritionAISDK.NutritionAdvisorResponse)
 }
+
+public typealias NutritionAdvisorIngredientsResponse = (Result<[PassioNutritionAISDK.PassioAdvisorFoodInfo], PassioNutritionAISDK.NetworkError>) -> Void
 
 public typealias NutritionAdvisorResponse = (Result<PassioNutritionAISDK.PassioAdvisorResponse, PassioNutritionAISDK.NetworkError>) -> Void
 
@@ -875,7 +927,7 @@ public typealias PackagedFoodCode = String
 
 public struct PassioAdvisorFoodInfo : Codable {
 
-    public let recogniseName: String
+    public let recognisedName: String
 
     public let portionSize: String
 
@@ -905,15 +957,17 @@ public struct PassioAdvisorFoodInfo : Codable {
 
 public struct PassioAdvisorResponse : Codable {
 
-    public var messageId: String?
+    public var messageId: String
 
-    public var markupContent: String?
+    public var markupContent: String
 
-    public var rawContent: String?
+    public var rawContent: String
 
     public var tools: [String]?
 
-    public var extractedIngridients: [PassioNutritionAISDK.PassioAdvisorFoodInfo]?
+    public var extractedIngredients: [PassioNutritionAISDK.PassioAdvisorFoodInfo]?
+
+    public init?(message: PassioNutritionAISDK.NAMessage?)
 
     /// Encodes this value into the given encoder.
     ///
@@ -1648,6 +1702,58 @@ extension PassioIDEntityType : Hashable {
 extension PassioIDEntityType : RawRepresentable {
 }
 
+public enum PassioImageResolution {
+
+    case res_512
+
+    case res_1080
+
+    case full
+
+    /// Returns a Boolean value indicating whether two values are equal.
+    ///
+    /// Equality is the inverse of inequality. For any values `a` and `b`,
+    /// `a == b` implies that `a != b` is `false`.
+    ///
+    /// - Parameters:
+    ///   - lhs: A value to compare.
+    ///   - rhs: Another value to compare.
+    public static func == (a: PassioNutritionAISDK.PassioImageResolution, b: PassioNutritionAISDK.PassioImageResolution) -> Bool
+
+    /// Hashes the essential components of this value by feeding them into the
+    /// given hasher.
+    ///
+    /// Implement this method to conform to the `Hashable` protocol. The
+    /// components used for hashing must be the same as the components compared
+    /// in your type's `==` operator implementation. Call `hasher.combine(_:)`
+    /// with each of these components.
+    ///
+    /// - Important: In your implementation of `hash(into:)`,
+    ///   don't call `finalize()` on the `hasher` instance provided,
+    ///   or replace it with a different instance.
+    ///   Doing so may become a compile-time error in the future.
+    ///
+    /// - Parameter hasher: The hasher to use when combining the components
+    ///   of this instance.
+    public func hash(into hasher: inout Hasher)
+
+    /// The hash value.
+    ///
+    /// Hash values are not guaranteed to be equal across different executions of
+    /// your program. Do not save hash values to use during a future execution.
+    ///
+    /// - Important: `hashValue` is deprecated as a `Hashable` requirement. To
+    ///   conform to `Hashable`, implement the `hash(into:)` requirement instead.
+    ///   The compiler provides an implementation for `hashValue` for you.
+    public var hashValue: Int { get }
+}
+
+extension PassioImageResolution : Equatable {
+}
+
+extension PassioImageResolution : Hashable {
+}
+
 public struct PassioIngredient : Codable {
 
     public let id: String
@@ -2377,7 +2483,7 @@ public class PassioNutritionAI {
     /// - Parameters:
     ///   - image: UIImage for recognizing Food
     ///   - completion: Returns Array of PassioAdvisorFoodInfo if any or empty array if unable to recognize food in image
-    public func recognizeImageRemote(image: UIImage, completion: @escaping ([PassioNutritionAISDK.PassioAdvisorFoodInfo]) -> Void)
+    public func recognizeImageRemote(image: UIImage, resolution: PassioNutritionAISDK.PassioImageResolution = .res_512, message: String? = nil, completion: @escaping ([PassioNutritionAISDK.PassioAdvisorFoodInfo]) -> Void)
 
     /// Detect food in a static image/photo
     /// - Parameters:
@@ -2386,6 +2492,24 @@ public class PassioNutritionAI {
     ///   - slicingRects: Optional ability to divide the image to slices or regions.
     ///   - completion: optional FoodCandidates
     public func detectFoodWithText(image: UIImage, detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), completion: @escaping ((any PassioNutritionAISDK.FoodCandidatesWithText)?) -> Void)
+
+    /// Returns hidden ingredients for a given food item
+    /// - Parameters:
+    ///   - foodName: Food name to search for
+    ///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` hidden ingredients found in the searched for food item.
+    public func fetchHiddenIngredients(foodName: String, completion: @escaping PassioNutritionAISDK.NutritionAdvisorIngredientsResponse)
+
+    /// Returns visual alternatives for a given food item
+    /// - Parameters:
+    ///   - foodName: Food name to search for
+    ///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` visual alternatives for the searched for food item.
+    public func fetchVisualAlternatives(foodName: String, completion: @escaping PassioNutritionAISDK.NutritionAdvisorIngredientsResponse)
+
+    /// Returns possible ingredients for a given food item
+    /// - Parameters:
+    ///   - foodName: Food name to search for
+    ///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` ingredients showing what might be contained in the given food.
+    public func fetchPossibleIngredients(foodName: String, completion: @escaping PassioNutritionAISDK.NutritionAdvisorIngredientsResponse)
 }
 
 extension PassioNutritionAI : PassioNutritionAISDK.PassioStatusDelegate {
@@ -2403,7 +2527,7 @@ extension PassioNutritionAI : PassioNutritionAISDK.PassioStatusDelegate {
 
 extension PassioNutritionAI {
 
-    public func getSupportedDevice() -> [PassioNutritionAISDK.CapturingDeviceType]
+    public func getSupportedDevice(for position: AVCaptureDevice.Position = .unspecified, preset: AVCaptureSession.Preset = .high) -> [PassioNutritionAISDK.CapturingDeviceType]
 
     public func setCapturingDevice(capturingDevice: PassioNutritionAISDK.CapturingDeviceType)
 }
@@ -3211,67 +3335,6 @@ public struct ResponseIngredient : Codable {
     ///
     /// - Parameter encoder: The encoder to write data to.
     public func encode(to encoder: any Encoder) throws
-}
-
-public enum SDKLanguage : String {
-
-    case en
-
-    case de
-
-    case auto
-
-    /// Creates a new instance with the specified raw value.
-    ///
-    /// If there is no value of the type that corresponds with the specified raw
-    /// value, this initializer returns `nil`. For example:
-    ///
-    ///     enum PaperSize: String {
-    ///         case A4, A5, Letter, Legal
-    ///     }
-    ///
-    ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
-    ///
-    ///     print(PaperSize(rawValue: "Tabloid"))
-    ///     // Prints "nil"
-    ///
-    /// - Parameter rawValue: The raw value to use for the new instance.
-    public init?(rawValue: String)
-
-    /// The raw type that can be used to represent all values of the conforming
-    /// type.
-    ///
-    /// Every distinct value of the conforming type has a corresponding unique
-    /// value of the `RawValue` type, but there may be values of the `RawValue`
-    /// type that don't have a corresponding value of the conforming type.
-    public typealias RawValue = String
-
-    /// The corresponding value of the raw type.
-    ///
-    /// A new instance initialized with `rawValue` will be equivalent to this
-    /// instance. For example:
-    ///
-    ///     enum PaperSize: String {
-    ///         case A4, A5, Letter, Legal
-    ///     }
-    ///
-    ///     let selectedSize = PaperSize.Letter
-    ///     print(selectedSize.rawValue)
-    ///     // Prints "Letter"
-    ///
-    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
-    ///     // Prints "true"
-    public var rawValue: String { get }
-}
-
-extension SDKLanguage : Equatable {
-}
-
-extension SDKLanguage : Hashable {
-}
-
-extension SDKLanguage : RawRepresentable {
 }
 
 /// PassioAlternateSearchNames contains alternate search names with search related data

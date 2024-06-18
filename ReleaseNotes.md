@@ -1,5 +1,53 @@
 # Passio SDK Release Notes
 
+## V3.1.1
+
+### New APIs.
+- Added `fetchHiddenIngredients`, `fetchVisualAlternatives` and `fetchPossibleIngredients` APIs.
+
+```swift  
+    /// Returns hidden ingredients for a given food item
+    /// - Parameters:
+    ///   - foodName: Food name to search for
+    ///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` hidden ingredients found in the searched for food item.
+    public func fetchHiddenIngredients(
+        foodName: String,
+        completion: @escaping NutritionAdvisorIngredientsResponse
+    )
+```
+```swift 
+    /// Returns visual alternatives for a given food item
+    /// - Parameters:
+    ///   - foodName: Food name to search for
+    ///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` visual alternatives for the searched for food item.
+    public func fetchVisualAlternatives(
+        foodName: String,
+        completion: @escaping NutritionAdvisorIngredientsResponse
+    )
+```
+```swift 
+    /// Returns possible ingredients for a given food item
+    /// - Parameters:
+    ///   - foodName: Food name to search for
+    ///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` ingredients showing what might be contained in the given food.
+    public func fetchPossibleIngredients(
+        foodName: String,
+        completion: @escaping NutritionAdvisorIngredientsResponse
+    )
+```
+
+### Updated APIs.
+- Added new `PassioImageResolution` parameter to `recognizeImageRemote` API.
+
+```Swift
+public func recognizeImageRemote(
+    image: UIImage,
+    resolution: PassioImageResolution = .res_512,
+    message: String? = nil,
+    completion: @escaping ([PassioAdvisorFoodInfo]) -> Void
+)
+```
+
 ## V3.1.0
 * Added Nutrition Advsior API
 ```swift
