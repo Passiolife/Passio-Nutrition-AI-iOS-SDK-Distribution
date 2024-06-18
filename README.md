@@ -374,4 +374,4 @@ override func viewDidLoad() {
     }
     ```
 
-<sup>Copyright 2024 Passio Inc</sup>
+**© 2024 Passio, Inc. All rights reserved.**
