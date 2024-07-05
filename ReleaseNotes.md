@@ -1,5 +1,8 @@
 # Passio SDK Release Notes
 
+## V3.1.2
+- Added missing suggarAdded nutrient in the `PassioNutrients`
+
 ## V3.1.1
 
 ### New APIs.
@@ -135,18 +138,13 @@ public func fetchFoodItemFor(refCode: String, completion: @escaping (PassioNutri
 
     public func fetchMealPlanForDay(mealPlanLabel: String, day: Int, completion: @escaping ([PassioNutritionAISDK.PassioMealPlanItem]) -> Void)
 ```
-* Added values for carbs protein and fat in the PassioSearchNutritionPreview data class.
-* MealTime was renamed to PassioMealTime.
-* Refactored APIs
-    * PassioSearchResult was renamed to PassioFoodDataInfo, fetchFoodItemForSearchResult was renamed to fetchFoodItemForDataInfo.
-    * fetchFoodItemForSuggestion was removed. Instead fetchFoodItemForDataInfo is used.
 
 ## V3.0.2
 * Added dynamic metadata loading in SDK inisialisations.
 * Intigrated API to fetch quick suggestions
 ```swift 
         public func fetchSuggestions(mealTime: MealTime, completion: @escaping ([PassioSearchResult]) -> Void)
-```
+    ```
 * MealTime enum added (Breakfast,lunch,dinner,snacks)
 * Added following micronutrients: Zinc, Selenium, Folic acid, Chromium, Vitamin-K Phylloquinone,Vitamin-K Menaquinone4,Vitamin-K Dihydrophylloquinone
 
