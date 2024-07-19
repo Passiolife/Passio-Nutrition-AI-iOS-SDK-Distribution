@@ -1,6 +1,6 @@
 # PassioNutritionAISDK 
 
-## Version 3.1.2
+## Version 3.1.4
 
 ```Swift
 import AVFoundation
@@ -802,12 +802,6 @@ public class NutritionAdvisor {
     /// Shared Instance
     public class var shared: PassioNutritionAISDK.NutritionAdvisor { get }
 
-    /// Use this method to configure Nutrition Advisor
-    /// - Parameters:
-    ///   - licenceKey: Licence Key for configuration
-    ///   - completion: NutritionAdvisorResult with sucess or error message
-    public func configure(licenceKey: String, completion: @escaping PassioNutritionAISDK.NutritionAdvisorStatus)
-
     /// Initiate converstion with Nutrition Advisor
     /// - Parameters:
     ///   - completion: NutritionAdvisorResult with sucess or error message
@@ -880,6 +874,19 @@ public struct NutritionPreviewResult : Codable {
     public func encode(to encoder: any Encoder) throws
 }
 
+public struct Obfuscator {
+
+    public var obfuscated: [UInt8] { get }
+
+    public static func deobfuscate(obfuscated: [UInt8]) -> [UInt8]
+
+    public static func deobfuscate(obfuscated: [UInt8]) -> String?
+
+    public init(_ unobfuscated: [UInt8])
+
+    public init(_ unobfuscated: String)
+}
+
 /// The ObjectDetectionCandidate protocol returns the object detection result
 public protocol ObjectDetectionCandidate : PassioNutritionAISDK.ClassificationCandidate {
 
@@ -926,6 +933,13 @@ public protocol PackagedFoodCandidate {
 
 /// packagedFoodCode (typealias String) is the string representation of the PackagedFoodCode id
 public typealias PackagedFoodCode = String
+
+/// Implement to receive account usage updates. Used to monitor total monthly
+/// tokens, used tokens and how many tokens the last request used.
+public protocol PassioAccountDelegate : AnyObject {
+
+    func tokenBudgetUpdated(tokenBudget: PassioNutritionAISDK.PassioTokenBudget)
+}
 
 public struct PassioAdvisorFoodInfo : Codable {
 
@@ -2017,11 +2031,11 @@ public class PassioMetadataService {
 
     public var getlabelIcons: [PassioNutritionAISDK.PassioID : PassioNutritionAISDK.PassioID]? { get }
 
+    public init(metatadataURL: URL? = nil)
+
     public func getPassioIDs(byModelName: String) -> [PassioNutritionAISDK.PassioID]?
 
     public func getLabel(passioID: PassioNutritionAISDK.PassioID, languageCode: String = "en") -> String?
-
-    public init(metatadataURL: URL? = nil)
 }
 
 /// PassioMode will report the mode the SDK is currently in.
@@ -2234,6 +2248,10 @@ public class PassioNutritionAI {
 
     /// Delegate to track PassioStatus changes. You will get the same status via the configure function.
     weak public var statusDelegate: (any PassioNutritionAISDK.PassioStatusDelegate)?
+
+    /// Delegate to track account usage updates. Used to monitor total monthly
+    /// tokens, used tokens and how many tokens the last request used.
+    weak public var accountDelegate: (any PassioNutritionAISDK.PassioAccountDelegate)?
 
     /// Available frames per seconds. The default set for two (2) fps.
     public enum FramesPerSecond : Int32 {
@@ -2512,6 +2530,12 @@ public class PassioNutritionAI {
     ///   - foodName: Food name to search for
     ///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` ingredients showing what might be contained in the given food.
     public func fetchPossibleIngredients(foodName: String, completion: @escaping PassioNutritionAISDK.NutritionAdvisorIngredientsResponse)
+
+    /// Use this method to turn Flashlight on/off.
+    /// - Parameters:
+    ///   - enabled: Pass true to turn flashlight on or pass false to turn in off.
+    ///   - torchLevel: Sets the illumination level when in Flashlight mode. This value must be a floating-point number between 0.0 and 1.0.
+    public func enableFlashlight(enabled: Bool, level torchLevel: Float)
 }
 
 extension PassioNutritionAI : PassioNutritionAISDK.PassioStatusDelegate {
@@ -2525,6 +2549,11 @@ extension PassioNutritionAI : PassioNutritionAISDK.PassioStatusDelegate {
     public func passioStatusChanged(status: PassioNutritionAISDK.PassioStatus)
 
     public func passioProcessing(filesLeft: Int)
+}
+
+extension PassioNutritionAI : PassioNutritionAISDK.PassioAccountDelegate {
+
+    public func tokenBudgetUpdated(tokenBudget: PassioNutritionAISDK.PassioTokenBudget)
 }
 
 extension PassioNutritionAI {
@@ -2943,6 +2972,8 @@ public struct PassioSpeechRecognitionModel {
     public let date: String!
 
     public let advisorFoodInfo: PassioNutritionAISDK.PassioAdvisorFoodInfo
+
+    public init(action: PassioNutritionAISDK.PassioLogAction?, meal: PassioNutritionAISDK.PassioMealTime?, date: String!, extractedIngridient: PassioNutritionAISDK.PassioAdvisorFoodInfo)
 }
 
 /// PassioStatus is returned at the end of the configuration of the SDK.
@@ -2995,6 +3026,40 @@ public protocol PassioStatusDelegate : AnyObject {
     func completedDownloadingFile(fileLocalURL: PassioNutritionAISDK.FileLocalURL, filesLeft: Int)
 
     func downloadingError(message: String)
+}
+
+public struct PassioTokenBudget : Codable {
+
+    public let budgetCap: Int
+
+    public let periodUsage: Int
+
+    public let requestUsage: Int
+
+    public var usedPercent: Float { get }
+
+    public func toString() -> String
+
+    public func debugPrint()
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: any Encoder) throws
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    public init(from decoder: any Decoder) throws
 }
 
 public struct Portion : Codable {
@@ -3693,6 +3758,8 @@ extension Array {
 extension UIImageView {
 
     @MainActor public func loadPassioIconBy(passioID: PassioNutritionAISDK.PassioID, entityType: PassioNutritionAISDK.PassioIDEntityType, size: PassioNutritionAISDK.IconSize = .px90, completion: @escaping (PassioNutritionAISDK.PassioID, UIImage) -> Void)
+
+    @MainActor public func loadImage(from url: URL, placeholder: UIImage? = nil)
 }
 
 infix operator .+ : DefaultPrecedence

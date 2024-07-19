@@ -1,6 +1,39 @@
 # Passio SDK Release Notes
 
-## V3.1.2
+## V3.1.4
+
+### New APIs.
+- Added Token Usage API to track token usage.
+```swift
+/// Delegate to track account usage updates. Used to monitor total monthly
+/// tokens, used tokens and how many tokens the last request used.
+public weak var accountDelegate: PassioAccountDelegate?
+
+/// Implement to receive account usage updates. Used to monitor total monthly
+/// tokens, used tokens and how many tokens the last request used.
+public protocol PassioAccountDelegate: AnyObject {
+    func tokenBudgetUpdated(tokenBudget: PassioTokenBudget)
+}
+
+public struct PassioTokenBudget: Codable {
+    public let budgetCap: Int
+    public let periodUsage: Int
+    public let requestUsage: Int
+    public var usedPercent: Float { get }
+    public func toString() -> String
+    public func debugPrint()
+}
+```
+
+- Added Flashlight API to turn Flashlight on/off.
+```swift
+/// Use this method to turn Flashlight on/off. This method will toggle the flashlight: if it is off, it will turn it on; if it is on, it will turn it off.
+/// - Parameters:
+///   - torchLevel: Sets the illumination level when in Flashlight mode. This value must be a floating-point number between 0.0 and 1.0. Default value for this parameter is  maxAvailableTorchLevel. Under thermal duress, the maximum available torch level may be less than 1.0.
+public func setFlashlightOn(level torchLevel: Float = AVCaptureDevice.maxAvailableTorchLevel)
+```
+
+## V3.1.3
 - Added missing suggarAdded nutrient in the `PassioNutrients`
 
 ## V3.1.1
