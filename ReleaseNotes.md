@@ -1,5 +1,64 @@
 # Passio SDK Release Notes
 
+## V3.2.0
+### New APIs:
+
+- Added remote recognition of nutrition facts
+```swift
+/// Use this method for scanning nutrients from Packaged Product. This method returns ``PassioFoodItem``.
+    /// - Parameters:
+    ///   - image: Image for detecting nutrients
+    ///   - resolution: Image resoultion for detection. Default Image resoultion is `512`, see ``PassioImageResolution`` for more options.
+    ///   - completion: If the response is successful, you will receive ``PassioFoodItem`` or else you will receive nil value.
+    public func recognizeNutritionFactsRemote(image: UIImage,
+                                              resolution: PassioImageResolution = .res_512,
+                                              completion: @escaping (PassioFoodItem?) -> Void)
+```
+
+- Added support for localization
+```swift
+/// Use this method to retrieve localized food data. The method will return `true` if the language setting is applied successfully.
+    /// - Parameters:
+    ///   - languageCode: A two-character string representing the ISO 639-1 language code (e.g., 'en' for English, 'fr' for French, 'de' for German).
+    public func updateLanguage(languageCode: String) -> Bool
+```
+
+### Updated APIs.
+
+- Added `remoteOnly` property in `PassioConfiguration` struct
+```swift
+/// If you set this option to true, the SDK will not download the ML models and Visual and Packaged food detection won't work, only Barcode and NutritionFacts will work.
+    public var remoteOnly = false
+```
+
+- Added barcode and nutrition facts scanning to the recognizeImageRemote function.
+```swift
+/// Use this method to retrieve ``PassioAdvisorFoodInfo`` by providing an image. You can provide any image, including those of regular food, barcodes, or nutrition facts printed on a product, to obtain the corresponding ``PassioAdvisorFoodInfo``
+    /// - Parameters:
+    ///   - image: UIImage for recognizing Food, Barcodes or Nutrition Facts
+    ///   - resolution: Image resoultion for detection. Default Image resoultion is 512, see ``PassioImageResolution`` for more options.
+    ///   - completion: Returns Array of ``PassioAdvisorFoodInfo`` if any or empty array if unable to recognize food in image
+    public func recognizeImageRemote(image: UIImage,
+                                     resolution: PassioImageResolution = .res_512,
+                                     message: String? = nil,
+                                     completion: @escaping ([PassioAdvisorFoodInfo]) -> Void)
+```
+
+- Added new tags property in PassioFoodDataInfo
+```swift
+public let tags: [String]?
+```
+
+- Added new Vitamin A RAE with μ unit in PassioNutrients struct
+```swift
+public func vitaminA_RAE() ->  Measurement<UnitMass>?
+```
+
+- Added new apiName property in PassioTokenBudget struct
+```swift
+public let apiName: String
+```
+
 ## V3.1.4
 
 ### New APIs.
@@ -27,10 +86,11 @@ public struct PassioTokenBudget: Codable {
 
 - Added Flashlight API to turn Flashlight on/off.
 ```swift
-/// Use this method to turn Flashlight on/off. This method will toggle the flashlight: if it is off, it will turn it on; if it is on, it will turn it off.
+/// Use this method to turn Flashlight on/off.
 /// - Parameters:
-///   - torchLevel: Sets the illumination level when in Flashlight mode. This value must be a floating-point number between 0.0 and 1.0. Default value for this parameter is  maxAvailableTorchLevel. Under thermal duress, the maximum available torch level may be less than 1.0.
-public func setFlashlightOn(level torchLevel: Float = AVCaptureDevice.maxAvailableTorchLevel)
+///   - enabled: Pass true to turn flashlight on or pass false to turn in off.
+///   - torchLevel: Sets the illumination level when in Flashlight mode. This value must be a floating-point number between 0.0 and 1.0.
+public func enableFlashlight(enabled: Bool, level torchLevel: Float)
 ```
 
 ## V3.1.3

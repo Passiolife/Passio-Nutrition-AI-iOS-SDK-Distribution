@@ -328,7 +328,6 @@ class RotationViewController: UIViewController {
             view.layer.insertSublayer(vLayer, at: 0)
         }
     }
-
 }
 
 ```
@@ -340,5 +339,37 @@ class RotationViewController: UIViewController {
 * Nutrition facts 
 
 ![Use this image to test recognition](./READMEIMAGES/passio_recognition_test.jpg)
+
+# Nutrition Advisor
+
+## Initialize and configure the Nutrition Advisor
+
+#### Note: Make sure you don't utilize the PassioNutritionAISDK Key. Instead, enter the key you obtained from Passio for NutritionAdvisor.
+- In ```viewDidLoad``` configure the Nutrition Advisor with the Key.
+```swift
+override func viewDidLoad() {
+    super.viewDidLoad()
+    let key = "Your_Nutrition_Advisor_Key"
+    NutritionAdvisor.shared.initConversation { status in
+         // initConversation status
+  }
+}
+```
+### After configuring the Nutrition Advisor
+
+1. Use this method to send message to Nutrition Advisor
+    ```swift
+    NutritionAdvisor.shared.sendMessage(message: message) { [weak self] advisorResponse in
+        /// If the response is successful, you will receive PassioAdvisorResponse
+        /// containing food information otherwise you will get error message
+    }
+    ```
+2. Use this method to send image to Nutrition Advisor
+    ```swift
+    NutritionAdvisor.shared.sendImage(image: image) { [weak self] advisorResponse in
+        /// If the response is successful, you will receive PassioAdvisorResponse
+        /// containing food information otherwise you will get error message
+    }
+    ```
 
 **© 2024 Passio, Inc. All rights reserved.**
