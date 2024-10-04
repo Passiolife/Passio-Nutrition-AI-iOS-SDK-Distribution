@@ -11,7 +11,6 @@ import CoreMedia
 import CoreMotion
 import DeveloperToolsSupport
 import Foundation
-import MLCompute
 import Metal
 import MetalPerformanceShaders
 import SQLite3
@@ -872,25 +871,25 @@ public class NutritionAdvisor {
 
     /// Initiate converstion with Nutrition Advisor
     /// - Parameters:
-    ///   - completion: NutritionAdvisorResult with sucess or error message
+    ///   - completion: ``NutritionAdvisorStatus`` with sucess or error message
     public func initConversation(completion: @escaping PassioNutritionAISDK.NutritionAdvisorStatus)
 
     /// Use this method to send message to Nutrition Advisor
     /// - Parameters:
     ///   - message: Message you want to send
-    ///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive PassioAdvisorResponse containing food information.
+    ///   - completion: Response with a success or error message. If the response is successful, you will receive ``NutritionAdvisorResponse`` containing ``PassioAdvisorResponse``.
     public func sendMessage(message: String, completion: @escaping PassioNutritionAISDK.NutritionAdvisorResponse)
 
     /// Use this method to send image to Nutrition Advisor
     /// - Parameters:
     ///   - image: UIImage you want to send
-    ///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive PassioAdvisorResponse containing food information.
+    ///   - completion: Response with a success or error message. If the response is successful, you will receive ``NutritionAdvisorResponse`` containing ``PassioAdvisorResponse``.
     public func sendImage(image: UIImage, completion: @escaping PassioNutritionAISDK.NutritionAdvisorResponse)
 
     /// Use this method to fetch ingredients
     /// - Parameters:
-    ///   - advisorResponse: Pass PassioAdvisorResponse
-    ///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive PassioAdvisorResponse containing food information.
+    ///   - advisorResponse: Pass ``PassioAdvisorResponse`` to get food info.
+    ///   - completion: Response with a success or error message. If the response is successful, you will receive ``NutritionAdvisorResponse`` containing ``PassioAdvisorResponse``.
     public func fetchIngridients(from advisorResponse: PassioNutritionAISDK.PassioAdvisorResponse, completion: @escaping PassioNutritionAISDK.NutritionAdvisorResponse)
 }
 
@@ -1295,11 +1294,13 @@ public struct PassioFoodItem : Codable {
 
     public var ingredients: [PassioNutritionAISDK.PassioIngredient]
 
-    public let refCode: String?
+    public let refCode: String
 
     public var tags: [String]?
 
     public var foodItemName: String { get }
+
+    public init(id: String, scannedId: PassioNutritionAISDK.PassioID = "", name: String, details: String, iconId: String, licenseCopy: String = "", amount: PassioNutritionAISDK.PassioFoodAmount, ingredients: [PassioNutritionAISDK.PassioIngredient], refCode: String, tags: [String]? = nil)
 
     public func nutrients(weight: Measurement<UnitMass>) -> PassioNutritionAISDK.PassioNutrients
 
@@ -1941,11 +1942,11 @@ public struct PassioIngredient : Codable {
 
     public var metadata: PassioNutritionAISDK.PassioFoodMetadata
 
-    public let refCode: String?
+    public let refCode: String
 
     public let tags: [String]?
 
-    public init(id: String, name: String, iconId: String, amount: PassioNutritionAISDK.PassioFoodAmount, referenceNutrients: PassioNutritionAISDK.PassioNutrients, metadata: PassioNutritionAISDK.PassioFoodMetadata, refCode: String?, tags: [String]?)
+    public init(id: String, name: String, iconId: String, amount: PassioNutritionAISDK.PassioFoodAmount, referenceNutrients: PassioNutritionAISDK.PassioNutrients, metadata: PassioNutritionAISDK.PassioFoodMetadata, refCode: String, tags: [String]?)
 
     public func nutrients(weight: Measurement<UnitMass>) -> PassioNutritionAISDK.PassioNutrients
 
@@ -2404,13 +2405,13 @@ public class PassioNutritionAI {
     /// The SDK will request Compressed file the default is set to "true" (faster download/slower processing). If set to "false" the SDK will request none-compressed files (slower download/faster processing.
     public var requestCompressedFiles: Bool
 
-    /// Get the PassioStatus directly or implement the PassioStatusDelegate for updates.
+    /// Get the ``PassioStatus`` directly or implement the ``PassioStatusDelegate`` for updates.
     public var status: PassioNutritionAISDK.PassioStatus { get }
 
-    /// Delegate to track PassioStatus changes. You will get the same status via the configure function.
+    /// Delegate to track ``PassioStatus`` changes. You will get the same status via the configure function.
     weak public var statusDelegate: (any PassioNutritionAISDK.PassioStatusDelegate)?
 
-    /// Delegate to track account usage updates. Used to monitor total monthly
+    /// Delegate to track account usage updates (``PassioTokenBudget``). Used to monitor total monthly
     /// tokens, used tokens and how many tokens the last request used.
     weak public var accountDelegate: (any PassioNutritionAISDK.PassioAccountDelegate)?
 
@@ -2471,8 +2472,8 @@ public class PassioNutritionAI {
 
     /// Call this API to configure the SDK
     /// - Parameters:
-    ///   - PassioConfiguration: Your desired configuration, must include your developer key
-    ///   - completion: Receive back the status of the SDK
+    ///   - passioConfiguration: ``PassioConfiguration``, Your desired configuration, which must include your developer key
+    ///   - completion: ``PassioStatus``, Receive back the status of the SDK
     public func configure(passioConfiguration: PassioNutritionAISDK.PassioConfiguration, completion: @escaping (PassioNutritionAISDK.PassioStatus) -> Void)
 
     /// Shut down the Passio SDK and release all resources
@@ -2480,53 +2481,52 @@ public class PassioNutritionAI {
 
     /// Use this function to detect food via pointing the camera at Food, Barcode and Packaged Food
     /// - Parameters:
-    ///   - detectionConfig: FoodDetectionConfiguration() object with the configuration
-    ///   - foodRecognitionDelegate: Add self to implement the FoodRecognitionDelegate
+    ///   - detectionConfig: ``FoodDetectionConfiguration`` object with the configuration
+    ///   - foodRecognitionDelegate: ``FoodRecognitionDelegate``, Add self to implement the FoodRecognitionDelegate
+    ///   - capturingDeviceType: ``CapturingDeviceType``, Defaults sets to best camera available for current iPhone.
     ///   - completion: success or failure of the startFoodDetection
     public func startFoodDetection(detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), foodRecognitionDelegate: any PassioNutritionAISDK.FoodRecognitionDelegate, capturingDeviceType: PassioNutritionAISDK.CapturingDeviceType = .defaultCapturing(), completion: @escaping (Bool) -> Void)
 
     /// Use this function to detect Nutrition Facts via pointing the camera at Nutrition Facts
     /// - Parameters:
-    ///   - nutritionfactsDelegate: Add self to implement the NutritionFactsDelegate
+    ///   - nutritionfactsDelegate: ``NutritionFactsDelegate``, Add self to implement the NutritionFactsDelegate
+    ///   - capturingDeviceType: ``CapturingDeviceType``, Defaults sets to best camera available for current iPhone.
     ///   - completion: success or failure of the startNutritionFactsDetection
     public func startNutritionFactsDetection(nutritionfactsDelegate: (any PassioNutritionAISDK.NutritionFactsDelegate)?, capturingDeviceType: PassioNutritionAISDK.CapturingDeviceType = .defaultCapturing(), completion: @escaping (Bool) -> Void)
 
     /// Use this function to stop food detection.
-    ///
-    /// Use this method to remove camera completely
-    ///
-    ///     public func removeVideoLayer()
     public func stopFoodDetection()
 
     /// Detect food in a static image/photo
     /// - Parameters:
     ///   - image: Image for detection
-    ///   - detectionConfig: FoodDetectionConfiguration
+    ///   - detectionConfig: ``FoodDetectionConfiguration``
     ///   - slicingRects: Optional ability to divide the image to slices or regions.
-    ///   - completion: optional FoodCandidates
+    ///   - completion: ``FoodCandidates``
+    @available(*, deprecated, message: "This API is deprecated and will be removed in future SDK versions. Please use the `recognizeImageRemote(image:resolution:message:completion)` API instead.")
     public func detectFoodIn(image: UIImage, detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), slicingRects: [CGRect]? = nil, completion: @escaping ((any PassioNutritionAISDK.FoodCandidates)?) -> Void)
 
     /// Detect barcodes "BarcodeCandidate" in an image
     /// - Parameter image: Image for the detection
-    /// - Parameter completion: Receives back Array of "BarcodeCandidate" for that image
+    /// - Parameter completion: Receives back Array of ``BarcodeCandidate`` for that image
     public func detectBarcodesIn(image: UIImage, completion: @escaping ([any PassioNutritionAISDK.BarcodeCandidate]) -> Void)
 
     /// List all food enabled for weight estimations
-    /// - Returns: List of PassioIDs
+    /// - Returns: Array of ``PassioID``
     public func listFoodEnabledForAmountEstimation() -> [PassioNutritionAISDK.PassioID]
 
     public func isWeightEstimateAvailableFor(passioID: PassioNutritionAISDK.PassioID) -> Bool
 
     /// use getPreviewLayer if you don't plan to rotate the PreviewLayer.
-    /// - Returns: AVCaptureVideoPreviewLayer
+    /// - Returns: ``AVCaptureVideoPreviewLayer``
     public func getPreviewLayer() -> AVCaptureVideoPreviewLayer?
 
     /// use getPreviewLayerWithGravity if you plan to rotate the PreviewLayer.
-    /// - Returns: AVCaptureVideoPreviewLayer
+    /// - Returns: ``AVCaptureVideoPreviewLayer``
     public func getPreviewLayerWithGravity(sessionPreset: AVCaptureSession.Preset = .hd1920x1080, volumeDetectionMode: PassioNutritionAISDK.VolumeDetectionMode = .none, videoGravity: AVLayerVideoGravity = .resizeAspectFill, capturingDeviceType: PassioNutritionAISDK.CapturingDeviceType = .defaultCapturing()) -> AVCaptureVideoPreviewLayer?
 
     /// Use getPreviewLayer if you don't plan to rotate the PreviewLayer.
-    /// - Returns: AVCaptureVideoPreviewLayer
+    /// - Returns: ``AVCaptureVideoPreviewLayer``
     public func getPreviewLayerForFrontCamera() -> AVCaptureVideoPreviewLayer?
 
     /// Don't call this function if you need to use the Passio layer again. Only call this function to set the PassioSDK Preview layer to nil
@@ -2536,7 +2536,7 @@ public class PassioNutritionAI {
     ///  - Parameter level: Level of zoom
     public func setCamera(toVideoZoomFactor: CGFloat)
 
-    /// Use this property to get Min and Max available VideoZoomFactor for camera
+    /// Use this property to get Min and Max available``VideoZoomFactor`` for camera
     public var getMinMaxCameraZoomLevel: (minLevel: CGFloat?, maxLevel: CGFloat?) { get }
 
     /// Use this function if you want to allow user to change focus of SDK's camera manually
@@ -2560,70 +2560,71 @@ public class PassioNutritionAI {
     public func cleanAllPersonalization()
 
     /// Lookup fetchFoodItemFor from PassioID
-    /// - Parameter passioID: PassioID
-    /// - Returns: PassioFoodItem
+    /// - Parameter ``PassioID``
+    /// - Returns: ``PassioFoodItem``
     public func fetchFoodItemFor(passioID: PassioNutritionAISDK.PassioID, completion: @escaping (PassioNutritionAISDK.PassioFoodItem?) -> Void)
 
     /// Lookup fetchFoodItem from RefCode
-    /// - Parameter RefCode: String
-    /// - Returns: PassioFoodItem
+    /// - Parameters:
+    ///   - refCode: Pass refCode as a String
+    ///   - completion: ``PassioFoodItem``
     public func fetchFoodItemFor(refCode: String, completion: @escaping (PassioNutritionAISDK.PassioFoodItem?) -> Void)
 
     /// Advanced search for food will return a list of alternate search and search result
     /// - Parameters:
-    ///   - byText: User typed in text
-    ///   - completion: PassioAlternateSearchNames, which containts list of alternate search and its results
+    ///   - byText: User typed text
+    ///   - completion: ``SearchResponse``, which containts list of alternate search and its results
     public func searchForFood(byText: String, completion: @escaping (PassioNutritionAISDK.SearchResponse?) -> Void)
 
-    /// Fetch ``PassioFoodItem`` for given ``PassioFoodDataInfo`` and weightGrams
+    /// Fetch ``PassioFoodItem`` for given ``PassioFoodDataInfo`` and servingQuantity and servingUnit.
     /// - Parameters:
-    ///   - foodItem: PassioFoodDataInfo
-    ///   - weighGrams: Optional Double, Default value is nil
-    ///   - completion: PassioFoodItem
-    public func fetchFoodItemFor(foodItem: PassioNutritionAISDK.PassioFoodDataInfo, weightGrams: Double? = nil, completion: @escaping (PassioNutritionAISDK.PassioFoodItem?) -> Void)
+    ///   - foodDataInfo: ``PassioFoodDataInfo``
+    ///   - servingQuantity: Pass servingQuantity to set in ``PassioFoodItem``
+    ///   - servingUnit: Pass servingUnit to set in ``PassioFoodItem``
+    ///   - completion: ``PassioFoodItem``
+    public func fetchFoodItemFor(foodDataInfo: PassioNutritionAISDK.PassioFoodDataInfo, servingQuantity: Double? = nil, servingUnit: String? = nil, completion: @escaping (PassioNutritionAISDK.PassioFoodItem?) -> Void)
 
     /// Get suggestions for particular meal time.
     /// - Parameters:
-    ///   - mealTime: meal time (.breakfast, .lunch, .dinner, .snack)
-    ///   - completion: [PassioFoodDataInfo]
+    ///   - mealTime: ``PassioMealTime`` (.breakfast, .lunch, .dinner, .snack)
+    ///   - completion: [``PassioFoodDataInfo``]
     public func fetchSuggestions(mealTime: PassioNutritionAISDK.PassioMealTime, completion: @escaping ([PassioNutritionAISDK.PassioFoodDataInfo]) -> Void)
 
     /// Get list of all meal plans.
     /// - Parameters:
-    ///   - completion: [PassioMealPlan]
+    ///   - completion: [``PassioMealPlan``]
     public func fetchMealPlans(completion: @escaping ([PassioNutritionAISDK.PassioMealPlan]) -> Void)
 
     /// Fetch meal plan for the day
     /// - Parameters:
     ///   - mealPlanLabel: type of mealPlan
     ///   - day: for which day meal plan is needed
-    ///   - completion: [PassioMealPlanItem]
+    ///   - completion: [``PassioMealPlanItem``]
     public func fetchMealPlanForDay(mealPlanLabel: String, day: Int, completion: @escaping ([PassioNutritionAISDK.PassioMealPlanItem]) -> Void)
 
     /// Fetch from Passio web-service the PassioFoodItem for a productCode
     /// - Parameter barcode: Product code
-    /// - Parameter completion: PassioFoodItem?
+    /// - Parameter completion: ``PassioFoodItem``
     public func fetchFoodItemFor(productCode: String, completion: @escaping ((PassioNutritionAISDK.PassioFoodItem?) -> Void))
 
     /// Fetch PassioFoodItem for a v2 PassioID
     /// - Parameter passioID: PassioID
-    /// - Parameter completion: Receive a closure with optional PassioFoodItem
+    /// - Parameter completion: Receive a closure with optional ``PassioFoodItem``
     public func fetchFoodItemLegacy(from passioID: PassioNutritionAISDK.PassioID, completion: @escaping (PassioNutritionAISDK.PassioFoodItem?) -> Void)
 
     /// This function replaces 'lookupIconFor'. You will receive the placeHolderIcon and an optional icon.  If the icons is nil you can use the asynchronous function to "fetchIconFor" the icons from the web.
     /// - Parameters:
     ///   - passioID: PassioID
-    ///   - size: IconSize (.px90, .px180 or .px360) where .px90 is the default
-    ///   - entityType: PassioEntityType to return the right placeholder.
+    ///   - size: ``IconSize`` (.px90, .px180 or .px360) where .px90 is the default
+    ///   - entityType: ``PassioIDEntityType`` to return the right placeholder.
     /// - Returns: UIImage and a UIImage?  You will receive the placeHolderIcon and an optional icon.  If the icons is nil you can use the asynchronous function to "fetchIconFor" the icons from the web.
     public func lookupIconsFor(passioID: PassioNutritionAISDK.PassioID, size: PassioNutritionAISDK.IconSize = IconSize.px90, entityType: PassioNutritionAISDK.PassioIDEntityType = .item) -> (placeHolderIcon: UIImage, icon: UIImage?)
 
     /// Fetch icons from the web.
     /// - Parameters:
-    ///   - passioID: PassioID
-    ///   - size: IconSize (.px90, .px180 or .px360) where .px90 is the default
-    ///   - entityType: PassioEntityType to return the right placeholder.
-    ///   - completion: Optional Icon.
+    ///   - passioID: ``PassioID``
+    ///   - size: ``IconSize`` (.px90, .px180 or .px360) where .px90 is the default
+    ///   - completion: UIImage? rerpesenting food Icon.
     public func fetchIconFor(passioID: PassioNutritionAISDK.PassioID, size: PassioNutritionAISDK.IconSize = IconSize.px90, completion: @escaping (UIImage?) -> Void)
 
     /// Get the icon URL
@@ -2656,10 +2657,10 @@ public class PassioNutritionAI {
     @available(iOS 15.0, *)
     public func setMLComputeUnits(units: MLComputeUnits)
 
-    /// Use this method to fetch PassioSpeechRecognitionModel using speech
+    /// Use this method to fetch ``PassioSpeechRecognitionModel`` using speech
     /// - Parameters:
     ///   - text: Text for recognizing food logging actions
-    ///   - completion: Actions with food data info
+    ///   - completion: Array of ``PassioSpeechRecognitionModel``
     public func recognizeSpeechRemote(from text: String, completion: @escaping ([PassioNutritionAISDK.PassioSpeechRecognitionModel]) -> Void)
 
     /// Use this method to retrieve ``PassioAdvisorFoodInfo`` by providing an image. You can provide any image, including those of regular food, barcodes, or nutrition facts printed on a product, to obtain the corresponding ``PassioAdvisorFoodInfo``
@@ -2671,28 +2672,28 @@ public class PassioNutritionAI {
 
     /// Detect food in a static image/photo
     /// - Parameters:
-    ///   - image: Image for detection
-    ///   - detectionConfig: FoodDetectionConfiguration
+    ///   - image: UIImage for detection
+    ///   - detectionConfig: ``FoodDetectionConfiguration``
     ///   - slicingRects: Optional ability to divide the image to slices or regions.
-    ///   - completion: optional FoodCandidates
+    ///   - completion: ``FoodCandidatesWithText``?
     public func detectFoodWithText(image: UIImage, detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), completion: @escaping ((any PassioNutritionAISDK.FoodCandidatesWithText)?) -> Void)
 
     /// Returns hidden ingredients for a given food item
     /// - Parameters:
     ///   - foodName: Food name to search for
-    ///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` hidden ingredients found in the searched for food item.
+    ///   - completion: ``NutritionAdvisorIngredientsResponse``, NutritionAdvisor responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` hidden ingredients found in the searched for food item.
     public func fetchHiddenIngredients(foodName: String, completion: @escaping PassioNutritionAISDK.NutritionAdvisorIngredientsResponse)
 
     /// Returns visual alternatives for a given food item
     /// - Parameters:
     ///   - foodName: Food name to search for
-    ///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` visual alternatives for the searched for food item.
+    ///   - completion: ``NutritionAdvisorIngredientsResponse``, NutritionAdvisor responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` visual alternatives for the searched for food item.
     public func fetchVisualAlternatives(foodName: String, completion: @escaping PassioNutritionAISDK.NutritionAdvisorIngredientsResponse)
 
     /// Returns possible ingredients for a given food item
     /// - Parameters:
     ///   - foodName: Food name to search for
-    ///   - completion: NutritionAdvisor responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` ingredients showing what might be contained in the given food.
+    ///   - completion: ``NutritionAdvisorIngredientsResponse``, NutritionAdvisor responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` ingredients showing what might be contained in the given food.
     public func fetchPossibleIngredients(foodName: String, completion: @escaping PassioNutritionAISDK.NutritionAdvisorIngredientsResponse)
 
     /// Use this method for scanning nutrients from Packaged Product. This method returns ``PassioFoodItem``.
@@ -2712,6 +2713,26 @@ public class PassioNutritionAI {
     /// - Parameters:
     ///   - languageCode: A two-character string representing the ISO 639-1 language code (e.g., 'en' for English, 'fr' for French, 'de' for German).
     public func updateLanguage(languageCode: String) -> Bool
+
+    /// Use this method to submit User Created Food. The method will return `true` if the uploading of user food is successfull.
+    /// - Parameters:
+    ///   - item: Pass ``PassioFoodItem`` to sumbit it to Passio
+    ///   - completion: You will receive ``PassioResult`` in completion.
+    public func submitUserCreatedFood(item: PassioNutritionAISDK.PassioFoodItem, completion: @escaping PassioNutritionAISDK.PassioResult)
+
+    /**
+     Use this method to report incorrect food item
+     
+     - Parameters:
+        - refCode: Reference code of food item
+        - productCode: Product code
+        - notes: Note if any (optional)
+        - completion: You will receive ``PassioResult`` in completion.
+     
+     - Precondition: Either `refCode` or `productCode` must be present
+     - Returns: It returns ``PassioResult`` that can be either an `errorMessage` or the `boolean` noting the success of the operation.
+     */
+    public func reportFoodItem(refCode: String = "", productCode: String = "", notes: [String]? = nil, completion: @escaping PassioNutritionAISDK.PassioResult)
 }
 
 extension PassioNutritionAI : PassioNutritionAISDK.PassioStatusDelegate {
@@ -2949,6 +2970,8 @@ extension PassioNutritionFacts.ServingSizeUnit : Hashable {
 
 extension PassioNutritionFacts.ServingSizeUnit : RawRepresentable {
 }
+
+public typealias PassioResult = (Result<Bool, PassioNutritionAISDK.NetworkError>) -> Void
 
 /// PassioSDKError will return the error with errorDescription if the configuration has failed.
 public enum PassioSDKError : LocalizedError, Codable {

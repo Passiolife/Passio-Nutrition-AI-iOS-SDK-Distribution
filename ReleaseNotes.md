@@ -1,5 +1,32 @@
 # Passio SDK Release Notes
 
+## V3.2.1
+### New APIs:
+
+- Added report food API
+```swift
+/**
+     Use this method to report incorrect food item
+     
+     - Parameters:
+        - refCode: Reference code of food item
+        - productCode: Product code
+        - notes: Note if any (optional)
+        - completion: You will receive ``PassioResult`` in completion.
+     
+     - Precondition: Either `refCode` or `productCode` must be present
+     - Returns: It returns ``PassioResult`` that can be either an `errorMessage` or the `boolean` noting the success of the operation.
+     */
+```
+
+- Submit User Created Food
+```swift
+/// Use this method to submit User Created Food. The method will return `true` if the uploading of user food is successfull.
+    /// - Parameters:
+    ///   - item: Pass ``PassioFoodItem`` to sumbit it to Passio
+    ///   - completion: You will receive ``PassioResult`` in completion.
+```
+
 ## V3.2.0
 ### New APIs:
 
