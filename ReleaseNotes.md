@@ -1,5 +1,48 @@
 # Passio SDK Release Notes
 
+## V3.2.2
+### New APIs:
+
+- Added semantic search API
+```swift
+/// Semantic search for food will return a list of alternate search and search result
+    /// - Parameters:
+    ///   - byText: User typed text
+    ///   - completion: ``SearchResponse``, which containts list of alternate search and its results
+    public func semanticSearchForFood(searchTerm: String,
+                                      completion: @escaping (PassioNutritionAISDK.SearchResponse?) -> Void)
+
+```
+
+- Added fetch next predicted ingredients API
+```swift
+/// Returns possible ingredients for a given food item
+    /// - Parameters:
+    ///   - ingredients: List of food ingredients name
+    ///   - completion: ``PassioPredictedIngredients``, PassioPredictedIngredients responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` ingredients showing what might be contained in the given food.
+    public func fetchNextPredictedIngredients(ingredients: [String], 
+                                              completion: @escaping PassioNutritionAISDK.PassioPredictedIngredients)
+
+```
+
+### Updated APIs:
+
+- Change fetchTagsFor API to accept the refCode
+```swift
+/// Fetch the tags from the ref code
+    /// - Parameters:
+    ///   - refCode: Reference code of food item
+    ///   - completion: Tag as a list of strings
+```
+
+- Change fetchInflammatoryEffectData API to accept the refCode
+```swift
+/// Fetch the list of nutrients with their inflammatory score
+    /// - Parameters:
+    ///   - refCode: Reference code of food item
+    ///   - completion: List of `InflammatoryEffectData` objects
+```
+
 ## V3.2.1
 ### New APIs:
 
@@ -16,7 +59,12 @@
      
      - Precondition: Either `refCode` or `productCode` must be present
      - Returns: It returns ``PassioResult`` that can be either an `errorMessage` or the `boolean` noting the success of the operation.
-     */
+     public func reportFoodItem(refCode: String = "", 
+                                productCode: String = "", 
+                                notes: [String]? = nil, 
+                                completion: @escaping PassioNutritionAISDK.PassioResult)
+
+*/
 ```
 
 - Submit User Created Food
@@ -25,6 +73,9 @@
     /// - Parameters:
     ///   - item: Pass ``PassioFoodItem`` to sumbit it to Passio
     ///   - completion: You will receive ``PassioResult`` in completion.
+    public func submitUserCreatedFood(item: PassioNutritionAISDK.PassioFoodItem,
+                                      completion: @escaping PassioNutritionAISDK.PassioResult)
+
 ```
 
 ## V3.2.0

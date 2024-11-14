@@ -1,6 +1,6 @@
 # PassioNutritionAISDK 
 
-## Version 3.2.0
+## Version 3.2.2
 
 ```Swift
 import AVFoundation
@@ -11,6 +11,7 @@ import CoreMedia
 import CoreMotion
 import DeveloperToolsSupport
 import Foundation
+import MLCompute
 import Metal
 import MetalPerformanceShaders
 import SQLite3
@@ -541,6 +542,8 @@ extension IconSize : RawRepresentable {
 
 /// InflammatoryEffectData for nutrients data
 public struct InflammatoryEffectData : Codable {
+
+    public let foodName: String
 
     public let name: String
 
@@ -1194,9 +1197,9 @@ public struct PassioConfiguration : Equatable {
 
 public struct PassioFoodAmount : Codable {
 
-    public let servingSizes: [PassioNutritionAISDK.PassioServingSize]
+    public var servingSizes: [PassioNutritionAISDK.PassioServingSize]
 
-    public let servingUnits: [PassioNutritionAISDK.PassioServingUnit]
+    public var servingUnits: [PassioNutritionAISDK.PassioServingUnit]
 
     public var selectedUnit: String
 
@@ -1309,6 +1312,14 @@ public struct PassioFoodItem : Codable {
     public func nutrientsReference() -> PassioNutritionAISDK.PassioNutrients
 
     public func ingredientWeight() -> Measurement<UnitMass>
+
+    @discardableResult
+    public mutating func setSelected(unit: String, quantity: Double) -> Bool
+
+    @discardableResult
+    public mutating func setSelectedUnit(_ unit: String) -> Bool
+
+    public mutating func setSelectedQuantity(_ quantity: Double)
 
     /// Encodes this value into the given encoder.
     ///
@@ -1561,6 +1572,8 @@ public struct PassioFoodOrigin : Codable, Equatable {
     public let source: String
 
     public var licenseCopy: String?
+
+    public init(id: String, source: String, licenseCopy: String? = nil)
 
     /// Returns a Boolean value indicating whether two values are equal.
     ///
@@ -1938,7 +1951,7 @@ public struct PassioIngredient : Codable {
 
     public var amount: PassioNutritionAISDK.PassioFoodAmount
 
-    public let referenceNutrients: PassioNutritionAISDK.PassioNutrients
+    public var referenceNutrients: PassioNutritionAISDK.PassioNutrients
 
     public var metadata: PassioNutritionAISDK.PassioFoodMetadata
 
@@ -1951,6 +1964,8 @@ public struct PassioIngredient : Codable {
     public func nutrients(weight: Measurement<UnitMass>) -> PassioNutritionAISDK.PassioNutrients
 
     public func weight() -> Measurement<UnitMass>
+
+    public mutating func setFoodIngredientServing(unit: String, quantity: Double) -> Bool
 
     /// Encodes this value into the given encoder.
     ///
@@ -2426,6 +2441,8 @@ public class PassioNutritionAI {
 
         case four
 
+        case max
+
         /// Creates a new instance with the specified raw value.
         ///
         /// If there is no value of the type that corresponds with the specified raw
@@ -2576,6 +2593,12 @@ public class PassioNutritionAI {
     ///   - completion: ``SearchResponse``, which containts list of alternate search and its results
     public func searchForFood(byText: String, completion: @escaping (PassioNutritionAISDK.SearchResponse?) -> Void)
 
+    /// Semantic search for food will return a list of alternate search and search result
+    /// - Parameters:
+    ///   - byText: User typed text
+    ///   - completion: ``SearchResponse``, which containts list of alternate search and its results
+    public func semanticSearchForFood(searchTerm: String, completion: @escaping (PassioNutritionAISDK.SearchResponse?) -> Void)
+
     /// Fetch ``PassioFoodItem`` for given ``PassioFoodDataInfo`` and servingQuantity and servingUnit.
     /// - Parameters:
     ///   - foodDataInfo: ``PassioFoodDataInfo``
@@ -2634,17 +2657,17 @@ public class PassioNutritionAI {
     /// - Returns: Optional URL
     public func iconURLFor(passioID: PassioNutritionAISDK.PassioID, size: PassioNutritionAISDK.IconSize = IconSize.px90) -> URL?
 
-    /// Beta API/Function
+    /// Fetch the tags from the ref code
     /// - Parameters:
-    ///   - passioID: passioID
-    ///   - completion: tag as a list of strings.
-    public func fetchTagsFor(passioID: PassioNutritionAISDK.PassioID, completion: @escaping ([String]?) -> Void)
+    ///   - refCode: Reference code of food item
+    ///   - completion: Tag as a list of strings
+    public func fetchTagsFor(refCode: String, completion: @escaping ([String]?) -> Void)
 
-    /// Returns fetchNutrientsFor
+    /// Fetch the list of nutrients with their inflammatory score
     /// - Parameters:
-    ///   - passioID: passioID
-    ///   - completion: tag as a list of strings.
-    public func fetchInflammatoryEffectData(passioID: PassioNutritionAISDK.PassioID, completion: @escaping ([PassioNutritionAISDK.InflammatoryEffectData]?) -> Void)
+    ///   - refCode: Reference code of food item
+    ///   - completion: List of `InflammatoryEffectData` objects
+    public func fetchInflammatoryEffectData(refCode: String, completion: @escaping ([PassioNutritionAISDK.InflammatoryEffectData]?) -> Void)
 
     /// Return a sorted list of available Volume Detections mode.
     /// Recommended mode is .auto
@@ -2695,6 +2718,12 @@ public class PassioNutritionAI {
     ///   - foodName: Food name to search for
     ///   - completion: ``NutritionAdvisorIngredientsResponse``, NutritionAdvisor responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` ingredients showing what might be contained in the given food.
     public func fetchPossibleIngredients(foodName: String, completion: @escaping PassioNutritionAISDK.NutritionAdvisorIngredientsResponse)
+
+    /// Returns possible ingredients for a given food item
+    /// - Parameters:
+    ///   - ingredients: List of food ingredients name
+    ///   - completion: ``PassioPredictedIngredients``, PassioPredictedIngredients responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` ingredients showing what might be contained in the given food.
+    public func fetchNextPredictedIngredients(ingredients: [String], completion: @escaping PassioNutritionAISDK.PassioPredictedIngredients)
 
     /// Use this method for scanning nutrients from Packaged Product. This method returns ``PassioFoodItem``.
     /// - Parameters:
@@ -2970,6 +2999,8 @@ extension PassioNutritionFacts.ServingSizeUnit : Hashable {
 
 extension PassioNutritionFacts.ServingSizeUnit : RawRepresentable {
 }
+
+public typealias PassioPredictedIngredients = (Result<[PassioNutritionAISDK.PassioAdvisorFoodInfo], PassioNutritionAISDK.NetworkError>) -> Void
 
 public typealias PassioResult = (Result<Bool, PassioNutritionAISDK.NetworkError>) -> Void
 
@@ -3972,6 +4003,5 @@ extension UIImageView {
 infix operator .+ : DefaultPrecedence
 
 infix operator ./ : DefaultPrecedence
-
 
 ```
