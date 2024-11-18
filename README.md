@@ -60,13 +60,13 @@ passioConfig.sdkDownloadsModels = false
 
 ## Try first to run the Quick Start Demo
 
-  A fast and easy way to get started with the SDK is to test it inside of PassioSDKQuickStart Demo App included in this package. Here are the steps:
+  A fast and easy way to get started with the SDK is to test it using the Quick start project. Here are the steps:
   
-  1. Open the project in Xcode:
-  2. Replace the SDK Key in the PassioQuickStartViewController.swift file with the key you obtained by signing up at https://www.passio.ai/nutrition-ai
-  3. Connect your iPhone and run
-  4. Modify the app bundle from "com.PassioDemoApp.demo" to "com.yourcompany...."
-  5. Run the demo app on your iPhone.
+  1. Download the Quick start project from this URL: https://github.com/Passiolife/Passio-iOS-QuickStart
+  2. Open the project in Xcode
+  3. Find `YOUR_PASSIO_KEY` inside `ImageSelectionVC.swift` and replace the SDK Key with the key you obtained by signing up at https://www.passio.ai/nutrition-ai
+  4. Modify the app bundle from "com.PassioDemoApp.demo" to "com.yourcompany...." 
+  5. Connect your iPhone and run the demo app on your iPhone
   6. For support, please contact support@passiolife.com
 
 ***
@@ -350,8 +350,6 @@ class RotationViewController: UIViewController {
 override func viewDidLoad() {
     super.viewDidLoad()
     let key = "Your_Nutrition_Advisor_Key"
-    NutritionAdvisor.shared.configure(licenceKey: key) { status in
-        // Configuration status
     NutritionAdvisor.shared.initConversation { status in
          // initConversation status
   }

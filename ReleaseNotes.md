@@ -1,5 +1,185 @@
 # Passio SDK Release Notes
 
+## V3.2.3
+### Updated APIs:
+
+- Renamed `semanticSearchForFood` to `searchForFoodSemantic`
+- Renamed `fetchNextPredictedIngredients` to `predictNextIngredients`
+
+## V3.2.2
+### New APIs:
+
+- Added semantic search API
+```swift
+/// Semantic search for food will return a list of alternate search and search result
+    /// - Parameters:
+    ///   - byText: User typed text
+    ///   - completion: ``SearchResponse``, which containts list of alternate search and its results
+    public func semanticSearchForFood(searchTerm: String,
+                                      completion: @escaping (PassioNutritionAISDK.SearchResponse?) -> Void)
+
+```
+
+- Added fetch next predicted ingredients API
+```swift
+/// Returns possible ingredients for a given food item
+    /// - Parameters:
+    ///   - ingredients: List of food ingredients name
+    ///   - completion: ``PassioPredictedIngredients``, PassioPredictedIngredients responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` ingredients showing what might be contained in the given food.
+    public func fetchNextPredictedIngredients(ingredients: [String], 
+                                              completion: @escaping PassioNutritionAISDK.PassioPredictedIngredients)
+
+```
+
+### Updated APIs:
+
+- Change fetchTagsFor API to accept the refCode
+```swift
+/// Fetch the tags from the ref code
+    /// - Parameters:
+    ///   - refCode: Reference code of food item
+    ///   - completion: Tag as a list of strings
+```
+
+- Change fetchInflammatoryEffectData API to accept the refCode
+```swift
+/// Fetch the list of nutrients with their inflammatory score
+    /// - Parameters:
+    ///   - refCode: Reference code of food item
+    ///   - completion: List of `InflammatoryEffectData` objects
+```
+
+## V3.2.1
+### New APIs:
+
+- Added report food API
+```swift
+/**
+     Use this method to report incorrect food item
+     
+     - Parameters:
+        - refCode: Reference code of food item
+        - productCode: Product code
+        - notes: Note if any (optional)
+        - completion: You will receive ``PassioResult`` in completion.
+     
+     - Precondition: Either `refCode` or `productCode` must be present
+     - Returns: It returns ``PassioResult`` that can be either an `errorMessage` or the `boolean` noting the success of the operation.
+     public func reportFoodItem(refCode: String = "", 
+                                productCode: String = "", 
+                                notes: [String]? = nil, 
+                                completion: @escaping PassioNutritionAISDK.PassioResult)
+
+*/
+```
+
+- Submit User Created Food
+```swift
+/// Use this method to submit User Created Food. The method will return `true` if the uploading of user food is successfull.
+    /// - Parameters:
+    ///   - item: Pass ``PassioFoodItem`` to sumbit it to Passio
+    ///   - completion: You will receive ``PassioResult`` in completion.
+    public func submitUserCreatedFood(item: PassioNutritionAISDK.PassioFoodItem,
+                                      completion: @escaping PassioNutritionAISDK.PassioResult)
+
+```
+
+## V3.2.0
+### New APIs:
+
+- Added remote recognition of nutrition facts
+```swift
+/// Use this method for scanning nutrients from Packaged Product. This method returns ``PassioFoodItem``.
+    /// - Parameters:
+    ///   - image: Image for detecting nutrients
+    ///   - resolution: Image resoultion for detection. Default Image resoultion is `512`, see ``PassioImageResolution`` for more options.
+    ///   - completion: If the response is successful, you will receive ``PassioFoodItem`` or else you will receive nil value.
+    public func recognizeNutritionFactsRemote(image: UIImage,
+                                              resolution: PassioImageResolution = .res_512,
+                                              completion: @escaping (PassioFoodItem?) -> Void)
+```
+
+- Added support for localization
+```swift
+/// Use this method to retrieve localized food data. The method will return `true` if the language setting is applied successfully.
+    /// - Parameters:
+    ///   - languageCode: A two-character string representing the ISO 639-1 language code (e.g., 'en' for English, 'fr' for French, 'de' for German).
+    public func updateLanguage(languageCode: String) -> Bool
+```
+
+### Updated APIs.
+
+- Added `remoteOnly` property in `PassioConfiguration` struct
+```swift
+/// If you set this option to true, the SDK will not download the ML models and Visual and Packaged food detection won't work, only Barcode and NutritionFacts will work.
+    public var remoteOnly = false
+```
+
+- Added barcode and nutrition facts scanning to the recognizeImageRemote function.
+```swift
+/// Use this method to retrieve ``PassioAdvisorFoodInfo`` by providing an image. You can provide any image, including those of regular food, barcodes, or nutrition facts printed on a product, to obtain the corresponding ``PassioAdvisorFoodInfo``
+    /// - Parameters:
+    ///   - image: UIImage for recognizing Food, Barcodes or Nutrition Facts
+    ///   - resolution: Image resoultion for detection. Default Image resoultion is 512, see ``PassioImageResolution`` for more options.
+    ///   - completion: Returns Array of ``PassioAdvisorFoodInfo`` if any or empty array if unable to recognize food in image
+    public func recognizeImageRemote(image: UIImage,
+                                     resolution: PassioImageResolution = .res_512,
+                                     message: String? = nil,
+                                     completion: @escaping ([PassioAdvisorFoodInfo]) -> Void)
+```
+
+- Added new tags property in PassioFoodDataInfo
+```swift
+public let tags: [String]?
+```
+
+- Added new Vitamin A RAE with μ unit in PassioNutrients struct
+```swift
+public func vitaminA_RAE() ->  Measurement<UnitMass>?
+```
+
+- Added new apiName property in PassioTokenBudget struct
+```swift
+public let apiName: String
+```
+
+## V3.1.4
+
+### New APIs.
+- Added Token Usage API to track token usage.
+```swift
+/// Delegate to track account usage updates. Used to monitor total monthly
+/// tokens, used tokens and how many tokens the last request used.
+public weak var accountDelegate: PassioAccountDelegate?
+
+/// Implement to receive account usage updates. Used to monitor total monthly
+/// tokens, used tokens and how many tokens the last request used.
+public protocol PassioAccountDelegate: AnyObject {
+    func tokenBudgetUpdated(tokenBudget: PassioTokenBudget)
+}
+
+public struct PassioTokenBudget: Codable {
+    public let budgetCap: Int
+    public let periodUsage: Int
+    public let requestUsage: Int
+    public var usedPercent: Float { get }
+    public func toString() -> String
+    public func debugPrint()
+}
+```
+
+- Added Flashlight API to turn Flashlight on/off.
+```swift
+/// Use this method to turn Flashlight on/off.
+/// - Parameters:
+///   - enabled: Pass true to turn flashlight on or pass false to turn in off.
+///   - torchLevel: Sets the illumination level when in Flashlight mode. This value must be a floating-point number between 0.0 and 1.0.
+public func enableFlashlight(enabled: Bool, level torchLevel: Float)
+```
+
+## V3.1.3
+- Added missing suggarAdded nutrient in the `PassioNutrients`
+
 ## V3.1.1
 
 ### New APIs.
@@ -135,18 +315,13 @@ public func fetchFoodItemFor(refCode: String, completion: @escaping (PassioNutri
 
     public func fetchMealPlanForDay(mealPlanLabel: String, day: Int, completion: @escaping ([PassioNutritionAISDK.PassioMealPlanItem]) -> Void)
 ```
-* Added values for carbs protein and fat in the PassioSearchNutritionPreview data class.
-* MealTime was renamed to PassioMealTime.
-* Refactored APIs
-    * PassioSearchResult was renamed to PassioFoodDataInfo, fetchFoodItemForSearchResult was renamed to fetchFoodItemForDataInfo.
-    * fetchFoodItemForSuggestion was removed. Instead fetchFoodItemForDataInfo is used.
 
 ## V3.0.2
 * Added dynamic metadata loading in SDK inisialisations.
 * Intigrated API to fetch quick suggestions
 ```swift 
         public func fetchSuggestions(mealTime: MealTime, completion: @escaping ([PassioSearchResult]) -> Void)
-```
+    ```
 * MealTime enum added (Breakfast,lunch,dinner,snacks)
 * Added following micronutrients: Zinc, Selenium, Folic acid, Chromium, Vitamin-K Phylloquinone,Vitamin-K Menaquinone4,Vitamin-K Dihydrophylloquinone
 

@@ -14,7 +14,7 @@ let package = Package(
     ],
     targets: [
         .binaryTarget(name: "PassioNutritionAISDK",
-                      url: "https://github.com/Passiolife/Passio-Nutrition-AI-iOS-SDK-Distribution/raw/3.1.1/PassioNutritionAISDK.xcframework.zip",
-                      checksum: "bf97cc736df544e57de89d21090bfe55d1bdc1ce780edb597acc655bc4ded08f")
+                      url: "https://github.com/Passiolife/Passio-Nutrition-AI-iOS-SDK-Distribution/raw/3.2.3/PassioNutritionAISDK.xcframework.zip",
+                      checksum: "d0d428805f80f8badc443a11e5d8b0b585e49e0873eeeb4c64c98ca3d25c1f94")
     ]
 )
