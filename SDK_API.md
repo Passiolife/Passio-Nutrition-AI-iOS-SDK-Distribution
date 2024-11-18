@@ -1,6 +1,6 @@
 # PassioNutritionAISDK 
 
-## Version 3.2.2
+## Version 3.2.3
 
 ```Swift
 import AVFoundation
@@ -2593,11 +2593,11 @@ public class PassioNutritionAI {
     ///   - completion: ``SearchResponse``, which containts list of alternate search and its results
     public func searchForFood(byText: String, completion: @escaping (PassioNutritionAISDK.SearchResponse?) -> Void)
 
-    /// Semantic search for food will return a list of alternate search and search result
+    /// Search for food semantic will return a list of alternate search and search result
     /// - Parameters:
     ///   - byText: User typed text
     ///   - completion: ``SearchResponse``, which containts list of alternate search and its results
-    public func semanticSearchForFood(searchTerm: String, completion: @escaping (PassioNutritionAISDK.SearchResponse?) -> Void)
+    public func searchForFoodSemantic(searchTerm: String, completion: @escaping (PassioNutritionAISDK.SearchResponse?) -> Void)
 
     /// Fetch ``PassioFoodItem`` for given ``PassioFoodDataInfo`` and servingQuantity and servingUnit.
     /// - Parameters:
@@ -2723,7 +2723,7 @@ public class PassioNutritionAI {
     /// - Parameters:
     ///   - ingredients: List of food ingredients name
     ///   - completion: ``PassioPredictedIngredients``, PassioPredictedIngredients responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` ingredients showing what might be contained in the given food.
-    public func fetchNextPredictedIngredients(ingredients: [String], completion: @escaping PassioNutritionAISDK.PassioPredictedIngredients)
+    public func predictNextIngredients(ingredients: [String], completion: @escaping PassioNutritionAISDK.PassioPredictedIngredients)
 
     /// Use this method for scanning nutrients from Packaged Product. This method returns ``PassioFoodItem``.
     /// - Parameters:
@@ -3999,7 +3999,7 @@ extension UIImageView {
 
     @MainActor public func loadImage(from url: URL, placeholder: UIImage? = nil)
 }
- 
+
 infix operator .+ : DefaultPrecedence
 
 infix operator ./ : DefaultPrecedence

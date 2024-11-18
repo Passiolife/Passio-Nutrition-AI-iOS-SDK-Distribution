@@ -1,5 +1,11 @@
 # Passio SDK Release Notes
 
+## V3.2.3
+### Updated APIs:
+
+- Renamed `semanticSearchForFood` to `searchForFoodSemantic`
+- Renamed `fetchNextPredictedIngredients` to `predictNextIngredients`
+
 ## V3.2.2
 ### New APIs:
 
