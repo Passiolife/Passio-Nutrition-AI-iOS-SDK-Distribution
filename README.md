@@ -58,7 +58,11 @@ passioConfig.sdkDownloadsModels = false
 ```
  In that case, the models be served  directly to the SDK. To find out more about this special configuration please contact us. 
 
-## Try first to run the Quick Start Demo
+## Quick Start Guide
+
+https://passio.gitbook.io/nutrition-ai/guides/ios-sdk-docs/quick-start-guide
+
+## Try first to run the Quick Start Demo (Deprecated)
 
   A fast and easy way to get started with the SDK is to test it using the Quick start project. Here are the steps:
   
