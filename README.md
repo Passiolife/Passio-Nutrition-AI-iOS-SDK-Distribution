@@ -1,6 +1,7 @@
 # Passio Nutrition-AI iOS SDK
 
-## Now available as Swift package at: https://github.com/Passiolife/Passio-Nutrition-AI-iOS-SDK-Distribution
+## Now available as Swift package at: 
+https://github.com/Passiolife/Passio-Nutrition-AI-iOS-SDK-Distribution
 
 ## Overview
 
@@ -43,6 +44,10 @@ In order to use the PassioSDK your app needs to meet the following minimal requi
     * iPhone 12 mini, Pro & pro Max
     * iPhone 13 Pro & Pro Max
     * iPhone 14, Pro, Pro Max & Plus
+ 
+## Quick Start Guide
+
+https://passio.gitbook.io/nutrition-ai/guides/ios-sdk-docs/quick-start-guide
 
 ## Getting the ml models to the device
 
@@ -57,10 +62,6 @@ var passioConfig = PassioConfiguration(key: "your_key")
 passioConfig.sdkDownloadsModels = false
 ```
  In that case, the models be served  directly to the SDK. To find out more about this special configuration please contact us. 
-
-## Quick Start Guide
-
-https://passio.gitbook.io/nutrition-ai/guides/ios-sdk-docs/quick-start-guide
 
 ## Try first to run the Quick Start Demo (Deprecated)
 
