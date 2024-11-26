@@ -2722,8 +2722,8 @@ public class PassioNutritionAI {
     /// Returns possible ingredients for a given food item
     /// - Parameters:
     ///   - ingredients: List of food ingredients name
-    ///   - completion: ``PassioPredictedIngredients``, PassioPredictedIngredients responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` ingredients showing what might be contained in the given food.
-    public func predictNextIngredients(ingredients: [String], completion: @escaping PassioNutritionAISDK.PassioPredictedIngredients)
+    ///   - completion: [``PassioFoodDataInfo``], You will receive an optional array of ``PassioFoodDataInfo``.
+    public func predictNextIngredients(ingredients: [String], completion: @escaping ([PassioNutritionAISDK.PassioFoodDataInfo]?) -> Void)
 
     /// Use this method for scanning nutrients from Packaged Product. This method returns ``PassioFoodItem``.
     /// - Parameters:

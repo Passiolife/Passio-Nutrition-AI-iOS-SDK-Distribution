@@ -1,5 +1,20 @@
 # Passio SDK Release Notes
 
+## V3.2.4
+### Updated API:
+
+- Change response callback of `predictNextIngredients`, that gives a list of predicted next ingredients based on the current list of ingredients in the recipe
+
+```swift
+    /// - Parameters:
+    ///   - ingredients: List of food ingredients name
+    ///   - completion: [``PassioFoodDataInfo``], You will receive an optional array of ``PassioFoodDataInfo``.
+    public func predictNextIngredients(
+        ingredients: [String],
+        completion: @escaping ([PassioFoodDataInfo]) -> Void
+    )
+```
+
 ## V3.2.3
 ### Updated APIs:
 
