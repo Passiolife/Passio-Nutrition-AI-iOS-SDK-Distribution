@@ -8,7 +8,7 @@
 ```swift
     /// - Parameters:
     ///   - ingredients: List of food ingredients name
-    ///   - completion: [``PassioFoodDataInfo``], You will receive an optional array of ``PassioFoodDataInfo``.
+    ///   - completion: ``[PassioFoodDataInfo]``, You will receive an array of ``PassioFoodDataInfo`` ingredients showing what might be contained in the given food.
     public func predictNextIngredients(
         ingredients: [String],
         completion: @escaping ([PassioFoodDataInfo]) -> Void
