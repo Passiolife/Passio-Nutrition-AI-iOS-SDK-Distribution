@@ -1,5 +1,18 @@
 # Passio SDK Release Notes
 
+## V3.2.4
+### What's new:
+
+- Fixed issue: `fetchFoodItemForDataInfo` returning incorrect weight
+- Added two properties inside `PassioConfiguration` to offer a layer of security, where clients can authenticate the SDK license and fetch the token on their backend.
+
+```swift
+/// Set the base URL of the target proxy endpoint
+public var proxyUrl: String?
+/// Set the needed headers to all of the requests
+public var proxyHeaders: [String: String]?
+```
+
 ## V3.2.3
 ### Updated APIs:
 
