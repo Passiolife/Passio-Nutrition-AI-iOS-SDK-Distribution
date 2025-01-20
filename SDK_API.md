@@ -1,6 +1,6 @@
 # PassioNutritionAISDK 
 
-## Version 3.2.3
+## Version 3.2.4
 
 ```Swift
 import AVFoundation
@@ -11,7 +11,6 @@ import CoreMedia
 import CoreMotion
 import DeveloperToolsSupport
 import Foundation
-import MLCompute
 import Metal
 import MetalPerformanceShaders
 import SQLite3
@@ -23,6 +22,11 @@ import _Concurrency
 import _StringProcessing
 import _SwiftConcurrencyShims
 import simd
+
+@MainActor @objc public class AVCaptureViedeoPreviewView : UIView {
+
+    @MainActor override dynamic public func layoutSubviews()
+}
 
 /// Returning all information of Amount estimation and directions how to move the device for better estimation
 public protocol AmountEstimate {
@@ -1182,7 +1186,13 @@ public struct PassioConfiguration : Equatable {
     /// If you are bridging the SDK via ReactNative or Flutter, please set accordingly.
     public var bridge: PassioNutritionAISDK.Bridge
 
-    public init(key: String)
+    /// Set the base URL of the target proxy endpoint
+    public var proxyUrl: String?
+
+    /// Set the needed headers to all of the requests
+    public var proxyHeaders: [String : String]?
+
+    public init(key: String = "")
 
     /// Returns a Boolean value indicating whether two values are equal.
     ///
@@ -1255,9 +1265,11 @@ public struct PassioFoodDataInfo : Codable {
 
     public let isShortName: Bool
 
+    public let refCode: String
+
     public let tags: [String]?
 
-    public init(foodName: String, brandName: String, iconID: PassioNutritionAISDK.PassioID, score: Double, scoredName: String, labelId: String, type: String, resultId: String, nutritionPreview: PassioNutritionAISDK.PassioSearchNutritionPreview?, isShortName: Bool, tags: [String]?)
+    public init(foodName: String, brandName: String, iconID: PassioNutritionAISDK.PassioID, score: Double, scoredName: String, labelId: String, type: String, resultId: String, nutritionPreview: PassioNutritionAISDK.PassioSearchNutritionPreview?, isShortName: Bool, refCode: String, tags: [String]?)
 
     /// Encodes this value into the given encoder.
     ///
@@ -2546,6 +2558,9 @@ public class PassioNutritionAI {
     /// - Returns: ``AVCaptureVideoPreviewLayer``
     public func getPreviewLayerForFrontCamera() -> AVCaptureVideoPreviewLayer?
 
+    /// - Returns: ``AVCaptureVideoPreviewLayer``
+    public func getPreviewLayerWithGravityView(sessionPreset: AVCaptureSession.Preset = .hd1920x1080, volumeDetectionMode: PassioNutritionAISDK.VolumeDetectionMode = .none, videoGravity: AVLayerVideoGravity = .resizeAspectFill, capturingDeviceType: PassioNutritionAISDK.CapturingDeviceType = .defaultCapturing(), tapToFocusEnabled: Bool = false) -> PassioNutritionAISDK.AVCaptureViedeoPreviewView?
+
     /// Don't call this function if you need to use the Passio layer again. Only call this function to set the PassioSDK Preview layer to nil
     public func removeVideoLayer()
 
@@ -2722,8 +2737,8 @@ public class PassioNutritionAI {
     /// Returns possible ingredients for a given food item
     /// - Parameters:
     ///   - ingredients: List of food ingredients name
-    ///   - completion: ``PassioPredictedIngredients``, PassioPredictedIngredients responds with a success or error response. If the response is successful, you will receive an array of ``PassioAdvisorFoodInfo`` ingredients showing what might be contained in the given food.
-    public func predictNextIngredients(ingredients: [String], completion: @escaping PassioNutritionAISDK.PassioPredictedIngredients)
+    ///   - completion: ``[PassioFoodDataInfo]``, You will receive an array of ``PassioFoodDataInfo`` ingredients showing what might be contained in the given food.
+    public func predictNextIngredients(ingredients: [String], completion: @escaping ([PassioNutritionAISDK.PassioFoodDataInfo]) -> Void)
 
     /// Use this method for scanning nutrients from Packaged Product. This method returns ``PassioFoodItem``.
     /// - Parameters:
@@ -2762,6 +2777,12 @@ public class PassioNutritionAI {
      - Returns: It returns ``PassioResult`` that can be either an `errorMessage` or the `boolean` noting the success of the operation.
      */
     public func reportFoodItem(refCode: String = "", productCode: String = "", notes: [String]? = nil, completion: @escaping PassioNutritionAISDK.PassioResult)
+
+    /// Get the junk food score from the ``PassioFoodItem``
+    /// - Parameters:
+    ///   - passioFoodItem: Pass ``PassioFoodItem`` to sumbit to Passio
+    ///   - completion: You will receive ``PassioUPFRatingResult`` in completion.
+    public func fetchUltraProcessingFoodRating(passioFoodItem: PassioNutritionAISDK.PassioFoodItem, completion: @escaping PassioNutritionAISDK.PassioUPFRatingResult)
 }
 
 extension PassioNutritionAI : PassioNutritionAISDK.PassioStatusDelegate {
@@ -3000,8 +3021,6 @@ extension PassioNutritionFacts.ServingSizeUnit : Hashable {
 extension PassioNutritionFacts.ServingSizeUnit : RawRepresentable {
 }
 
-public typealias PassioPredictedIngredients = (Result<[PassioNutritionAISDK.PassioAdvisorFoodInfo], PassioNutritionAISDK.NetworkError>) -> Void
-
 public typealias PassioResult = (Result<Bool, PassioNutritionAISDK.NetworkError>) -> Void
 
 /// PassioSDKError will return the error with errorDescription if the configuration has failed.
@@ -3012,6 +3031,8 @@ public enum PassioSDKError : LocalizedError, Codable {
     case keyNotValid
 
     case licensedKeyHasExpired(String?)
+
+    case licensedFileDoesNotExists
 
     case modelsNotValid
 
@@ -3044,6 +3065,19 @@ public enum PassioSDKError : LocalizedError, Codable {
     ///
     /// - Parameter decoder: The decoder to read data from.
     public init(from decoder: any Decoder) throws
+}
+
+extension PassioSDKError : Equatable {
+
+    /// Returns a Boolean value indicating whether two values are equal.
+    ///
+    /// Equality is the inverse of inequality. For any values `a` and `b`,
+    /// `a == b` implies that `a != b` is `false`.
+    ///
+    /// - Parameters:
+    ///   - lhs: A value to compare.
+    ///   - rhs: Another value to compare.
+    public static func == (lhs: PassioNutritionAISDK.PassioSDKError, rhs: PassioNutritionAISDK.PassioSDKError) -> Bool
 }
 
 public struct PassioSearchNutritionPreview : Codable {
@@ -3297,6 +3331,23 @@ public struct PassioTokenBudget : Codable {
     /// - Parameter decoder: The decoder to read data from.
     public init(from decoder: any Decoder) throws
 }
+
+public struct PassioUPFRating : Decodable {
+
+    public let rating: Int?
+
+    public let highlightedIngredients: [String]
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    public init(from decoder: any Decoder) throws
+}
+
+public typealias PassioUPFRatingResult = (Result<PassioNutritionAISDK.PassioUPFRating, PassioNutritionAISDK.NetworkError>) -> Void
 
 public struct Portion : Codable {
 
@@ -3642,12 +3693,92 @@ public struct ResponseIngredient : Codable {
     public func encode(to encoder: any Encoder) throws
 }
 
+public enum SDKLanguage : String {
+
+    case en
+
+    case de
+
+    case auto
+
+    /// Creates a new instance with the specified raw value.
+    ///
+    /// If there is no value of the type that corresponds with the specified raw
+    /// value, this initializer returns `nil`. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     print(PaperSize(rawValue: "Legal"))
+    ///     // Prints "Optional("PaperSize.Legal")"
+    ///
+    ///     print(PaperSize(rawValue: "Tabloid"))
+    ///     // Prints "nil"
+    ///
+    /// - Parameter rawValue: The raw value to use for the new instance.
+    public init?(rawValue: String)
+
+    /// The raw type that can be used to represent all values of the conforming
+    /// type.
+    ///
+    /// Every distinct value of the conforming type has a corresponding unique
+    /// value of the `RawValue` type, but there may be values of the `RawValue`
+    /// type that don't have a corresponding value of the conforming type.
+    public typealias RawValue = String
+
+    /// The corresponding value of the raw type.
+    ///
+    /// A new instance initialized with `rawValue` will be equivalent to this
+    /// instance. For example:
+    ///
+    ///     enum PaperSize: String {
+    ///         case A4, A5, Letter, Legal
+    ///     }
+    ///
+    ///     let selectedSize = PaperSize.Letter
+    ///     print(selectedSize.rawValue)
+    ///     // Prints "Letter"
+    ///
+    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
+    ///     // Prints "true"
+    public var rawValue: String { get }
+}
+
+extension SDKLanguage : Equatable {
+}
+
+extension SDKLanguage : Hashable {
+}
+
+extension SDKLanguage : RawRepresentable {
+}
+
 /// PassioAlternateSearchNames contains alternate search names with search related data
-public struct SearchResponse {
+public struct SearchResponse : Codable {
 
     public let alternateNames: [String]
 
     public let results: [PassioNutritionAISDK.PassioFoodDataInfo]
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: any Encoder) throws
+
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
+    public init(from decoder: any Decoder) throws
 }
 
 public struct SynonymLang : Codable {
@@ -3985,6 +4116,8 @@ public struct Weight : Codable {
     /// - Parameter encoder: The encoder to write data to.
     public func encode(to encoder: any Encoder) throws
 }
+
+public func printObject<T>(_ object: T) where T : Encodable
 
 extension Array {
 
