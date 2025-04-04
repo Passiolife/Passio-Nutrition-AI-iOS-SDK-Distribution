@@ -1,5 +1,18 @@
 # Passio SDK Release Notes
 
+## V3.2.5
+### What's new:
+
+- Add concerns to `PassioFoodMetadata`
+- Refactor `fetchFoodItemForDataInfo` method
+
+### Deprecated APIs:
+
+- `startFoodDetection`
+- `stopFoodDetection`
+- `detectFoodWithText`
+- `startNutritionFactsDetection`
+
 ## V3.2.4
 ### What's new:
 

@@ -1,6 +1,6 @@
 # PassioNutritionAISDK 
 
-## Version 3.2.4
+## Version 3.2.5
 
 ```Swift
 import AVFoundation
@@ -23,9 +23,9 @@ import _StringProcessing
 import _SwiftConcurrencyShims
 import simd
 
-@MainActor @objc public class AVCaptureViedeoPreviewView : UIView {
+@MainActor @objc @preconcurrency public class AVCaptureViedeoPreviewView : UIView {
 
-    @MainActor override dynamic public func layoutSubviews()
+    @MainActor @preconcurrency override dynamic public func layoutSubviews()
 }
 
 /// Returning all information of Amount estimation and directions how to move the device for better estimation
@@ -242,7 +242,7 @@ public enum CapturingDeviceType : CaseIterable {
     public typealias AllCases = [PassioNutritionAISDK.CapturingDeviceType]
 
     /// A collection of all values of this type.
-    public static var allCases: [PassioNutritionAISDK.CapturingDeviceType] { get }
+    nonisolated public static var allCases: [PassioNutritionAISDK.CapturingDeviceType] { get }
 
     /// The hash value.
     ///
@@ -451,8 +451,6 @@ public struct FoodDetectionConfiguration {
     public var detectVisual: Bool
 
     /// Select the right Volume Detection Mode
-    public var volumeDetectionMode: PassioNutritionAISDK.VolumeDetectionMode
-
     /// Set to true for detecting barcodes
     public var detectBarcodes: Bool
 
@@ -465,7 +463,7 @@ public struct FoodDetectionConfiguration {
     /// The frequency of sending images for the recognitions models. The default is set to two pre seconds. Increasing this value will require more resources from the device.
     public var framesPerSecond: PassioNutritionAISDK.PassioNutritionAI.FramesPerSecond
 
-    public init(detectVisual: Bool = true, volumeDetectionMode: PassioNutritionAISDK.VolumeDetectionMode = .none, detectBarcodes: Bool = false, detectPackagedFood: Bool = false)
+    public init(detectVisual: Bool = true, detectBarcodes: Bool = false, detectPackagedFood: Bool = false)
 }
 
 /// Implement the FoodRecognitionDelegate protocol to receive delegate method from the FoodRecognition
@@ -1034,6 +1032,8 @@ public struct PassioAdvisorFoodInfo : Codable {
 
     public let packagedFoodItem: PassioNutritionAISDK.PassioFoodItem?
 
+    public let productCode: String?
+
     public let resultType: PassioNutritionAISDK.PassioFoodResultType?
 
     /// Encodes this value into the given encoder.
@@ -1555,7 +1555,9 @@ public struct PassioFoodMetadata : Codable {
 
     public var tags: [String]?
 
-    public init(foodOrigins: [PassioNutritionAISDK.PassioFoodOrigin]? = nil, barcode: PassioNutritionAISDK.Barcode? = nil, ingredientsDescription: String? = nil, tags: [String]? = nil)
+    public var concerns: [Int]?
+
+    public init(foodOrigins: [PassioNutritionAISDK.PassioFoodOrigin]? = nil, barcode: PassioNutritionAISDK.Barcode? = nil, ingredientsDescription: String? = nil, tags: [String]? = nil, concerns: [Int]? = nil)
 
     /// Encodes this value into the given encoder.
     ///
@@ -1708,7 +1710,7 @@ public enum PassioFoodResultType : String, CaseIterable, Codable {
     public typealias RawValue = String
 
     /// A collection of all values of this type.
-    public static var allCases: [PassioNutritionAISDK.PassioFoodResultType] { get }
+    nonisolated public static var allCases: [PassioNutritionAISDK.PassioFoodResultType] { get }
 
     /// The corresponding value of the raw type.
     ///
@@ -1872,7 +1874,7 @@ public enum PassioIDEntityType : String, CaseIterable, Codable {
     public typealias RawValue = String
 
     /// A collection of all values of this type.
-    public static var allCases: [PassioNutritionAISDK.PassioIDEntityType] { get }
+    nonisolated public static var allCases: [PassioNutritionAISDK.PassioIDEntityType] { get }
 
     /// The corresponding value of the raw type.
     ///
@@ -2037,7 +2039,7 @@ public enum PassioLogAction : String, Codable, CaseIterable {
     public typealias RawValue = String
 
     /// A collection of all values of this type.
-    public static var allCases: [PassioNutritionAISDK.PassioLogAction] { get }
+    nonisolated public static var allCases: [PassioNutritionAISDK.PassioLogAction] { get }
 
     /// The corresponding value of the raw type.
     ///
@@ -2514,6 +2516,7 @@ public class PassioNutritionAI {
     ///   - foodRecognitionDelegate: ``FoodRecognitionDelegate``, Add self to implement the FoodRecognitionDelegate
     ///   - capturingDeviceType: ``CapturingDeviceType``, Defaults sets to best camera available for current iPhone.
     ///   - completion: success or failure of the startFoodDetection
+    @available(*, deprecated, message: "Use `recognizeImageRemote` instead.")
     public func startFoodDetection(detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), foodRecognitionDelegate: any PassioNutritionAISDK.FoodRecognitionDelegate, capturingDeviceType: PassioNutritionAISDK.CapturingDeviceType = .defaultCapturing(), completion: @escaping (Bool) -> Void)
 
     /// Use this function to detect Nutrition Facts via pointing the camera at Nutrition Facts
@@ -2521,19 +2524,12 @@ public class PassioNutritionAI {
     ///   - nutritionfactsDelegate: ``NutritionFactsDelegate``, Add self to implement the NutritionFactsDelegate
     ///   - capturingDeviceType: ``CapturingDeviceType``, Defaults sets to best camera available for current iPhone.
     ///   - completion: success or failure of the startNutritionFactsDetection
+    @available(*, deprecated, message: "This method is deprecated and will be removed in a future release.")
     public func startNutritionFactsDetection(nutritionfactsDelegate: (any PassioNutritionAISDK.NutritionFactsDelegate)?, capturingDeviceType: PassioNutritionAISDK.CapturingDeviceType = .defaultCapturing(), completion: @escaping (Bool) -> Void)
 
     /// Use this function to stop food detection.
+    @available(*, deprecated, message: "Use `recognizeImageRemote` instead.")
     public func stopFoodDetection()
-
-    /// Detect food in a static image/photo
-    /// - Parameters:
-    ///   - image: Image for detection
-    ///   - detectionConfig: ``FoodDetectionConfiguration``
-    ///   - slicingRects: Optional ability to divide the image to slices or regions.
-    ///   - completion: ``FoodCandidates``
-    @available(*, deprecated, message: "This API is deprecated and will be removed in future SDK versions. Please use the `recognizeImageRemote(image:resolution:message:completion)` API instead.")
-    public func detectFoodIn(image: UIImage, detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), slicingRects: [CGRect]? = nil, completion: @escaping ((any PassioNutritionAISDK.FoodCandidates)?) -> Void)
 
     /// Detect barcodes "BarcodeCandidate" in an image
     /// - Parameter image: Image for the detection
@@ -2552,14 +2548,14 @@ public class PassioNutritionAI {
 
     /// use getPreviewLayerWithGravity if you plan to rotate the PreviewLayer.
     /// - Returns: ``AVCaptureVideoPreviewLayer``
-    public func getPreviewLayerWithGravity(sessionPreset: AVCaptureSession.Preset = .hd1920x1080, volumeDetectionMode: PassioNutritionAISDK.VolumeDetectionMode = .none, videoGravity: AVLayerVideoGravity = .resizeAspectFill, capturingDeviceType: PassioNutritionAISDK.CapturingDeviceType = .defaultCapturing()) -> AVCaptureVideoPreviewLayer?
+    public func getPreviewLayerWithGravity(sessionPreset: AVCaptureSession.Preset = .hd1920x1080, videoGravity: AVLayerVideoGravity = .resizeAspectFill, capturingDeviceType: PassioNutritionAISDK.CapturingDeviceType = .defaultCapturing()) -> AVCaptureVideoPreviewLayer?
 
     /// Use getPreviewLayer if you don't plan to rotate the PreviewLayer.
     /// - Returns: ``AVCaptureVideoPreviewLayer``
     public func getPreviewLayerForFrontCamera() -> AVCaptureVideoPreviewLayer?
 
     /// - Returns: ``AVCaptureVideoPreviewLayer``
-    public func getPreviewLayerWithGravityView(sessionPreset: AVCaptureSession.Preset = .hd1920x1080, volumeDetectionMode: PassioNutritionAISDK.VolumeDetectionMode = .none, videoGravity: AVLayerVideoGravity = .resizeAspectFill, capturingDeviceType: PassioNutritionAISDK.CapturingDeviceType = .defaultCapturing(), tapToFocusEnabled: Bool = false) -> PassioNutritionAISDK.AVCaptureViedeoPreviewView?
+    public func getPreviewLayerWithGravityView(sessionPreset: AVCaptureSession.Preset = .hd1920x1080, videoGravity: AVLayerVideoGravity = .resizeAspectFill, capturingDeviceType: PassioNutritionAISDK.CapturingDeviceType = .defaultCapturing(), tapToFocusEnabled: Bool = false) -> PassioNutritionAISDK.AVCaptureViedeoPreviewView?
 
     /// Don't call this function if you need to use the Passio layer again. Only call this function to set the PassioSDK Preview layer to nil
     public func removeVideoLayer()
@@ -2684,13 +2680,6 @@ public class PassioNutritionAI {
     ///   - completion: List of `InflammatoryEffectData` objects
     public func fetchInflammatoryEffectData(refCode: String, completion: @escaping ([PassioNutritionAISDK.InflammatoryEffectData]?) -> Void)
 
-    /// Return a sorted list of available Volume Detections mode.
-    /// Recommended mode is .auto
-    public var availableVolumeDetectionModes: [PassioNutritionAISDK.VolumeDetectionMode] { get }
-
-    /// Return the best Volume detection Mode for this iPhone
-    public var bestVolumeDetectionMode: PassioNutritionAISDK.VolumeDetectionMode { get }
-
     /// Beta feature: Passio recommends not to change this value. The default is .cpuAndGPU
     @available(iOS 15.0, *)
     public func setMLComputeUnits(units: MLComputeUnits)
@@ -2714,6 +2703,7 @@ public class PassioNutritionAI {
     ///   - detectionConfig: ``FoodDetectionConfiguration``
     ///   - slicingRects: Optional ability to divide the image to slices or regions.
     ///   - completion: ``FoodCandidatesWithText``?
+    @available(*, deprecated, message: "This method is deprecated and will be removed in a future release.")
     public func detectFoodWithText(image: UIImage, detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), completion: @escaping ((any PassioNutritionAISDK.FoodCandidatesWithText)?) -> Void)
 
     /// Returns hidden ingredients for a given food item
@@ -3336,6 +3326,8 @@ public struct PassioUPFRating : Decodable {
 
     public let rating: Int?
 
+    public var chainOfThought: String
+
     public let highlightedIngredients: [String]
 
     /// Creates a new instance by decoding from the given decoder.
@@ -3497,6 +3489,8 @@ public struct ResponseIngredient : Codable {
     public let licenseCopy: String?
 
     public let tags: [String]?
+
+    public var concerns: [Int]?
 
     public let refCode: String?
 
@@ -4020,77 +4014,6 @@ public struct UPCProduct : Codable {
     public init(from decoder: any Decoder) throws
 }
 
-/// VolumeDetectionMode for detection volume.
-public enum VolumeDetectionMode : String, CaseIterable {
-
-    /// Using best technology available in this order dualWideCamera, dualCamera or none if the device is not capable of detection volume.
-    case auto
-
-    /// If dualWideCamera is not available the mode will not fall back to dualCamera
-    case dualWideCamera
-
-    /// No volume detection
-    case none
-
-    /// Creates a new instance with the specified raw value.
-    ///
-    /// If there is no value of the type that corresponds with the specified raw
-    /// value, this initializer returns `nil`. For example:
-    ///
-    ///     enum PaperSize: String {
-    ///         case A4, A5, Letter, Legal
-    ///     }
-    ///
-    ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
-    ///
-    ///     print(PaperSize(rawValue: "Tabloid"))
-    ///     // Prints "nil"
-    ///
-    /// - Parameter rawValue: The raw value to use for the new instance.
-    public init?(rawValue: String)
-
-    /// A type that can represent a collection of all values of this type.
-    public typealias AllCases = [PassioNutritionAISDK.VolumeDetectionMode]
-
-    /// The raw type that can be used to represent all values of the conforming
-    /// type.
-    ///
-    /// Every distinct value of the conforming type has a corresponding unique
-    /// value of the `RawValue` type, but there may be values of the `RawValue`
-    /// type that don't have a corresponding value of the conforming type.
-    public typealias RawValue = String
-
-    /// A collection of all values of this type.
-    public static var allCases: [PassioNutritionAISDK.VolumeDetectionMode] { get }
-
-    /// The corresponding value of the raw type.
-    ///
-    /// A new instance initialized with `rawValue` will be equivalent to this
-    /// instance. For example:
-    ///
-    ///     enum PaperSize: String {
-    ///         case A4, A5, Letter, Legal
-    ///     }
-    ///
-    ///     let selectedSize = PaperSize.Letter
-    ///     print(selectedSize.rawValue)
-    ///     // Prints "Letter"
-    ///
-    ///     print(selectedSize == PaperSize(rawValue: selectedSize.rawValue)!)
-    ///     // Prints "true"
-    public var rawValue: String { get }
-}
-
-extension VolumeDetectionMode : Equatable {
-}
-
-extension VolumeDetectionMode : Hashable {
-}
-
-extension VolumeDetectionMode : RawRepresentable {
-}
-
 public struct Weight : Codable {
 
     public let unit: String?
@@ -4128,9 +4051,9 @@ extension Array {
 
 extension UIImageView {
 
-    @MainActor public func loadPassioIconBy(passioID: PassioNutritionAISDK.PassioID, entityType: PassioNutritionAISDK.PassioIDEntityType, size: PassioNutritionAISDK.IconSize = .px90, completion: @escaping (PassioNutritionAISDK.PassioID, UIImage) -> Void)
+    @MainActor @preconcurrency public func loadPassioIconBy(passioID: PassioNutritionAISDK.PassioID, entityType: PassioNutritionAISDK.PassioIDEntityType, size: PassioNutritionAISDK.IconSize = .px90, completion: @escaping (PassioNutritionAISDK.PassioID, UIImage) -> Void)
 
-    @MainActor public func loadImage(from url: URL, placeholder: UIImage? = nil)
+    @MainActor @preconcurrency public func loadImage(from url: URL, placeholder: UIImage? = nil)
 }
 
 infix operator .+ : DefaultPrecedence
