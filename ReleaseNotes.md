@@ -1,5 +1,74 @@
 # Passio SDK Release Notes
 
+## V3.2.6
+### New APIs:
+
+- Added hierarchy grouping for voice results
+```swift
+/// This method groups a list of `PassioFoodItem` into recipes
+    /// - Parameters:
+    ///   - text: Text for recognizing food logging actions
+    ///   - completion: ``PassioRecognitionResult`` with array of ``PassioRecognitionItem``
+    public func recognizeSpeechRemoteWithGrouping(text: String,
+                                                  completion: @escaping (Result<PassioRecognitionResult, Error>) -> Void) {
+        coreSDK.recognizeSpeechRemoteWithGrouping(text: text,
+                                                  completion: completion)
+    }
+```
+
+- Added hierarchy grouping for image results
+```swift
+// This method groups a list of `PassioFoodItem` into recipes
+    /// - Parameters:
+    ///   - image: UIImage for recognizing Food, Barcodes or Nutrition Facts
+    ///   - resolution: Image resoultion for detection. Default Image resoultion is 512, see ``PassioImageResolution`` for more options.
+    ///   - completion: ``PassioRecognitionResult`` with array of ``PassioRecognitionItem``
+    public func recognizeImageRemoteWithGrouping(image: UIImage,
+                                                 resolution: PassioImageResolution = .res_512,
+                                                 message: String? = nil,
+                                                 completion: @escaping (Result<PassioRecognitionResult, Error>) -> Void) {
+        coreSDK.recognizeImageRemoteWithGrouping(image: image,
+                                                 resolution: resolution,
+                                                 message: message,
+                                                 completion: completion)
+    }
+```
+
+- Added generateMealPlan API
+```swift
+/// Generates a meal plan for the user based on the provided input
+    /// - Parameters:
+    ///   - request: The food item or ingredient list to generate a meal plan for
+    ///   - completion: ``PassioGeneratedMealPlan``
+    public func generateMealPlan(request: String,
+                                 completion: @escaping (Result<PassioGeneratedMealPlan, Error>) -> Void) {
+        coreSDK.generateMealPlan(request: request,
+                                 completion: completion)
+    }
+```
+
+- Added generateMealPlanPreview API
+```swift
+/// Generates a meal plan preview for the user based on the provided input
+    /// - Parameters:
+    ///   - request: The food item or ingredient list to generate a meal plan preview for
+    ///   - completion: ``PassioGeneratedMealPlan``
+    public func generateMealPlanPreview(request: String,
+                                        completion: @escaping (Result<PassioGeneratedMealPlan, Error>) -> Void) {
+        coreSDK.generateMealPlanPreview(request: request,
+                                        completion: completion)
+    }
+```
+
+### Removed APIs:
+
+- `detectFoodWithText`
+- `startNutritionFactsDetection`
+
+### Enhancements:
+
+- `recognizeImageRemote` is able to also recognize barcode images, which means, this is a broader API which handles more cases
+
 ## V3.2.5
 ### What's new:
 

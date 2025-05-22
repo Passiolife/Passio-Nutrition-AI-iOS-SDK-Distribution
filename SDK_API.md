@@ -1,6 +1,6 @@
 # PassioNutritionAISDK 
 
-## Version 3.2.5
+## Version 3.2.6
 
 ```Swift
 import AVFoundation
@@ -1739,6 +1739,95 @@ extension PassioFoodResultType : Hashable {
 extension PassioFoodResultType : RawRepresentable {
 }
 
+public struct PassioGeneratedMealPlan {
+
+    public let constraints: PassioNutritionAISDK.PassioGeneratedMealPlanConstraints?
+
+    public let shoppingList: [PassioNutritionAISDK.PassioGeneratedMealPlanShoppingItem]
+
+    public let mealPlanDays: [PassioNutritionAISDK.PassioGeneratedMealPlanDay]
+}
+
+public struct PassioGeneratedMealPlanConstraints {
+
+    public let constraints: PassioNutritionAISDK.SDKDic?
+
+    public let macros: PassioNutritionAISDK.PassioGeneratedMealPlanMacros
+}
+
+public struct PassioGeneratedMealPlanDay {
+
+    public let breakfast: [PassioNutritionAISDK.PassioGeneratedMealPlanRecipe]
+
+    public let lunch: [PassioNutritionAISDK.PassioGeneratedMealPlanRecipe]
+
+    public let dinner: [PassioNutritionAISDK.PassioGeneratedMealPlanRecipe]
+
+    public let snack: [PassioNutritionAISDK.PassioGeneratedMealPlanRecipe]
+
+    public let macros: PassioNutritionAISDK.PassioGeneratedMealPlanMacros
+}
+
+public struct PassioGeneratedMealPlanDayPreview {
+
+    public let breakfast: [PassioNutritionAISDK.PassioGeneratedMealPlanRecipePreview]
+
+    public let lunch: [PassioNutritionAISDK.PassioGeneratedMealPlanRecipePreview]
+
+    public let dinner: [PassioNutritionAISDK.PassioGeneratedMealPlanRecipePreview]
+
+    public let snack: [PassioNutritionAISDK.PassioGeneratedMealPlanRecipePreview]
+}
+
+public struct PassioGeneratedMealPlanMacros {
+
+    public let calories: Double
+
+    public let protein: Double
+
+    public let fiber: Double
+
+    public let carbs: Double
+
+    public let fat: Double
+
+    public let sugar: Double
+}
+
+public struct PassioGeneratedMealPlanPreview {
+
+    public let constraints: PassioNutritionAISDK.PassioGeneratedMealPlanConstraints?
+
+    public let mealPlanDays: [PassioNutritionAISDK.PassioGeneratedMealPlanDayPreview]
+}
+
+public struct PassioGeneratedMealPlanRecipe {
+
+    public let name: String?
+
+    public let preparation: String?
+
+    public let macros: PassioNutritionAISDK.PassioGeneratedMealPlanMacros
+
+    public let ingredients: [PassioNutritionAISDK.PassioFoodDataInfo]
+}
+
+public struct PassioGeneratedMealPlanRecipePreview {
+
+    public let name: String?
+
+    public let rejected: Bool
+}
+
+public struct PassioGeneratedMealPlanShoppingItem {
+
+    public let name: String?
+
+    public let portionQuantity: Double?
+
+    public let portionSize: String?
+}
+
 /// PassioID (typealias String) is used throughout the SDK, food and other objects are identified by PassioID. All attributes (names, nutrition etc..) are referred by PassioID.
 public typealias PassioID = String
 
@@ -2426,6 +2515,7 @@ public class PassioNutritionAI {
 
     final public let filesVersion: Int
 
+    /// Update Core SDK version by pressing cntrl + commad + version below
     public var version: String { get }
 
     /// Shared Instance
@@ -2518,14 +2608,6 @@ public class PassioNutritionAI {
     ///   - completion: success or failure of the startFoodDetection
     @available(*, deprecated, message: "Use `recognizeImageRemote` instead.")
     public func startFoodDetection(detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), foodRecognitionDelegate: any PassioNutritionAISDK.FoodRecognitionDelegate, capturingDeviceType: PassioNutritionAISDK.CapturingDeviceType = .defaultCapturing(), completion: @escaping (Bool) -> Void)
-
-    /// Use this function to detect Nutrition Facts via pointing the camera at Nutrition Facts
-    /// - Parameters:
-    ///   - nutritionfactsDelegate: ``NutritionFactsDelegate``, Add self to implement the NutritionFactsDelegate
-    ///   - capturingDeviceType: ``CapturingDeviceType``, Defaults sets to best camera available for current iPhone.
-    ///   - completion: success or failure of the startNutritionFactsDetection
-    @available(*, deprecated, message: "This method is deprecated and will be removed in a future release.")
-    public func startNutritionFactsDetection(nutritionfactsDelegate: (any PassioNutritionAISDK.NutritionFactsDelegate)?, capturingDeviceType: PassioNutritionAISDK.CapturingDeviceType = .defaultCapturing(), completion: @escaping (Bool) -> Void)
 
     /// Use this function to stop food detection.
     @available(*, deprecated, message: "Use `recognizeImageRemote` instead.")
@@ -2690,21 +2772,39 @@ public class PassioNutritionAI {
     ///   - completion: Array of ``PassioSpeechRecognitionModel``
     public func recognizeSpeechRemote(from text: String, completion: @escaping ([PassioNutritionAISDK.PassioSpeechRecognitionModel]) -> Void)
 
-    /// Use this method to retrieve ``PassioAdvisorFoodInfo`` by providing an image. You can provide any image, including those of regular food, barcodes, or nutrition facts printed on a product, to obtain the corresponding ``PassioAdvisorFoodInfo``
+    /// This method groups a list of `PassioFoodItem` into recipes
+    /// - Parameters:
+    ///   - text: Text for recognizing food logging actions
+    ///   - completion: ``PassioRecognitionResult`` with array of ``PassioRecognitionItem``
+    public func recognizeSpeechRemoteWithGrouping(text: String, completion: @escaping (Result<PassioNutritionAISDK.PassioRecognitionResult, any Error>) -> Void)
+
+    /// Use this method to retrieve ``PassioAdvisorFoodInfo`` by providing an image.
+    /// You can provide any image, including those of regular food, barcodes, or
+    /// nutrition facts printed on a product, to obtain the corresponding ``PassioAdvisorFoodInfo``
     /// - Parameters:
     ///   - image: UIImage for recognizing Food, Barcodes or Nutrition Facts
     ///   - resolution: Image resoultion for detection. Default Image resoultion is 512, see ``PassioImageResolution`` for more options.
     ///   - completion: Returns Array of ``PassioAdvisorFoodInfo`` if any or empty array if unable to recognize food in image
     public func recognizeImageRemote(image: UIImage, resolution: PassioNutritionAISDK.PassioImageResolution = .res_512, message: String? = nil, completion: @escaping ([PassioNutritionAISDK.PassioAdvisorFoodInfo]) -> Void)
 
-    /// Detect food in a static image/photo
+    /// This method groups a list of `PassioFoodItem` into recipes
     /// - Parameters:
-    ///   - image: UIImage for detection
-    ///   - detectionConfig: ``FoodDetectionConfiguration``
-    ///   - slicingRects: Optional ability to divide the image to slices or regions.
-    ///   - completion: ``FoodCandidatesWithText``?
-    @available(*, deprecated, message: "This method is deprecated and will be removed in a future release.")
-    public func detectFoodWithText(image: UIImage, detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), completion: @escaping ((any PassioNutritionAISDK.FoodCandidatesWithText)?) -> Void)
+    ///   - image: UIImage for recognizing Food, Barcodes or Nutrition Facts
+    ///   - resolution: Image resoultion for detection. Default Image resoultion is 512, see ``PassioImageResolution`` for more options.
+    ///   - completion: ``PassioRecognitionResult`` with array of ``PassioRecognitionItem``
+    public func recognizeImageRemoteWithGrouping(image: UIImage, resolution: PassioNutritionAISDK.PassioImageResolution = .res_512, message: String? = nil, completion: @escaping (Result<PassioNutritionAISDK.PassioRecognitionResult, any Error>) -> Void)
+
+    /// Generates a meal plan for the user based on the provided input
+    /// - Parameters:
+    ///   - request: The food item or ingredient list to generate a meal plan for
+    ///   - completion: ``PassioGeneratedMealPlan``
+    public func generateMealPlan(request: String, completion: @escaping (Result<PassioNutritionAISDK.PassioGeneratedMealPlan, any Error>) -> Void)
+
+    /// Generates a meal plan preview for the user based on the provided input
+    /// - Parameters:
+    ///   - request: The food item or ingredient list to generate a meal plan preview for
+    ///   - completion: ``PassioGeneratedMealPlan``
+    public func generateMealPlanPreview(request: String, completion: @escaping (Result<PassioNutritionAISDK.PassioGeneratedMealPlan, any Error>) -> Void)
 
     /// Returns hidden ingredients for a given food item
     /// - Parameters:
@@ -3009,6 +3109,48 @@ extension PassioNutritionFacts.ServingSizeUnit : Hashable {
 }
 
 extension PassioNutritionFacts.ServingSizeUnit : RawRepresentable {
+}
+
+public struct PassioRecognitionItem : Encodable {
+
+    public let foodItem: PassioNutritionAISDK.PassioFoodItem
+
+    public let date: String
+
+    public let action: PassioNutritionAISDK.PassioLogAction?
+
+    public let mealTime: PassioNutritionAISDK.PassioMealTime?
+
+    public let resultType: PassioNutritionAISDK.PassioFoodResultType
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: any Encoder) throws
+}
+
+public struct PassioRecognitionResult : Encodable {
+
+    public let mealName: String
+
+    public let items: [PassioNutritionAISDK.PassioRecognitionItem]
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: any Encoder) throws
 }
 
 public typealias PassioResult = (Result<Bool, PassioNutritionAISDK.NetworkError>) -> Void
@@ -3687,6 +3829,8 @@ public struct ResponseIngredient : Codable {
     public func encode(to encoder: any Encoder) throws
 }
 
+public typealias SDKDic = [String : Any]
+
 public enum SDKLanguage : String {
 
     case en
@@ -4054,6 +4198,13 @@ extension UIImageView {
     @MainActor @preconcurrency public func loadPassioIconBy(passioID: PassioNutritionAISDK.PassioID, entityType: PassioNutritionAISDK.PassioIDEntityType, size: PassioNutritionAISDK.IconSize = .px90, completion: @escaping (PassioNutritionAISDK.PassioID, UIImage) -> Void)
 
     @MainActor @preconcurrency public func loadImage(from url: URL, placeholder: UIImage? = nil)
+}
+
+extension Date {
+
+    public var timeSince: Double { get }
+
+    public func convertDate(dateFormat: String) -> String
 }
 
 infix operator .+ : DefaultPrecedence
