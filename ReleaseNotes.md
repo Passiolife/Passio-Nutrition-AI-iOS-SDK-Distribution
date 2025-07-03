@@ -1,5 +1,34 @@
 # Passio SDK Release Notes
 
+## V3.2.7
+### New APIs:
+
+- Added startBarcodeScanning
+```swift
+/// Use this function to detect barcodes by pointing the camera at a barcode
+/// - Parameters:
+///   - recognitionDelegate: ``BarcodeRecognitionDelegate``, Add self to implement the BarcodeRecognitionDelegate
+///   - completion: If success, it will return array of `BarcodeCandidate` objects
+public func startBarcodeScanning(recognitionDelegate: BarcodeRecognitionDelegate,
+                                 completion: @escaping (Bool) -> Void) {
+    coreSDK.startBarcodeScanning(recognitionDelegate: recognitionDelegate,
+                                 completion: completion)
+}
+```
+
+- Added stopBarcodeScanning
+```swift
+/// Use this function to stop barcode detection.
+public func stopBarcodeScanning() {
+    coreSDK.stopFoodDetection()
+}
+```
+
+### Removed APIs:
+
+- `startFoodDetection`
+- `stopFoodDetection`
+
 ## V3.2.6
 ### New APIs:
 

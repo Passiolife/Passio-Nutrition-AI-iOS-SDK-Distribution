@@ -1,6 +1,6 @@
 # PassioNutritionAISDK 
 
-## Version 3.2.6
+## Version 3.2.7
 
 ```Swift
 import AVFoundation
@@ -11,6 +11,7 @@ import CoreMedia
 import CoreMotion
 import DeveloperToolsSupport
 import Foundation
+import MLCompute
 import Metal
 import MetalPerformanceShaders
 import SQLite3
@@ -26,6 +27,8 @@ import simd
 @MainActor @objc @preconcurrency public class AVCaptureViedeoPreviewView : UIView {
 
     @MainActor @preconcurrency override dynamic public func layoutSubviews()
+
+    @objc deinit
 }
 
 /// Returning all information of Amount estimation and directions how to move the device for better estimation
@@ -100,6 +103,15 @@ public protocol BarcodeDetectionDelegate : AnyObject {
     func barcodeResult(barcodes: [any PassioNutritionAISDK.BarcodeCandidate])
 }
 
+/// Implement the BarcodeRecognitionDelegate protocol to receive delegate method from the startBarcodeScanning
+public protocol BarcodeRecognitionDelegate : AnyObject {
+
+    /// Delegate function for food recognition
+    /// - Parameters:
+    ///   - candidates: Barcode candidates if available
+    func recognitionResults(barcodeCandidates: [any PassioNutritionAISDK.BarcodeCandidate]?)
+}
+
 public struct Branded : Codable {
 
     public let owner: String?
@@ -146,7 +158,7 @@ public enum Bridge : String {
     ///     }
     ///
     ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
+    ///     // Prints "Optional(PaperSize.Legal)"
     ///
     ///     print(PaperSize(rawValue: "Tabloid"))
     ///     // Prints "nil"
@@ -221,6 +233,12 @@ public enum CapturingDeviceType : CaseIterable {
     ///   - rhs: Another value to compare.
     public static func == (a: PassioNutritionAISDK.CapturingDeviceType, b: PassioNutritionAISDK.CapturingDeviceType) -> Bool
 
+    /// A type that can represent a collection of all values of this type.
+    public typealias AllCases = [PassioNutritionAISDK.CapturingDeviceType]
+
+    /// A collection of all values of this type.
+    nonisolated public static var allCases: [PassioNutritionAISDK.CapturingDeviceType] { get }
+
     /// Hashes the essential components of this value by feeding them into the
     /// given hasher.
     ///
@@ -237,12 +255,6 @@ public enum CapturingDeviceType : CaseIterable {
     /// - Parameter hasher: The hasher to use when combining the components
     ///   of this instance.
     public func hash(into hasher: inout Hasher)
-
-    /// A type that can represent a collection of all values of this type.
-    public typealias AllCases = [PassioNutritionAISDK.CapturingDeviceType]
-
-    /// A collection of all values of this type.
-    nonisolated public static var allCases: [PassioNutritionAISDK.CapturingDeviceType] { get }
 
     /// The hash value.
     ///
@@ -375,7 +387,7 @@ public enum EstimationQuality : String {
     ///     }
     ///
     ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
+    ///     // Prints "Optional(PaperSize.Legal)"
     ///
     ///     print(PaperSize(rawValue: "Tabloid"))
     ///     // Prints "nil"
@@ -466,16 +478,6 @@ public struct FoodDetectionConfiguration {
     public init(detectVisual: Bool = true, detectBarcodes: Bool = false, detectPackagedFood: Bool = false)
 }
 
-/// Implement the FoodRecognitionDelegate protocol to receive delegate method from the FoodRecognition
-public protocol FoodRecognitionDelegate : AnyObject {
-
-    /// Delegate function for food recognition
-    /// - Parameters:
-    ///   - candidates: Food candidates
-    ///   - image: Image used for detection
-    func recognitionResults(candidates: (any PassioNutritionAISDK.FoodCandidates)?, image: UIImage?)
-}
-
 public protocol FoodRecognitionWithTextObservations : AnyObject {
 
     func recognitionResults(candidates: (any PassioNutritionAISDK.FoodCandidates)?, image: UIImage?, nutritionFacts: PassioNutritionAISDK.PassioNutritionFacts?, observations: [VNRecognizedTextObservation])
@@ -499,7 +501,7 @@ public enum IconSize : String {
     ///     }
     ///
     ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
+    ///     // Prints "Optional(PaperSize.Legal)"
     ///
     ///     print(PaperSize(rawValue: "Tabloid"))
     ///     // Prints "nil"
@@ -668,7 +670,7 @@ public enum MoveDirection : String {
     ///     }
     ///
     ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
+    ///     // Prints "Optional(PaperSize.Legal)"
     ///
     ///     print(PaperSize(rawValue: "Tabloid"))
     ///     // Prints "nil"
@@ -896,6 +898,8 @@ public class NutritionAdvisor {
     ///   - advisorResponse: Pass ``PassioAdvisorResponse`` to get food info.
     ///   - completion: Response with a success or error message. If the response is successful, you will receive ``NutritionAdvisorResponse`` containing ``PassioAdvisorResponse``.
     public func fetchIngridients(from advisorResponse: PassioNutritionAISDK.PassioAdvisorResponse, completion: @escaping PassioNutritionAISDK.NutritionAdvisorResponse)
+
+    @objc deinit
 }
 
 public protocol NutritionAdvisorDelegate : AnyObject {
@@ -1115,6 +1119,17 @@ public struct PassioAlternative : Codable, Equatable, Hashable {
     ///   - rhs: Another value to compare.
     public static func == (a: PassioNutritionAISDK.PassioAlternative, b: PassioNutritionAISDK.PassioAlternative) -> Bool
 
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: any Encoder) throws
+
     /// Hashes the essential components of this value by feeding them into the
     /// given hasher.
     ///
@@ -1131,17 +1146,6 @@ public struct PassioAlternative : Codable, Equatable, Hashable {
     /// - Parameter hasher: The hasher to use when combining the components
     ///   of this instance.
     public func hash(into hasher: inout Hasher)
-
-    /// Encodes this value into the given encoder.
-    ///
-    /// If the value fails to encode anything, `encoder` will encode an empty
-    /// keyed container in its place.
-    ///
-    /// This function throws an error if any values are invalid for the given
-    /// encoder's format.
-    ///
-    /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: any Encoder) throws
 
     /// The hash value.
     ///
@@ -1690,7 +1694,7 @@ public enum PassioFoodResultType : String, CaseIterable, Codable {
     ///     }
     ///
     ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
+    ///     // Prints "Optional(PaperSize.Legal)"
     ///
     ///     print(PaperSize(rawValue: "Tabloid"))
     ///     // Prints "nil"
@@ -1943,7 +1947,7 @@ public enum PassioIDEntityType : String, CaseIterable, Codable {
     ///     }
     ///
     ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
+    ///     // Prints "Optional(PaperSize.Legal)"
     ///
     ///     print(PaperSize(rawValue: "Tabloid"))
     ///     // Prints "nil"
@@ -2108,7 +2112,7 @@ public enum PassioLogAction : String, Codable, CaseIterable {
     ///     }
     ///
     ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
+    ///     // Prints "Optional(PaperSize.Legal)"
     ///
     ///     print(PaperSize(rawValue: "Tabloid"))
     ///     // Prints "nil"
@@ -2232,7 +2236,7 @@ public enum PassioMealTime : String, Codable {
     ///     }
     ///
     ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
+    ///     // Prints "Optional(PaperSize.Legal)"
     ///
     ///     print(PaperSize(rawValue: "Tabloid"))
     ///     // Prints "nil"
@@ -2314,6 +2318,8 @@ public class PassioMetadataService {
     public func getPassioIDs(byModelName: String) -> [PassioNutritionAISDK.PassioID]?
 
     public func getLabel(passioID: PassioNutritionAISDK.PassioID, languageCode: String = "en") -> String?
+
+    @objc deinit
 }
 
 /// PassioMode will report the mode the SDK is currently in.
@@ -2339,6 +2345,17 @@ public enum PassioMode : Codable {
     ///   - rhs: Another value to compare.
     public static func == (a: PassioNutritionAISDK.PassioMode, b: PassioNutritionAISDK.PassioMode) -> Bool
 
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: any Encoder) throws
+
     /// Hashes the essential components of this value by feeding them into the
     /// given hasher.
     ///
@@ -2355,17 +2372,6 @@ public enum PassioMode : Codable {
     /// - Parameter hasher: The hasher to use when combining the components
     ///   of this instance.
     public func hash(into hasher: inout Hasher)
-
-    /// Encodes this value into the given encoder.
-    ///
-    /// If the value fails to encode anything, `encoder` will encode an empty
-    /// keyed container in its place.
-    ///
-    /// This function throws an error if any values are invalid for the given
-    /// encoder's format.
-    ///
-    /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: any Encoder) throws
 
     /// The hash value.
     ///
@@ -2557,7 +2563,7 @@ public class PassioNutritionAI {
         ///     }
         ///
         ///     print(PaperSize(rawValue: "Legal"))
-        ///     // Prints "Optional("PaperSize.Legal")"
+        ///     // Prints "Optional(PaperSize.Legal)"
         ///
         ///     print(PaperSize(rawValue: "Tabloid"))
         ///     // Prints "nil"
@@ -2600,18 +2606,14 @@ public class PassioNutritionAI {
     /// Shut down the Passio SDK and release all resources
     public func shutDownPassioSDK()
 
-    /// Use this function to detect food via pointing the camera at Food, Barcode and Packaged Food
+    /// Use this function to detect barcodes by pointing the camera at a barcode
     /// - Parameters:
-    ///   - detectionConfig: ``FoodDetectionConfiguration`` object with the configuration
-    ///   - foodRecognitionDelegate: ``FoodRecognitionDelegate``, Add self to implement the FoodRecognitionDelegate
-    ///   - capturingDeviceType: ``CapturingDeviceType``, Defaults sets to best camera available for current iPhone.
-    ///   - completion: success or failure of the startFoodDetection
-    @available(*, deprecated, message: "Use `recognizeImageRemote` instead.")
-    public func startFoodDetection(detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), foodRecognitionDelegate: any PassioNutritionAISDK.FoodRecognitionDelegate, capturingDeviceType: PassioNutritionAISDK.CapturingDeviceType = .defaultCapturing(), completion: @escaping (Bool) -> Void)
+    ///   - recognitionDelegate: ``BarcodeRecognitionDelegate``, Add self to implement the BarcodeRecognitionDelegate
+    ///   - completion: If success, it will return array of `BarcodeCandidate` objects
+    public func startBarcodeScanning(recognitionDelegate: any PassioNutritionAISDK.BarcodeRecognitionDelegate, completion: @escaping (Bool) -> Void)
 
-    /// Use this function to stop food detection.
-    @available(*, deprecated, message: "Use `recognizeImageRemote` instead.")
-    public func stopFoodDetection()
+    /// Use this function to stop barcode detection.
+    public func stopBarcodeScanning()
 
     /// Detect barcodes "BarcodeCandidate" in an image
     /// - Parameter image: Image for the detection
@@ -2721,7 +2723,7 @@ public class PassioNutritionAI {
     /// Fetch from Passio web-service the PassioFoodItem for a productCode
     /// - Parameter barcode: Product code
     /// - Parameter completion: ``PassioFoodItem``
-    public func fetchFoodItemFor(productCode: String, completion: @escaping ((PassioNutritionAISDK.PassioFoodItem?) -> Void))
+    public func fetchFoodItemFor(productCode: String, completion: @escaping (PassioNutritionAISDK.PassioFoodItem?) -> Void)
 
     /// Fetch PassioFoodItem for a v2 PassioID
     /// - Parameter passioID: PassioID
@@ -2873,6 +2875,8 @@ public class PassioNutritionAI {
     ///   - passioFoodItem: Pass ``PassioFoodItem`` to sumbit to Passio
     ///   - completion: You will receive ``PassioUPFRatingResult`` in completion.
     public func fetchUltraProcessingFoodRating(passioFoodItem: PassioNutritionAISDK.PassioFoodItem, completion: @escaping PassioNutritionAISDK.PassioUPFRatingResult)
+
+    @objc deinit
 }
 
 extension PassioNutritionAI : PassioNutritionAISDK.PassioStatusDelegate {
@@ -2934,7 +2938,7 @@ public class PassioNutritionFacts {
         ///     }
         ///
         ///     print(PaperSize(rawValue: "Legal"))
-        ///     // Prints "Optional("PaperSize.Legal")"
+        ///     // Prints "Optional(PaperSize.Legal)"
         ///
         ///     print(PaperSize(rawValue: "Tabloid"))
         ///     // Prints "nil"
@@ -3095,6 +3099,8 @@ public class PassioNutritionFacts {
     public var description: String { get }
 
     public func clearAll()
+
+    @objc deinit
 }
 
 extension PassioNutritionFacts {
@@ -3275,6 +3281,17 @@ public struct PassioServingSize : Codable, Equatable, Hashable {
     ///   - rhs: Another value to compare.
     public static func == (a: PassioNutritionAISDK.PassioServingSize, b: PassioNutritionAISDK.PassioServingSize) -> Bool
 
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: any Encoder) throws
+
     /// Hashes the essential components of this value by feeding them into the
     /// given hasher.
     ///
@@ -3291,17 +3308,6 @@ public struct PassioServingSize : Codable, Equatable, Hashable {
     /// - Parameter hasher: The hasher to use when combining the components
     ///   of this instance.
     public func hash(into hasher: inout Hasher)
-
-    /// Encodes this value into the given encoder.
-    ///
-    /// If the value fails to encode anything, `encoder` will encode an empty
-    /// keyed container in its place.
-    ///
-    /// This function throws an error if any values are invalid for the given
-    /// encoder's format.
-    ///
-    /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: any Encoder) throws
 
     /// The hash value.
     ///
@@ -3849,7 +3855,7 @@ public enum SDKLanguage : String {
     ///     }
     ///
     ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
+    ///     // Prints "Optional(PaperSize.Legal)"
     ///
     ///     print(PaperSize(rawValue: "Tabloid"))
     ///     // Prints "nil"
@@ -4210,5 +4216,4 @@ extension Date {
 infix operator .+ : DefaultPrecedence
 
 infix operator ./ : DefaultPrecedence
-
 ```
