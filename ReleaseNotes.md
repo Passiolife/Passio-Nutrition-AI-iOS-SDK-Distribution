@@ -1,5 +1,9 @@
 # Passio SDK Release Notes
 
+## V3.2.8
+
+- Fixed incorrect packaging of v3.2.7, identical to v3.2.7 otherwise.
+
 ## V3.2.7
 ### New APIs:
 
