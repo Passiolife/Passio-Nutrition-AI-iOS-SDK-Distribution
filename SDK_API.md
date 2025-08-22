@@ -1,6 +1,6 @@
 # PassioNutritionAISDK 
 
-## Version 3.2.5
+## Version 3.2.9
 
 ```Swift
 import AVFoundation
@@ -11,6 +11,7 @@ import CoreMedia
 import CoreMotion
 import DeveloperToolsSupport
 import Foundation
+import MLCompute
 import Metal
 import MetalPerformanceShaders
 import SQLite3
@@ -26,6 +27,8 @@ import simd
 @MainActor @objc @preconcurrency public class AVCaptureViedeoPreviewView : UIView {
 
     @MainActor @preconcurrency override dynamic public func layoutSubviews()
+
+    @objc deinit
 }
 
 /// Returning all information of Amount estimation and directions how to move the device for better estimation
@@ -100,6 +103,15 @@ public protocol BarcodeDetectionDelegate : AnyObject {
     func barcodeResult(barcodes: [any PassioNutritionAISDK.BarcodeCandidate])
 }
 
+/// Implement the BarcodeRecognitionDelegate protocol to receive delegate method from the startBarcodeScanning
+public protocol BarcodeRecognitionDelegate : AnyObject {
+
+    /// Delegate function for food recognition
+    /// - Parameters:
+    ///   - candidates: Barcode candidates if available
+    func recognitionResults(barcodeCandidates: [any PassioNutritionAISDK.BarcodeCandidate]?)
+}
+
 public struct Branded : Codable {
 
     public let owner: String?
@@ -146,7 +158,7 @@ public enum Bridge : String {
     ///     }
     ///
     ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
+    ///     // Prints "Optional(PaperSize.Legal)"
     ///
     ///     print(PaperSize(rawValue: "Tabloid"))
     ///     // Prints "nil"
@@ -221,6 +233,12 @@ public enum CapturingDeviceType : CaseIterable {
     ///   - rhs: Another value to compare.
     public static func == (a: PassioNutritionAISDK.CapturingDeviceType, b: PassioNutritionAISDK.CapturingDeviceType) -> Bool
 
+    /// A type that can represent a collection of all values of this type.
+    public typealias AllCases = [PassioNutritionAISDK.CapturingDeviceType]
+
+    /// A collection of all values of this type.
+    nonisolated public static var allCases: [PassioNutritionAISDK.CapturingDeviceType] { get }
+
     /// Hashes the essential components of this value by feeding them into the
     /// given hasher.
     ///
@@ -237,12 +255,6 @@ public enum CapturingDeviceType : CaseIterable {
     /// - Parameter hasher: The hasher to use when combining the components
     ///   of this instance.
     public func hash(into hasher: inout Hasher)
-
-    /// A type that can represent a collection of all values of this type.
-    public typealias AllCases = [PassioNutritionAISDK.CapturingDeviceType]
-
-    /// A collection of all values of this type.
-    nonisolated public static var allCases: [PassioNutritionAISDK.CapturingDeviceType] { get }
 
     /// The hash value.
     ///
@@ -375,7 +387,7 @@ public enum EstimationQuality : String {
     ///     }
     ///
     ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
+    ///     // Prints "Optional(PaperSize.Legal)"
     ///
     ///     print(PaperSize(rawValue: "Tabloid"))
     ///     // Prints "nil"
@@ -466,16 +478,6 @@ public struct FoodDetectionConfiguration {
     public init(detectVisual: Bool = true, detectBarcodes: Bool = false, detectPackagedFood: Bool = false)
 }
 
-/// Implement the FoodRecognitionDelegate protocol to receive delegate method from the FoodRecognition
-public protocol FoodRecognitionDelegate : AnyObject {
-
-    /// Delegate function for food recognition
-    /// - Parameters:
-    ///   - candidates: Food candidates
-    ///   - image: Image used for detection
-    func recognitionResults(candidates: (any PassioNutritionAISDK.FoodCandidates)?, image: UIImage?)
-}
-
 public protocol FoodRecognitionWithTextObservations : AnyObject {
 
     func recognitionResults(candidates: (any PassioNutritionAISDK.FoodCandidates)?, image: UIImage?, nutritionFacts: PassioNutritionAISDK.PassioNutritionFacts?, observations: [VNRecognizedTextObservation])
@@ -499,7 +501,7 @@ public enum IconSize : String {
     ///     }
     ///
     ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
+    ///     // Prints "Optional(PaperSize.Legal)"
     ///
     ///     print(PaperSize(rawValue: "Tabloid"))
     ///     // Prints "nil"
@@ -668,7 +670,7 @@ public enum MoveDirection : String {
     ///     }
     ///
     ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
+    ///     // Prints "Optional(PaperSize.Legal)"
     ///
     ///     print(PaperSize(rawValue: "Tabloid"))
     ///     // Prints "nil"
@@ -896,6 +898,8 @@ public class NutritionAdvisor {
     ///   - advisorResponse: Pass ``PassioAdvisorResponse`` to get food info.
     ///   - completion: Response with a success or error message. If the response is successful, you will receive ``NutritionAdvisorResponse`` containing ``PassioAdvisorResponse``.
     public func fetchIngridients(from advisorResponse: PassioNutritionAISDK.PassioAdvisorResponse, completion: @escaping PassioNutritionAISDK.NutritionAdvisorResponse)
+
+    @objc deinit
 }
 
 public protocol NutritionAdvisorDelegate : AnyObject {
@@ -1115,6 +1119,17 @@ public struct PassioAlternative : Codable, Equatable, Hashable {
     ///   - rhs: Another value to compare.
     public static func == (a: PassioNutritionAISDK.PassioAlternative, b: PassioNutritionAISDK.PassioAlternative) -> Bool
 
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: any Encoder) throws
+
     /// Hashes the essential components of this value by feeding them into the
     /// given hasher.
     ///
@@ -1131,17 +1146,6 @@ public struct PassioAlternative : Codable, Equatable, Hashable {
     /// - Parameter hasher: The hasher to use when combining the components
     ///   of this instance.
     public func hash(into hasher: inout Hasher)
-
-    /// Encodes this value into the given encoder.
-    ///
-    /// If the value fails to encode anything, `encoder` will encode an empty
-    /// keyed container in its place.
-    ///
-    /// This function throws an error if any values are invalid for the given
-    /// encoder's format.
-    ///
-    /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: any Encoder) throws
 
     /// The hash value.
     ///
@@ -1269,7 +1273,9 @@ public struct PassioFoodDataInfo : Codable {
 
     public let tags: [String]?
 
-    public init(foodName: String, brandName: String, iconID: PassioNutritionAISDK.PassioID, score: Double, scoredName: String, labelId: String, type: String, resultId: String, nutritionPreview: PassioNutritionAISDK.PassioSearchNutritionPreview?, isShortName: Bool, refCode: String, tags: [String]?)
+    public let concerns: [Int]?
+
+    public init(foodName: String, brandName: String, iconID: PassioNutritionAISDK.PassioID, score: Double, scoredName: String, labelId: String, type: String, resultId: String, nutritionPreview: PassioNutritionAISDK.PassioSearchNutritionPreview?, isShortName: Bool, refCode: String, tags: [String]?, concerns: [Int]?)
 
     /// Encodes this value into the given encoder.
     ///
@@ -1690,7 +1696,7 @@ public enum PassioFoodResultType : String, CaseIterable, Codable {
     ///     }
     ///
     ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
+    ///     // Prints "Optional(PaperSize.Legal)"
     ///
     ///     print(PaperSize(rawValue: "Tabloid"))
     ///     // Prints "nil"
@@ -1737,6 +1743,95 @@ extension PassioFoodResultType : Hashable {
 }
 
 extension PassioFoodResultType : RawRepresentable {
+}
+
+public struct PassioGeneratedMealPlan {
+
+    public let constraints: PassioNutritionAISDK.PassioGeneratedMealPlanConstraints?
+
+    public let shoppingList: [PassioNutritionAISDK.PassioGeneratedMealPlanShoppingItem]
+
+    public let mealPlanDays: [PassioNutritionAISDK.PassioGeneratedMealPlanDay]
+}
+
+public struct PassioGeneratedMealPlanConstraints {
+
+    public let constraints: PassioNutritionAISDK.SDKDic?
+
+    public let macros: PassioNutritionAISDK.PassioGeneratedMealPlanMacros
+}
+
+public struct PassioGeneratedMealPlanDay {
+
+    public let breakfast: [PassioNutritionAISDK.PassioGeneratedMealPlanRecipe]
+
+    public let lunch: [PassioNutritionAISDK.PassioGeneratedMealPlanRecipe]
+
+    public let dinner: [PassioNutritionAISDK.PassioGeneratedMealPlanRecipe]
+
+    public let snack: [PassioNutritionAISDK.PassioGeneratedMealPlanRecipe]
+
+    public let macros: PassioNutritionAISDK.PassioGeneratedMealPlanMacros
+}
+
+public struct PassioGeneratedMealPlanDayPreview {
+
+    public let breakfast: [PassioNutritionAISDK.PassioGeneratedMealPlanRecipePreview]
+
+    public let lunch: [PassioNutritionAISDK.PassioGeneratedMealPlanRecipePreview]
+
+    public let dinner: [PassioNutritionAISDK.PassioGeneratedMealPlanRecipePreview]
+
+    public let snack: [PassioNutritionAISDK.PassioGeneratedMealPlanRecipePreview]
+}
+
+public struct PassioGeneratedMealPlanMacros {
+
+    public let calories: Double
+
+    public let protein: Double
+
+    public let fiber: Double
+
+    public let carbs: Double
+
+    public let fat: Double
+
+    public let sugar: Double
+}
+
+public struct PassioGeneratedMealPlanPreview {
+
+    public let constraints: PassioNutritionAISDK.PassioGeneratedMealPlanConstraints?
+
+    public let mealPlanDays: [PassioNutritionAISDK.PassioGeneratedMealPlanDayPreview]
+}
+
+public struct PassioGeneratedMealPlanRecipe {
+
+    public let name: String?
+
+    public let preparation: String?
+
+    public let macros: PassioNutritionAISDK.PassioGeneratedMealPlanMacros
+
+    public let ingredients: [PassioNutritionAISDK.PassioFoodDataInfo]
+}
+
+public struct PassioGeneratedMealPlanRecipePreview {
+
+    public let name: String?
+
+    public let rejected: Bool
+}
+
+public struct PassioGeneratedMealPlanShoppingItem {
+
+    public let name: String?
+
+    public let portionQuantity: Double?
+
+    public let portionSize: String?
 }
 
 /// PassioID (typealias String) is used throughout the SDK, food and other objects are identified by PassioID. All attributes (names, nutrition etc..) are referred by PassioID.
@@ -1854,7 +1949,7 @@ public enum PassioIDEntityType : String, CaseIterable, Codable {
     ///     }
     ///
     ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
+    ///     // Prints "Optional(PaperSize.Legal)"
     ///
     ///     print(PaperSize(rawValue: "Tabloid"))
     ///     // Prints "nil"
@@ -2019,7 +2114,7 @@ public enum PassioLogAction : String, Codable, CaseIterable {
     ///     }
     ///
     ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
+    ///     // Prints "Optional(PaperSize.Legal)"
     ///
     ///     print(PaperSize(rawValue: "Tabloid"))
     ///     // Prints "nil"
@@ -2143,7 +2238,7 @@ public enum PassioMealTime : String, Codable {
     ///     }
     ///
     ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
+    ///     // Prints "Optional(PaperSize.Legal)"
     ///
     ///     print(PaperSize(rawValue: "Tabloid"))
     ///     // Prints "nil"
@@ -2225,6 +2320,8 @@ public class PassioMetadataService {
     public func getPassioIDs(byModelName: String) -> [PassioNutritionAISDK.PassioID]?
 
     public func getLabel(passioID: PassioNutritionAISDK.PassioID, languageCode: String = "en") -> String?
+
+    @objc deinit
 }
 
 /// PassioMode will report the mode the SDK is currently in.
@@ -2250,6 +2347,17 @@ public enum PassioMode : Codable {
     ///   - rhs: Another value to compare.
     public static func == (a: PassioNutritionAISDK.PassioMode, b: PassioNutritionAISDK.PassioMode) -> Bool
 
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: any Encoder) throws
+
     /// Hashes the essential components of this value by feeding them into the
     /// given hasher.
     ///
@@ -2266,17 +2374,6 @@ public enum PassioMode : Codable {
     /// - Parameter hasher: The hasher to use when combining the components
     ///   of this instance.
     public func hash(into hasher: inout Hasher)
-
-    /// Encodes this value into the given encoder.
-    ///
-    /// If the value fails to encode anything, `encoder` will encode an empty
-    /// keyed container in its place.
-    ///
-    /// This function throws an error if any values are invalid for the given
-    /// encoder's format.
-    ///
-    /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: any Encoder) throws
 
     /// The hash value.
     ///
@@ -2426,6 +2523,7 @@ public class PassioNutritionAI {
 
     final public let filesVersion: Int
 
+    /// Update Core SDK version by pressing cntrl + commad + version below
     public var version: String { get }
 
     /// Shared Instance
@@ -2467,7 +2565,7 @@ public class PassioNutritionAI {
         ///     }
         ///
         ///     print(PaperSize(rawValue: "Legal"))
-        ///     // Prints "Optional("PaperSize.Legal")"
+        ///     // Prints "Optional(PaperSize.Legal)"
         ///
         ///     print(PaperSize(rawValue: "Tabloid"))
         ///     // Prints "nil"
@@ -2510,26 +2608,14 @@ public class PassioNutritionAI {
     /// Shut down the Passio SDK and release all resources
     public func shutDownPassioSDK()
 
-    /// Use this function to detect food via pointing the camera at Food, Barcode and Packaged Food
+    /// Use this function to detect barcodes by pointing the camera at a barcode
     /// - Parameters:
-    ///   - detectionConfig: ``FoodDetectionConfiguration`` object with the configuration
-    ///   - foodRecognitionDelegate: ``FoodRecognitionDelegate``, Add self to implement the FoodRecognitionDelegate
-    ///   - capturingDeviceType: ``CapturingDeviceType``, Defaults sets to best camera available for current iPhone.
-    ///   - completion: success or failure of the startFoodDetection
-    @available(*, deprecated, message: "Use `recognizeImageRemote` instead.")
-    public func startFoodDetection(detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), foodRecognitionDelegate: any PassioNutritionAISDK.FoodRecognitionDelegate, capturingDeviceType: PassioNutritionAISDK.CapturingDeviceType = .defaultCapturing(), completion: @escaping (Bool) -> Void)
+    ///   - recognitionDelegate: ``BarcodeRecognitionDelegate``, Add self to implement the BarcodeRecognitionDelegate
+    ///   - completion: If success, it will return array of `BarcodeCandidate` objects
+    public func startBarcodeScanning(recognitionDelegate: any PassioNutritionAISDK.BarcodeRecognitionDelegate, completion: @escaping (Bool) -> Void)
 
-    /// Use this function to detect Nutrition Facts via pointing the camera at Nutrition Facts
-    /// - Parameters:
-    ///   - nutritionfactsDelegate: ``NutritionFactsDelegate``, Add self to implement the NutritionFactsDelegate
-    ///   - capturingDeviceType: ``CapturingDeviceType``, Defaults sets to best camera available for current iPhone.
-    ///   - completion: success or failure of the startNutritionFactsDetection
-    @available(*, deprecated, message: "This method is deprecated and will be removed in a future release.")
-    public func startNutritionFactsDetection(nutritionfactsDelegate: (any PassioNutritionAISDK.NutritionFactsDelegate)?, capturingDeviceType: PassioNutritionAISDK.CapturingDeviceType = .defaultCapturing(), completion: @escaping (Bool) -> Void)
-
-    /// Use this function to stop food detection.
-    @available(*, deprecated, message: "Use `recognizeImageRemote` instead.")
-    public func stopFoodDetection()
+    /// Use this function to stop barcode detection.
+    public func stopBarcodeScanning()
 
     /// Detect barcodes "BarcodeCandidate" in an image
     /// - Parameter image: Image for the detection
@@ -2598,6 +2684,12 @@ public class PassioNutritionAI {
     ///   - completion: ``PassioFoodItem``
     public func fetchFoodItemFor(refCode: String, completion: @escaping (PassioNutritionAISDK.PassioFoodItem?) -> Void)
 
+    /// Retrieve a JSON string containing all the nutrients from a RefCode
+    /// - Parameters:
+    ///   - refCode: Pass refCode as a String
+    ///   - completion: JSON string containing all the nutrients
+    public func fetchNutrientJSON(refCode: String, completion: @escaping (String?) -> Void)
+
     /// Advanced search for food will return a list of alternate search and search result
     /// - Parameters:
     ///   - byText: User typed text
@@ -2639,7 +2731,7 @@ public class PassioNutritionAI {
     /// Fetch from Passio web-service the PassioFoodItem for a productCode
     /// - Parameter barcode: Product code
     /// - Parameter completion: ``PassioFoodItem``
-    public func fetchFoodItemFor(productCode: String, completion: @escaping ((PassioNutritionAISDK.PassioFoodItem?) -> Void))
+    public func fetchFoodItemFor(productCode: String, completion: @escaping (PassioNutritionAISDK.PassioFoodItem?) -> Void)
 
     /// Fetch PassioFoodItem for a v2 PassioID
     /// - Parameter passioID: PassioID
@@ -2690,21 +2782,39 @@ public class PassioNutritionAI {
     ///   - completion: Array of ``PassioSpeechRecognitionModel``
     public func recognizeSpeechRemote(from text: String, completion: @escaping ([PassioNutritionAISDK.PassioSpeechRecognitionModel]) -> Void)
 
-    /// Use this method to retrieve ``PassioAdvisorFoodInfo`` by providing an image. You can provide any image, including those of regular food, barcodes, or nutrition facts printed on a product, to obtain the corresponding ``PassioAdvisorFoodInfo``
+    /// This method groups a list of `PassioFoodItem` into recipes
+    /// - Parameters:
+    ///   - text: Text for recognizing food logging actions
+    ///   - completion: ``PassioRecognitionResult`` with array of ``PassioRecognitionItem``
+    public func recognizeSpeechRemoteWithGrouping(text: String, completion: @escaping (Result<PassioNutritionAISDK.PassioRecognitionResult, any Error>) -> Void)
+
+    /// Use this method to retrieve ``PassioAdvisorFoodInfo`` by providing an image.
+    /// You can provide any image, including those of regular food, barcodes, or
+    /// nutrition facts printed on a product, to obtain the corresponding ``PassioAdvisorFoodInfo``
     /// - Parameters:
     ///   - image: UIImage for recognizing Food, Barcodes or Nutrition Facts
     ///   - resolution: Image resoultion for detection. Default Image resoultion is 512, see ``PassioImageResolution`` for more options.
     ///   - completion: Returns Array of ``PassioAdvisorFoodInfo`` if any or empty array if unable to recognize food in image
     public func recognizeImageRemote(image: UIImage, resolution: PassioNutritionAISDK.PassioImageResolution = .res_512, message: String? = nil, completion: @escaping ([PassioNutritionAISDK.PassioAdvisorFoodInfo]) -> Void)
 
-    /// Detect food in a static image/photo
+    /// This method groups a list of `PassioFoodItem` into recipes
     /// - Parameters:
-    ///   - image: UIImage for detection
-    ///   - detectionConfig: ``FoodDetectionConfiguration``
-    ///   - slicingRects: Optional ability to divide the image to slices or regions.
-    ///   - completion: ``FoodCandidatesWithText``?
-    @available(*, deprecated, message: "This method is deprecated and will be removed in a future release.")
-    public func detectFoodWithText(image: UIImage, detectionConfig: PassioNutritionAISDK.FoodDetectionConfiguration = FoodDetectionConfiguration(), completion: @escaping ((any PassioNutritionAISDK.FoodCandidatesWithText)?) -> Void)
+    ///   - image: UIImage for recognizing Food, Barcodes or Nutrition Facts
+    ///   - resolution: Image resoultion for detection. Default Image resoultion is 512, see ``PassioImageResolution`` for more options.
+    ///   - completion: ``PassioRecognitionResult`` with array of ``PassioRecognitionItem``
+    public func recognizeImageRemoteWithGrouping(image: UIImage, resolution: PassioNutritionAISDK.PassioImageResolution = .res_512, message: String? = nil, completion: @escaping (Result<PassioNutritionAISDK.PassioRecognitionResult, any Error>) -> Void)
+
+    /// Generates a meal plan for the user based on the provided input
+    /// - Parameters:
+    ///   - request: The food item or ingredient list to generate a meal plan for
+    ///   - completion: ``PassioGeneratedMealPlan``
+    public func generateMealPlan(request: String, completion: @escaping (Result<PassioNutritionAISDK.PassioGeneratedMealPlan, any Error>) -> Void)
+
+    /// Generates a meal plan preview for the user based on the provided input
+    /// - Parameters:
+    ///   - request: The food item or ingredient list to generate a meal plan preview for
+    ///   - completion: ``PassioGeneratedMealPlan``
+    public func generateMealPlanPreview(request: String, completion: @escaping (Result<PassioNutritionAISDK.PassioGeneratedMealPlan, any Error>) -> Void)
 
     /// Returns hidden ingredients for a given food item
     /// - Parameters:
@@ -2773,6 +2883,8 @@ public class PassioNutritionAI {
     ///   - passioFoodItem: Pass ``PassioFoodItem`` to sumbit to Passio
     ///   - completion: You will receive ``PassioUPFRatingResult`` in completion.
     public func fetchUltraProcessingFoodRating(passioFoodItem: PassioNutritionAISDK.PassioFoodItem, completion: @escaping PassioNutritionAISDK.PassioUPFRatingResult)
+
+    @objc deinit
 }
 
 extension PassioNutritionAI : PassioNutritionAISDK.PassioStatusDelegate {
@@ -2834,7 +2946,7 @@ public class PassioNutritionFacts {
         ///     }
         ///
         ///     print(PaperSize(rawValue: "Legal"))
-        ///     // Prints "Optional("PaperSize.Legal")"
+        ///     // Prints "Optional(PaperSize.Legal)"
         ///
         ///     print(PaperSize(rawValue: "Tabloid"))
         ///     // Prints "nil"
@@ -2995,6 +3107,8 @@ public class PassioNutritionFacts {
     public var description: String { get }
 
     public func clearAll()
+
+    @objc deinit
 }
 
 extension PassioNutritionFacts {
@@ -3009,6 +3123,48 @@ extension PassioNutritionFacts.ServingSizeUnit : Hashable {
 }
 
 extension PassioNutritionFacts.ServingSizeUnit : RawRepresentable {
+}
+
+public struct PassioRecognitionItem : Encodable {
+
+    public let foodItem: PassioNutritionAISDK.PassioFoodItem
+
+    public let date: String
+
+    public let action: PassioNutritionAISDK.PassioLogAction?
+
+    public let mealTime: PassioNutritionAISDK.PassioMealTime?
+
+    public let resultType: PassioNutritionAISDK.PassioFoodResultType
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: any Encoder) throws
+}
+
+public struct PassioRecognitionResult : Encodable {
+
+    public let mealName: String
+
+    public let items: [PassioNutritionAISDK.PassioRecognitionItem]
+
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: any Encoder) throws
 }
 
 public typealias PassioResult = (Result<Bool, PassioNutritionAISDK.NetworkError>) -> Void
@@ -3133,6 +3289,17 @@ public struct PassioServingSize : Codable, Equatable, Hashable {
     ///   - rhs: Another value to compare.
     public static func == (a: PassioNutritionAISDK.PassioServingSize, b: PassioNutritionAISDK.PassioServingSize) -> Bool
 
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
+    public func encode(to encoder: any Encoder) throws
+
     /// Hashes the essential components of this value by feeding them into the
     /// given hasher.
     ///
@@ -3149,17 +3316,6 @@ public struct PassioServingSize : Codable, Equatable, Hashable {
     /// - Parameter hasher: The hasher to use when combining the components
     ///   of this instance.
     public func hash(into hasher: inout Hasher)
-
-    /// Encodes this value into the given encoder.
-    ///
-    /// If the value fails to encode anything, `encoder` will encode an empty
-    /// keyed container in its place.
-    ///
-    /// This function throws an error if any values are invalid for the given
-    /// encoder's format.
-    ///
-    /// - Parameter encoder: The encoder to write data to.
-    public func encode(to encoder: any Encoder) throws
 
     /// The hash value.
     ///
@@ -3687,6 +3843,8 @@ public struct ResponseIngredient : Codable {
     public func encode(to encoder: any Encoder) throws
 }
 
+public typealias SDKDic = [String : Any]
+
 public enum SDKLanguage : String {
 
     case en
@@ -3705,7 +3863,7 @@ public enum SDKLanguage : String {
     ///     }
     ///
     ///     print(PaperSize(rawValue: "Legal"))
-    ///     // Prints "Optional("PaperSize.Legal")"
+    ///     // Prints "Optional(PaperSize.Legal)"
     ///
     ///     print(PaperSize(rawValue: "Tabloid"))
     ///     // Prints "nil"
@@ -4056,8 +4214,14 @@ extension UIImageView {
     @MainActor @preconcurrency public func loadImage(from url: URL, placeholder: UIImage? = nil)
 }
 
+extension Date {
+
+    public var timeSince: Double { get }
+
+    public func convertDate(dateFormat: String) -> String
+}
+
 infix operator .+ : DefaultPrecedence
 
 infix operator ./ : DefaultPrecedence
-
 ```
