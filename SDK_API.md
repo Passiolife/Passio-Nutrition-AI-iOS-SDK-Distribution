@@ -1,6 +1,6 @@
 # PassioNutritionAISDK 
 
-## Version 3.2.8
+## Version 3.2.9
 
 ```Swift
 import AVFoundation
@@ -1273,7 +1273,9 @@ public struct PassioFoodDataInfo : Codable {
 
     public let tags: [String]?
 
-    public init(foodName: String, brandName: String, iconID: PassioNutritionAISDK.PassioID, score: Double, scoredName: String, labelId: String, type: String, resultId: String, nutritionPreview: PassioNutritionAISDK.PassioSearchNutritionPreview?, isShortName: Bool, refCode: String, tags: [String]?)
+    public let concerns: [Int]?
+
+    public init(foodName: String, brandName: String, iconID: PassioNutritionAISDK.PassioID, score: Double, scoredName: String, labelId: String, type: String, resultId: String, nutritionPreview: PassioNutritionAISDK.PassioSearchNutritionPreview?, isShortName: Bool, refCode: String, tags: [String]?, concerns: [Int]?)
 
     /// Encodes this value into the given encoder.
     ///
@@ -2681,6 +2683,12 @@ public class PassioNutritionAI {
     ///   - refCode: Pass refCode as a String
     ///   - completion: ``PassioFoodItem``
     public func fetchFoodItemFor(refCode: String, completion: @escaping (PassioNutritionAISDK.PassioFoodItem?) -> Void)
+
+    /// Retrieve a JSON string containing all the nutrients from a RefCode
+    /// - Parameters:
+    ///   - refCode: Pass refCode as a String
+    ///   - completion: JSON string containing all the nutrients
+    public func fetchNutrientJSON(refCode: String, completion: @escaping (String?) -> Void)
 
     /// Advanced search for food will return a list of alternate search and search result
     /// - Parameters:

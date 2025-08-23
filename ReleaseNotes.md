@@ -1,5 +1,19 @@
 # Passio SDK Release Notes
 
+## V3.2.9
+### New APIs:
+
+- Updated PassioFoodDataInfo, added concerns
+
+- Added fetchNutrientJSON
+```swift
+/// Retrieve a JSON string containing all the nutrients from a RefCode
+/// - Parameters:
+///   - refCode: Pass refCode as a String
+///   - completion: JSON string containing all the nutrients
+public func fetchNutrientJSON(refCode: String, completion: @escaping (String?) -> Void)
+```
+
 ## V3.2.8
 
 - Fixed incorrect packaging of v3.2.7, identical to v3.2.7 otherwise.
