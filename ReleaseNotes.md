@@ -1,17 +1,24 @@
 # Passio SDK Release Notes
 
+## V3.2.10
+
+- Added localization headers to all endpoints
+- Fixed a bug where foodName was not localized
+
 ## V3.2.9
 ### New APIs:
 
-- Updated PassioFoodDataInfo, added concerns
-
 - Added fetchNutrientJSON
 ```swift
-/// Retrieve a JSON string containing all the nutrients from a RefCode
+/// Lookup fetchFoodItem from RefCode
 /// - Parameters:
 ///   - refCode: Pass refCode as a String
 ///   - completion: JSON string containing all the nutrients
-public func fetchNutrientJSON(refCode: String, completion: @escaping (String?) -> Void)
+public func fetchNutrientJSON(refCode: String, completion: @escaping (String?) -> Void) {
+    coreSDK.fetchNutrientJSON(refCode: refCode) { (nutrients) in
+        completion(nutrients)
+    }
+}
 ```
 
 ## V3.2.8

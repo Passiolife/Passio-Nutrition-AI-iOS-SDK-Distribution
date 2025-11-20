@@ -1,6 +1,6 @@
 # PassioNutritionAISDK 
 
-## Version 3.2.9
+## Version 3.2.10
 
 ```Swift
 import AVFoundation
@@ -19,9 +19,6 @@ import SwiftUI
 import UIKit
 import VideoToolbox
 import Vision
-import _Concurrency
-import _StringProcessing
-import _SwiftConcurrencyShims
 import simd
 
 @MainActor @objc @preconcurrency public class AVCaptureViedeoPreviewView : UIView {
@@ -2684,7 +2681,7 @@ public class PassioNutritionAI {
     ///   - completion: ``PassioFoodItem``
     public func fetchFoodItemFor(refCode: String, completion: @escaping (PassioNutritionAISDK.PassioFoodItem?) -> Void)
 
-    /// Retrieve a JSON string containing all the nutrients from a RefCode
+    /// Lookup fetchFoodItem from RefCode
     /// - Parameters:
     ///   - refCode: Pass refCode as a String
     ///   - completion: JSON string containing all the nutrients
