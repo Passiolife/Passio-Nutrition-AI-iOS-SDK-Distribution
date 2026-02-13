@@ -1,0 +1,4 @@
+framework module PassioNutritionAISDK {
+  header "PassioNutritionAISDK-Swift.h"
+  requires objc
+}

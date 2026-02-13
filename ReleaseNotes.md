@@ -1,17 +1,141 @@
 # Passio SDK Release Notes
 
+## V3.2.12
+
+- Added mealName and componentName to PassioAdvisorFoodInfo.
+
+## V3.2.11
+
+- Added updateSearchConfiguration
+```swift
+/// Use this method to set the `Passio-Search-Config` header to customize search.
+/// Controls search behavior, data sources, and filtering options. All search and food endpoints support this header.
+///
+/// - Parameters:
+///   - config: A JSON string that contains the config data.
+///
+/// ### Filter Configuration
+/// **Region Filters** - Control geographic filtering and boosting:
+/// - Accepts a map/object with region codes as keys and priorities (1-10) as values.
+/// - Priority 1 = HIGHEST preference, Priority 10 = LOWEST preference.
+/// - Valid codes: ISO2 codes (`us`, `gb`, `jp`), BCP47 codes (`en-US`, `en-GB`, `ja-JP`), or language codes (`en`, `ja`, `es`).
+/// - Example: `{"regionFilters": {"us": 1, "gb": 3, "ja": 1}}`
+/// - When `strictRegionMode = true`: Only shows items from specified regions (branded items only, generic items always included).
+/// - When `strictRegionMode = false`: Boosts matching regions in results.
+///
+/// **Source Filters** - Strict filtering by data source:
+/// - Accepts an array of source names.
+/// - Valid sources: `fdc`, `firebase`, `legacy`, `openfood`, `passio`, `passio-foodai`.
+/// - Example: `{"sourceFilters": ["fdc", "passio"]}`
+/// - Always uses strict filtering (removes items not from specified sources).
+///
+/// **Type Filters** - Filter by item category:
+/// - Accepts an array of item types.
+/// - Valid types: `generic`, `branded`, `recipe`.
+/// - Example: `{"typeFilters": ["branded", "generic"]}`
+/// - Always uses strict filtering (removes items not of specified types).
+///
+/// **Strict Region Mode** - Control generic item handling:
+/// - `true` = Removes ALL items without country data (strict regional search).
+/// - `false` = Keeps items without country data (default, recommended).
+/// - `null` or omitted = Uses global default configuration.
+///
+/// ### Data Source Configuration
+/// **Data Source Configs** - Control which data sources to query:
+/// - `passio` - Main Passio database (included: 100 results, max: 1000).
+/// - `edamam_ingredients` - Edamam ingredient database (included: 10, max: 50).
+/// - `edamam_recipes` - Edamam recipe database (included: 0, max: 25).
+///
+/// ### Concern Flags
+/// **Ignore With Concern Flags** - Filter out items with specific data quality concerns:
+/// - Accepts an array of concern flag IDs (see `/napi/food/concernCodes` for full list).
+/// - Common codes:
+///   - `1002` - Missing essential nutrients (calories/macros).
+///   - `1100` - Invalid serving size.
+///   - `1205` - Excessive sodium content.
+///   - `1211` - Sum of nutrients exceeded 100g.
+///   - `1300` - Missing ingredients list (branded items).
+/// - Example: `{"ignoreWithConcernFlags": [1002, 1100, 1211]}`
+///
+/// ### Complete Example
+/// ```json
+/// {
+///   "dataSourceConfigs": [
+///     {"name": "passio", "requestResultCount": 100},
+///     {"name": "edamam_ingredients", "requestResultCount": 10}
+///   ],
+///   "regionFilters": {"us": 1, "gb": 3},
+///   "typeFilters": ["branded"],
+///   "sourceFilters": ["fdc", "passio"],
+///   "strictRegionMode": false,
+///   "ignoreWithConcernFlags": [1002, 1100]
+/// }
+/// ```
+///
+/// Notes:
+/// - Filters are applied AFTER search results are retrieved.
+/// - Caching is disabled when filters are active to ensure fresh results.
+/// - Generic items (USDA reference foods) are automatically exempted from region filtering by default.
+/// - Filtering reduces token costs by returning fewer results.
+public func updateSearchConfiguration(config: String?) {
+    coreSDK.updateSearchConfiguration(config: config)
+}
+```
+
+- Added updateProductLocalization
+```swift
+/// Use this method to set the `Passio-Product-Localization` header.
+/// Controls the language/region for product search results. Used to localize product names, descriptions,
+/// and leverage region-specific semantic search tools.
+///
+/// - Parameters:
+///   - localizationCode: Accepts BCP47 language tags or ISO 639-1 language codes (e.g., `"en"` for English, `"fr"` for French, `"de"` for German).
+/// - Returns: A Boolean value indicating whether the localization setting was applied successfully.
+///
+/// ### Format
+/// Accepts BCP47 language tags or ISO 639-1 language codes:
+/// - `en-US` - English (United States)
+/// - `en-GB` - English (United Kingdom)
+/// - `ja-JP` - Japanese (Japan)
+/// - `es-MX` - Spanish (Mexico)
+/// - `fr-FR` - French (France)
+/// - `de-DE` - German (Germany)
+/// Or just language codes: `en`, `ja`, `es`, `fr`, `de`.
+///
+/// ### What It Does
+/// - **Regional Semantic Search**: If a region-specific semantic search tool exists (e.g., `semantic_search_ja-jp`), it will be used automatically.
+/// - **Translation**: Response will be translated to the target language if different from source.
+/// - **Regional Preferences**: Results may be optimized for the specified region.
+///
+/// ### Example
+/// ```swift
+/// setProductLocalizationHeader(localizationCode: "en-US")
+/// ```
+@discardableResult
+public func updateProductLocalization(localizationCode: String?) -> Bool {
+    coreSDK.updateProductLocalization(localizationCode: localizationCode)
+}
+```
+
+## V3.2.10
+
+- Added localization headers to all endpoints
+- Fixed a bug where foodName was not localized
+
 ## V3.2.9
 ### New APIs:
 
-- Updated PassioFoodDataInfo, added concerns
-
 - Added fetchNutrientJSON
 ```swift
-/// Retrieve a JSON string containing all the nutrients from a RefCode
+/// Lookup fetchFoodItem from RefCode
 /// - Parameters:
 ///   - refCode: Pass refCode as a String
 ///   - completion: JSON string containing all the nutrients
-public func fetchNutrientJSON(refCode: String, completion: @escaping (String?) -> Void)
+public func fetchNutrientJSON(refCode: String, completion: @escaping (String?) -> Void) {
+    coreSDK.fetchNutrientJSON(refCode: refCode) { (nutrients) in
+        completion(nutrients)
+    }
+}
 ```
 
 ## V3.2.8
