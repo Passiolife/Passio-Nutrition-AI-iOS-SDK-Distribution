@@ -1,6 +1,6 @@
 # PassioNutritionAISDK 
 
-## Version 3.2.11
+## Version 3.2.12
 
 ```Swift
 import AVFoundation
@@ -1034,6 +1034,10 @@ public struct PassioAdvisorFoodInfo : Codable {
     public let packagedFoodItem: PassioNutritionAISDK.PassioFoodItem?
 
     public let productCode: String?
+
+    public let mealName: String?
+
+    public let componentName: String?
 
     public let resultType: PassioNutritionAISDK.PassioFoodResultType?
 
@@ -2951,7 +2955,7 @@ public class PassioNutritionAI {
     ///
     /// ### Example
     /// ```swift
-    /// setProductLocalizationHeader(localizationCode: "en-US")
+    /// updateProductLocalization(localizationCode: "en-US")
     /// ```
     @discardableResult
     public func updateProductLocalization(localizationCode: String?) -> Bool

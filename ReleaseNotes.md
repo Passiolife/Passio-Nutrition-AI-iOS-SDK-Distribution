@@ -1,5 +1,9 @@
 # Passio SDK Release Notes
 
+## V3.2.12
+
+- Added mealName and componentName to PassioAdvisorFoodInfo.
+
 ## V3.2.11
 
 - Added updateSearchConfiguration
