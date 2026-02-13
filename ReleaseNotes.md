@@ -1,5 +1,9 @@
 # Passio SDK Release Notes
 
+## V3.2.13
+
+- Fixed a bug with image compression that was causing incorrect results in some cases.
+
 ## V3.2.12
 
 - Added mealName and componentName to PassioAdvisorFoodInfo.
