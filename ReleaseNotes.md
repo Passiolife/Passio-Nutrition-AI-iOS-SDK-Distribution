@@ -1,5 +1,9 @@
 # Passio SDK Release Notes
 
+## V3.3.0
+
+- Updated version to match other platform releases.
+
 ## V3.2.13
 
 - Fixed a bug with image compression that was causing incorrect results in some cases.
