@@ -1,6 +1,6 @@
 # PassioNutritionAISDK 
 
-## Version 3.2.12
+## Version 3.3.0
 
 ```Swift
 import AVFoundation
